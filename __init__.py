@@ -10,6 +10,8 @@ NODE_CLASS_MAPPINGS = {
     "Endless Nodes Six Input Text Switch": EndlessNode_SixTextInputSwitch,
     "Endless Nodes Six Integer IO Switch": EndlessNode_SixIntIOSwitch,
     "Endless Nodes Six Integer IO Widget": EndlessNode_SixIntIOWidget,
+	"Endless Nodes Parameteriizer": EndlessNode_XLParameterizer,
+	"Endless Nodes Parameterizer & Prompts": EndlessNode_XLParameterizerPrompt,	
 }
 
 __all__ = ['NODE_CLASS_MAPPINGS']

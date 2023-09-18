@@ -1,9 +1,14 @@
+"""
+@author: Endless Sea of Stars
+@title: Endless Nodes
+@nickname: Endless Nodes
+@description: A small set of nodes I created for various numerical and text inputs.
+"""
 #--------------------------------------
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #
 #
-
 
 import torch
 import numpy as np
@@ -71,12 +76,6 @@ class EndlessNode_SixTextInputSwitch:
 #--------------------------------------
 ##Six Integer Input and Output via connectors
 
-"""
-@author: Endless Sea of Stars
-@title: Endless-SixIntIO
-@nickname: Endless
-@description: Six Int Inputs and Output
-"""
 
 class EndlessNode_SixIntIOSwitch:
     def __init__(self):
@@ -151,7 +150,70 @@ class EndlessNode_SixIntIOWidget:
     def six_int_widget(self,int1,int2,int3,int4,int5,int6):
         return(int1,int2,int3,int4,int5,int6)
 			
+#Text Encode Combo Box
 
+class EndlessNode_XLParameterizerPrompt:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 1024, "step": 8}),
+                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 1024, "step": 8}),
+                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
+            },				
+            "optional": {				
+                "endless_text_g": ("STRING", {"default": "Main Prompt", "multiline": True}),
+                "endless_text_l": ("STRING", {"default": "Supporting Words", "multiline": True}),					
+            }
+        }
+    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","STRING","STRING",)
+    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score","Base/Refiner Main Prompt","Base Support Prompt",)		
+    FUNCTION = "ParameterizerPrompt"
+
+    CATEGORY="Endless"
+
+
+    def ParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endless_text_g,endless_text_1):
+        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endless_text_g,endless_text_1)
+		
+class EndlessNode_XLParameterizer:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
+            }
+        }
+    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT",)
+    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score",)		
+    FUNCTION = "Parameterizer"
+
+    CATEGORY="Endless"
+
+
+    def Parameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore):
+        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore)
+		
 # FUTURE NODE IDEAS
 
 			
@@ -173,5 +235,3 @@ class EndlessNode_SixIntIOWidget:
 # ComfyUI Interface for the basic ideas of what nodes I wanted
 #
 # https://github.com/comfyanonymous/ComfyUI
-
-
