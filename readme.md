@@ -5,6 +5,10 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
+##UPDATE: Sep 17, 2023##
+
+###Added the Endless Nodes Parameterizer ###
+
 ## Install
 
 Navigate to your /ComfyUI/custom_nodes/ folder 
@@ -31,6 +35,26 @@ I've seen a fair number of 3-, 4-, or more way text input and outputs, I wanted 
 As above, but with widgets for entry instead of connectors
 
 ![sixintwidget](./img/sixintwidget.png)
+
+### Endless Node Parameterizer ###
+
+This node has a collection of inputs for the CLIP text Encoder and Refiners for SDXL based workflows
+
+Inputs include:
+
+- base width: set width for the base encoder
+- base height: set height for the base encoder
+- base cropped width: crop width for the base encoder
+- base cropped height: crop height for the base encoder
+- base target width: target width for the base encoder
+- base target height: target height for the base encoder
+- refiner width: crop width for the refiner if you have included one
+- refiner height: crop height for the refiner if you have included one
+- refiner aesthetic score: set the score value for the refiner
+
+You can set up two of these one for the positive and one for the negative prompt
+
+![sixintconnect](./img/parameterizer.png)
 
 ## Usage License and Restrictions
 
