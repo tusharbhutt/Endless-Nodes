@@ -5,9 +5,9 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
-##UPDATE: Sep 17, 2023##
+## UPDATE: Sep 17, 2023
 
-###Added the Endless Nodes Parameterizer ###
+### Added the Endless Nodes Parameterizer
 
 ## Install
 
@@ -36,7 +36,7 @@ As above, but with widgets for entry instead of connectors
 
 ![sixintwidget](./img/sixintwidget.png)
 
-### Endless Node Parameterizer ###
+### Endless Node Parameterizer
 
 This node has a collection of inputs for the CLIP text Encoder and Refiners for SDXL based workflows
 
