@@ -4,14 +4,16 @@
 @nickname: Endless Nodes
 @description: A small set of nodes I created for various numerical and text inputs.
 """
+
+# Version 0.15
 #--------------------------------------
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #
 #
 
-import torch
-import numpy as np
+#import torch
+#import numpy as np
 import os
 import sys
 import io
@@ -120,8 +122,6 @@ class EndlessNode_SixIntIOSwitch:
 #--------------------------------------
 ##Six Integer Input and Output by Widget
 
-	
-
 class EndlessNode_SixIntIOWidget:
     def __init__(self):
         pass
@@ -150,9 +150,9 @@ class EndlessNode_SixIntIOWidget:
     def six_int_widget(self,int1,int2,int3,int4,int5,int6):
         return(int1,int2,int3,int4,int5,int6)
 			
-#Text Encode Combo Box
+#Text Encode Combo Box with prompt
 
-class EndlessNode_XLParameterizerPrompt:
+class EndlessNode_XLParameterizerPrompt: 
     def __init__(self):
         pass
 
@@ -171,20 +171,23 @@ class EndlessNode_XLParameterizerPrompt:
                 "refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
             },				
             "optional": {				
-                "endless_text_g": ("STRING", {"default": "Main Prompt", "multiline": True}),
-                "endless_text_l": ("STRING", {"default": "Supporting Words", "multiline": True}),					
+                "endlessG": ("STRING", {"default": "TEXT_G,acts as main prompt and connects to refiner text input", "multiline": True}),
+                "endlessL": ("STRING", {"default": "TEXT_L, acts as supporting prompt", "multiline": True}),				
             }
         }
+
     RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","STRING","STRING",)
-    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score","Base/Refiner Main Prompt","Base Support Prompt",)		
+    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score","Text_G/Refiner Prompt","Text_L Prompt",)	
+	
     FUNCTION = "ParameterizerPrompt"
 
     CATEGORY="Endless"
 
+    def ParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endlessG,endlessL):
+        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endlessG,endlessL)
 
-    def ParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endless_text_g,endless_text_1):
-        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endless_text_g,endless_text_1)
-		
+# CLIP tect encodee box without prompt
+
 class EndlessNode_XLParameterizer:
     def __init__(self):
         pass
@@ -213,7 +216,79 @@ class EndlessNode_XLParameterizer:
 
     def Parameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore):
         return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore)
-		
+
+
+#Text Encode Combo Box with prompt
+
+class EndlessNode_ComboXLParameterizerPrompt: 
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_pascore": ("FLOAT", {"default": 6.5, "min": 0, "max": 0xffffffffffffffff}),
+                "refiner_nascore": ("FLOAT", {"default": 2.5, "min": 0, "max": 0xffffffffffffffff}),		
+            },				
+            "optional": {				
+                "PendlessG": ("STRING", {"default": "Positive TEXT_G,acts as main prompt and connects to refiner text input", "multiline": True}),
+                "PendlessL": ("STRING", {"default": "Positive TEXT_L, acts as supporting prompt", "multiline": True}),
+                "NendlessG": ("STRING", {"default": "Negative TEXT_G, acts as main prompt and connects to refiner text input", "multiline": True}),
+                "NendlessL": ("STRING", {"default": "Negative TEXT_L, acts as supporting prompt", "multiline": True}),						
+            }
+        }
+
+    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","FLOAT","STRING","STRING", "STRING","STRING",)
+    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Positive Refiner Aesthetic Score","Negative Refiner Aesthetic Score","Positive Text_G and Refiner Text Prompt","Postive Text_L Prompt","Negative Text_G and Refiner Text Prompt","Negative Text_L Prompt",)	
+	
+    FUNCTION = "ComboParameterizerPrompt"
+
+    CATEGORY="Endless"
+
+    def ComboParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore,refiner_nascore,PendlessG,PendlessL,NendlessG,NendlessL):
+        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore,refiner_nascore,PendlessG,PendlessL,NendlessG,NendlessL)
+
+# CLIP text encode box without prompt, COMBO that allows one box for both pos/neg parameters to be fed to CLIP text, with separate POS/NEG Aestheticscore
+
+class EndlessNode_ComboXLParameterizer:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+                "refiner_pascore": ("FLOAT", {"default": 6.5, "min": 0, "max": 0xffffffffffffffff}),
+                "refiner_nascore": ("FLOAT", {"default": 2.5, "min": 0, "max": 0xffffffffffffffff}),				
+            }
+        }
+    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","FLOAT")
+    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Positive Refiner Aesthetic Score","Negative Refiner Aesthetic Score",)		
+    FUNCTION = "ComboParameterizer"
+
+    CATEGORY="Endless"
+
+
+    def ComboParameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore):
+        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore)
+
 # FUTURE NODE IDEAS
 
 			
