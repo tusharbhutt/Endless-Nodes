@@ -5,9 +5,18 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
-## UPDATE: Sep 17, 2023
+**UPDATE: Sep 18, 2023**
 
-### Added the Endless Nodes Parameterizer
+Added the Endless Nodes Parameterizer with Text_G and Text_L prompt box
+Added the Parameterizer with a_score for both pos/neg
+Added the Parameterizer with a_score for both pos/neg and Text_G and Text_L prompt box
+Fixed some typos
+
+
+**UPDATE: Sep 17, 2023**
+
+Added the Endless Nodes Parameterizer
+
 
 ## Install
 
@@ -16,6 +25,8 @@ Navigate to your /ComfyUI/custom_nodes/ folder
 In Windows, you can then right-click to start a command prompt and type:
 
 `git clone https://github.com/tusharbhutt/Endless-Nodes`
+
+You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager)
 
 ## Node List
 
@@ -36,7 +47,7 @@ As above, but with widgets for entry instead of connectors
 
 ![sixintwidget](./img/sixintwidget.png)
 
-### Endless Node Parameterizer
+### Endless Node Parameterizer 
 
 This node has a collection of inputs for the CLIP text Encoder and Refiners for SDXL based workflows
 
@@ -54,7 +65,21 @@ Inputs include:
 
 You can set up two of these one for the positive and one for the negative prompt
 
-![sixintconnect](./img/parameterizer.png)
+![parameterizer](./img/parameterizer.png)
+
+## Parameterizer with prompt
+
+As above, but with TEXT_G and TEXT_L  outputs
+
+![parameterizerprompt](./img/parameterizerprompt.png)
+
+## COMBO Parameterizer with and without prompt
+
+After making the Parameterizer, I realized having two separate ones for both the positive and negative CLIP encoders is not optimal, because almost everyone will use the same resolution for both the positive and negative base and refiners.  However, you may (well, you *should…*) want separate aesthetic scorers for the positive and negative CLIPs, so also I came up with one that does this for you.  Also comes in a variant that has the prompt boxes for you.
+
+![comboparameterizer](./img/comboparameterizer.png)
+
+![comboparameterizerprompt](./img/comboparameterizerprompt.png)
 
 ## Usage License and Restrictions
 
