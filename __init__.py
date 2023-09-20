@@ -8,6 +8,7 @@ from .endless_nodes import *
 
 NODE_CLASS_MAPPINGS = {
     "Endless Nodes Six Input Text Switch": EndlessNode_SixTextInputSwitch,
+    "Endless Nodes Eight Input Text Switch": EndlessNode_EightTextInputSwitch,	
     "Endless Nodes Six Integer IO Switch": EndlessNode_SixIntIOSwitch,
     "Endless Nodes Six Integer IO Widget": EndlessNode_SixIntIOWidget,
 	"Endless Nodes Parameterizer": EndlessNode_XLParameterizer,

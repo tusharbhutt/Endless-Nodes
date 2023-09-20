@@ -5,7 +5,7 @@
 @description: A small set of nodes I created for various numerical and text inputs.
 """
 
-# Version 0.15
+# Version 0.16 - Add Eight Text Input
 #--------------------------------------
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
@@ -60,20 +60,71 @@ class EndlessNode_SixTextInputSwitch:
     FUNCTION = "six_text_switch"
     CATEGORY = "Endless"
 
-    def six_text_switch(self, Input, text1, text2=None, text3=None, text4=None, text5=None, text6=None):
+    def six_text_switch(self, Input, text1=None,text2=None,text3=None,text4=None,text5=None,text6=None):
 
         if Input == 1:
-            return (text1, )
+            return (text1,)
         elif Input == 2:
-            return (text2, )
+            return (text2,)
         elif Input == 3:
-            return (text3, )
+            return (text3,)
         elif Input == 4:
-            return (text4, )
+            return (text4,)
         elif Input == 5:
-            return (text5, )			
+            return (text5,)			
         else:
-            return (text6, )            
+            return (text6,)            
+
+#Eight Text Input Node for selection (needed more slots, what can I say)
+
+
+class EndlessNode_EightTextInputSwitch:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "Input": ("INT", {"default": 1, "min": 1, "max": 8, "step": 1, "display": "slider"}),      
+#I like the slider idea, it's better for a touch screen				
+                "text1": ("STRING", {"forceInput": True}),               
+            },
+            "optional": {
+                "text2": ("STRING", {"forceInput": True}),
+                "text3": ("STRING", {"forceInput": True}),
+                "text4": ("STRING", {"forceInput": True}),
+                "text5": ("STRING", {"forceInput": True}),
+                "text6": ("STRING", {"forceInput": True}),				
+                "text7": ("STRING", {"forceInput": True}),
+                "text8": ("STRING", {"forceInput": True}),	
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("Output",)	
+    
+    FUNCTION = "eight_text_switch"
+    CATEGORY = "Endless"
+
+    def eight_text_switch(self,Input,text1=None,text2=None,text3=None,text4=None,text5=None,text6=None,text7=None,text8=None,):
+
+        if Input == 1:
+            return (text1,)
+        elif Input == 2:
+            return (text2,)
+        elif Input == 3:
+            return (text3,)
+        elif Input == 4:
+            return (text4,)
+        elif Input == 5:
+            return (text5,)			
+        elif Input == 6:
+            return (text6,)
+        elif Input == 7:
+            return (text7,)	
+        else:
+            return (text8,)            
 
 #--------------------------------------
 ##Six Integer Input and Output via connectors

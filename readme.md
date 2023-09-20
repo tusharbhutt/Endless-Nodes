@@ -5,17 +5,21 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
+**UPDATE: Sep 20, 2023**
+
++ Added and eight input number switch because I needed it
+
 **UPDATE: Sep 18, 2023**
 
-Added the Endless Nodes Parameterizer with Text_G and Text_L prompt box
-Added the Parameterizer with a_score for both pos/neg
-Added the Parameterizer with a_score for both pos/neg and Text_G and Text_L prompt box
-Fixed some typos
++ Added the Endless Nodes Parameterizer with Text_G and Text_L prompt box
++ Added the Parameterizer with a_score for both pos/neg
++ Added the Parameterizer with a_score for both pos/neg and Text_G and Text_L prompt box
++ Fixed some typos
 
 
 **UPDATE: Sep 17, 2023**
 
-Added the Endless Nodes Parameterizer
++ Added the Endless Nodes Parameterizer
 
 
 ## Install
@@ -36,11 +40,14 @@ Allows the user to select between six text inputs and uses a slider to make the 
 
 ![sixtext](./img/sixtext.png)
 
+**NOT SHOWN: There is an eight input variant now too, as of Sep 20, 2023**
 
 ### Six Integer Input to Six Integer Output
-I've seen a fair number of 3-, 4-, or more way text input and outputs, I wanted to do something for numbers as well.  Use it as you wish.
+I've seen a fair number of 3-, 4-, or more X-way text input and outputs, I wanted to do something for numbers as well.  Use it as you wish.
+
 
 ![sixintconnect](./img/sixintconnect.png)
+
 
 ### Six Integer Widget
 As above, but with widgets for entry instead of connectors
