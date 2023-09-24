@@ -5,9 +5,14 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
+
+**UPDATE: Sep 24, 2023**
+
++ Took the node from https://github.com/strimmlarn that does aesthetic scoring and re-purposed it
+
 **UPDATE: Sep 20, 2023**
 
-+ Added and eight input number switch because I needed it
++ Added an eight input number switch because I needed it
 
 **UPDATE: Sep 18, 2023**
 
@@ -31,6 +36,8 @@ In Windows, you can then right-click to start a command prompt and type:
 `git clone https://github.com/tusharbhutt/Endless-Nodes`
 
 You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager)
+
+**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer!  I've added them in the requirement file but if it doesn't work, yo will need to download manually**
 
 ## Node List
 
@@ -88,6 +95,23 @@ After making the Parameterizer, I realized having two separate ones for both the
 
 ![comboparameterizerprompt](./img/comboparameterizerprompt.png)
 
+## Aesthetic Scoring Output ##
+
+This node will output a predicted aestheic score as a number and dispaly it with the appropriate node (e.g., rgthree's "Any" node).  I took the node from https://github.com/strimmlarn that does aesthetic scoring and repurposed it so that it is simpler and outputs the score as a number.  I combined the model loader and score calculator into one, and removed the Aesthetic Score Sorter.  
+
+![aestheticone](./img/aestheticone.png)
+
+You can load a number of scoring models, I use the "chadscorer" model found here:
+
+https://github.com/grexzen/SD-Chad/blob/main/chadscorer.pth
+
+As for the original node from strimmlarn,  please refer to this GitHub if you would like to examine it:
+
+https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score
+
+The scorer adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary
+
+
 ## Usage License and Restrictions
 
 See GPL Licensing V3 for usage.  You may modify this code as long as you keep the credits for this repository and for those noted in the credit section below.  **YOU ARE EXPRESSLY FORBIDDEN FROM USING THIS NODE TO CREATE ANY IMAGES OR ARTWORK THAT VIOLATES THE STABLE DIFFUSION USAGE NOTES [HERE](https://huggingface.co/stabilityai/stable-diffusion-2#misuse-malicious-use-and-out-of-scope-use) AND [HERE](https://huggingface.co/stabilityai/stable-diffusion-2#misuse-and-malicious-use).**
@@ -104,8 +128,10 @@ These nodes may or may not be maintained.  They work on my system, but may not o
 
 [Comfyroll Custom Nodes](https://github.com/RockOfFire/ComfyUI_Comfyroll_CustomNode) for the overall node code layout, coding snippets,  and inspiration for the text input and number switches
 
-
  [WLSH Nodes](https://github.com/wallish77/wlsh_nodes) for some coding for the Integer Widget
- 
 
 [ComfyUI](https://github.com/comfyanonymous/ComfyUI) Interface for the basic ideas of what nodes I wanted
+
+[ComfyUI-Strimmlarns-Aesthetic-Score](https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score) for the original coding for Aesthetic Scoring Type One
+
+The orginal scorer, and therefore my derivative too, use the [MLP class code](https://github.com/christophschuhmann/improved-aesthetic-predictor) from Christoph Schuhmann

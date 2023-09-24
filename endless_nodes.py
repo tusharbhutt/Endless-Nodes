@@ -1,11 +1,15 @@
 """
-@author: Endless Sea of Stars
-@title: Endless Nodes
-@nickname: Endless Nodes
+@author: BiffMunky
+@title: 🌌 An Endless Sea of Stars Nodes 🌌
+@nickname: 🌌 Endless Nodes 🌌
 @description: A small set of nodes I created for various numerical and text inputs.
 """
 
-# Version 0.16 - Add Eight Text Input
+# Version 0.23 - Aesthetic Scoring TYpe 1 addeded
+#0.22 Unreleased - intro'd asestheic score
+#0.21 unreleased -- trying for display nodes
+#0.20 sorted categories of nodes
+
 #--------------------------------------
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
@@ -13,15 +17,28 @@
 #
 
 #import torch
-#import numpy as np
-import os
-import sys
+
+from PIL import Image
+from PIL.PngImagePlugin import PngInfo
+from os.path import join
+from warnings import filterwarnings
+import clip
+import datetime
 import io
 import json
+import math
+import numpy as np
+import os
+import pytorch_lightning as pl
+import re
+import sys
+import statistics
+import torch
+import torch.nn as nn
+
 
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
-#heh, probably not needed
 
 import comfy.sd
 import comfy.utils
@@ -34,318 +51,501 @@ import typing as tg
 
 
 class EndlessNode_SixTextInputSwitch:
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "Input": ("INT", {"default": 1, "min": 1, "max": 6, "step": 1, "display": "slider"}),      
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"Input": ("INT", {"default": 1, "min": 1, "max": 6, "step": 1, "display": "slider"}),	  
 #I like the slider idea, it's better for a touch screen				
-                "text1": ("STRING", {"forceInput": True}),               
-            },
-            "optional": {
-                "text2": ("STRING", {"forceInput": True}),
-                "text3": ("STRING", {"forceInput": True}),
-                "text4": ("STRING", {"forceInput": True}),
-                "text5": ("STRING", {"forceInput": True}),
-                "text6": ("STRING", {"forceInput": True}),				
-            }
-        }
+				"text1": ("STRING", {"forceInput": True}),			   
+			},
+			"optional": {
+				"text2": ("STRING", {"forceInput": True}),
+				"text3": ("STRING", {"forceInput": True}),
+				"text4": ("STRING", {"forceInput": True}),
+				"text5": ("STRING", {"forceInput": True}),
+				"text6": ("STRING", {"forceInput": True}),				
+			}
+		}
 
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("Output",)	
-    
-    FUNCTION = "six_text_switch"
-    CATEGORY = "Endless"
+	RETURN_TYPES = ("STRING",)
+	RETURN_NAMES = ("Output",)	
+	
+	FUNCTION = "six_text_switch"
+	CATEGORY = "Endless 🌌/Switches"
 
-    def six_text_switch(self, Input, text1=None,text2=None,text3=None,text4=None,text5=None,text6=None):
+	def six_text_switch(self, Input, text1=None,text2=None,text3=None,text4=None,text5=None,text6=None):
 
-        if Input == 1:
-            return (text1,)
-        elif Input == 2:
-            return (text2,)
-        elif Input == 3:
-            return (text3,)
-        elif Input == 4:
-            return (text4,)
-        elif Input == 5:
-            return (text5,)			
-        else:
-            return (text6,)            
+		if Input == 1:
+			return (text1,)
+		elif Input == 2:
+			return (text2,)
+		elif Input == 3:
+			return (text3,)
+		elif Input == 4:
+			return (text4,)
+		elif Input == 5:
+			return (text5,)			
+		else:
+			return (text6,)			
 
 #Eight Text Input Node for selection (needed more slots, what can I say)
 
 
 class EndlessNode_EightTextInputSwitch:
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "Input": ("INT", {"default": 1, "min": 1, "max": 8, "step": 1, "display": "slider"}),      
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"Input": ("INT", {"default": 1, "min": 1, "max": 8, "step": 1, "display": "slider"}),	  
 #I like the slider idea, it's better for a touch screen				
-                "text1": ("STRING", {"forceInput": True}),               
-            },
-            "optional": {
-                "text2": ("STRING", {"forceInput": True}),
-                "text3": ("STRING", {"forceInput": True}),
-                "text4": ("STRING", {"forceInput": True}),
-                "text5": ("STRING", {"forceInput": True}),
-                "text6": ("STRING", {"forceInput": True}),				
-                "text7": ("STRING", {"forceInput": True}),
-                "text8": ("STRING", {"forceInput": True}),	
-            }
-        }
+				"text1": ("STRING", {"forceInput": True}),			   
+			},
+			"optional": {
+				"text2": ("STRING", {"forceInput": True}),
+				"text3": ("STRING", {"forceInput": True}),
+				"text4": ("STRING", {"forceInput": True}),
+				"text5": ("STRING", {"forceInput": True}),
+				"text6": ("STRING", {"forceInput": True}),				
+				"text7": ("STRING", {"forceInput": True}),
+				"text8": ("STRING", {"forceInput": True}),	
+			}
+		}
 
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("Output",)	
-    
-    FUNCTION = "eight_text_switch"
-    CATEGORY = "Endless"
+	RETURN_TYPES = ("STRING",)
+	RETURN_NAMES = ("Output",)	
+	
+	FUNCTION = "eight_text_switch"
+	CATEGORY = "Endless 🌌/Switches"
 
-    def eight_text_switch(self,Input,text1=None,text2=None,text3=None,text4=None,text5=None,text6=None,text7=None,text8=None,):
+	def eight_text_switch(self,Input,text1=None,text2=None,text3=None,text4=None,text5=None,text6=None,text7=None,text8=None,):
 
-        if Input == 1:
-            return (text1,)
-        elif Input == 2:
-            return (text2,)
-        elif Input == 3:
-            return (text3,)
-        elif Input == 4:
-            return (text4,)
-        elif Input == 5:
-            return (text5,)			
-        elif Input == 6:
-            return (text6,)
-        elif Input == 7:
-            return (text7,)	
-        else:
-            return (text8,)            
+		if Input == 1:
+			return (text1,)
+		elif Input == 2:
+			return (text2,)
+		elif Input == 3:
+			return (text3,)
+		elif Input == 4:
+			return (text4,)
+		elif Input == 5:
+			return (text5,)			
+		elif Input == 6:
+			return (text6,)
+		elif Input == 7:
+			return (text7,)	
+		else:
+			return (text8,)			
 
 #--------------------------------------
 ##Six Integer Input and Output via connectors
 
 
 class EndlessNode_SixIntIOSwitch:
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {        
-                "INT1": ("INT", {"forceInput": True}),               
-            },
-            "optional": {
-                "INT2": ("INT", {"forceInput": True}),
-                "INT3": ("INT", {"forceInput": True}),
-                "INT4": ("INT", {"forceInput": True}),
-                "INT5": ("INT", {"forceInput": True}),
-                "INT6": ("INT", {"forceInput": True}),				
-            }
-        }
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {		
+				"INT1": ("INT", {"forceInput": True}),			   
+			},
+			"optional": {
+				"INT2": ("INT", {"forceInput": True}),
+				"INT3": ("INT", {"forceInput": True}),
+				"INT4": ("INT", {"forceInput": True}),
+				"INT5": ("INT", {"forceInput": True}),
+				"INT6": ("INT", {"forceInput": True}),				
+			}
+		}
 
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",)
-    RETURN_NAMES = ("INT1","INT2","INT3","INT4","INT5","INT6",)	
-    
-    FUNCTION = "six_intIO_switch"
-    CATEGORY = "Endless"
+	RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",)
+	RETURN_NAMES = ("INT1","INT2","INT3","INT4","INT5","INT6",)	
+	
+	FUNCTION = "six_intIO_switch"
+	CATEGORY = "Endless 🌌/Switches"
 
-    def six_intIO_switch(self, Input, INT1=0, INT2=0, INT3=0, INT4=0, INT5=0, INT6=0):
+	def six_intIO_switch(self, Input, INT1=0, INT2=0, INT3=0, INT4=0, INT5=0, INT6=0):
 
-        if Input == 1:
-            return (INT1, )
-        elif Input == 2:
-            return (INT2, )
-        elif Input == 3:
-            return (INT3, )
-        elif Input == 4:
-            return (INT4, )
-        elif Input == 5:
-            return (INT5, )			
-        else:
-            return (INT6, )
+		if Input == 1:
+			return (INT1, )
+		elif Input == 2:
+			return (INT2, )
+		elif Input == 3:
+			return (INT3, )
+		elif Input == 4:
+			return (INT4, )
+		elif Input == 5:
+			return (INT5, )			
+		else:
+			return (INT6, )
 			
 #--------------------------------------
 ##Six Integer Input and Output by Widget
 
 class EndlessNode_SixIntIOWidget:
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "int1": ("INT", {"default": 0,}),
-            },				
-            "optional": {				
-                "int2": ("INT", {"default": 0,}),
-                "int3": ("INT", {"default": 0,}),
-                "int4": ("INT", {"default": 0,}),
-                "int5": ("INT", {"default": 0,}),
-                "int6": ("INT", {"default": 0,}),				
-            }
-        }
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",)
-    RETURN_NAMES = ("INT1","INT2","INT3","INT4","INT5","INT6",)		
-    FUNCTION = "six_int_widget"
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"int1": ("INT", {"default": 0,}),
+			},				
+			"optional": {				
+				"int2": ("INT", {"default": 0,}),
+				"int3": ("INT", {"default": 0,}),
+				"int4": ("INT", {"default": 0,}),
+				"int5": ("INT", {"default": 0,}),
+				"int6": ("INT", {"default": 0,}),				
+			}
+		}
+	RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",)
+	RETURN_NAMES = ("INT1","INT2","INT3","INT4","INT5","INT6",)		
+	FUNCTION = "six_int_widget"
 
-    CATEGORY="Endless"
+	CATEGORY = "Endless 🌌/Switches"
 
 
-    def six_int_widget(self,int1,int2,int3,int4,int5,int6):
-        return(int1,int2,int3,int4,int5,int6)
+	def six_int_widget(self,int1,int2,int3,int4,int5,int6):
+		return(int1,int2,int3,int4,int5,int6)
 			
 #Text Encode Combo Box with prompt
 
 class EndlessNode_XLParameterizerPrompt: 
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 1024, "step": 8}),
-                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 1024, "step": 8}),
-                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
-            },				
-            "optional": {				
-                "endlessG": ("STRING", {"default": "TEXT_G,acts as main prompt and connects to refiner text input", "multiline": True}),
-                "endlessL": ("STRING", {"default": "TEXT_L, acts as supporting prompt", "multiline": True}),				
-            }
-        }
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_crop_w": ("INT", {"default": 0, "min": 0, "max": 1024, "step": 8}),
+				"base_crop_h": ("INT", {"default": 0, "min": 0, "max": 1024, "step": 8}),
+				"base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
+			},				
+			"optional": {				
+				"endlessG": ("STRING", {"default": "TEXT_G,acts as main prompt and connects to refiner text input", "multiline": True}),
+				"endlessL": ("STRING", {"default": "TEXT_L, acts as supporting prompt", "multiline": True}),				
+			}
+		}
 
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","STRING","STRING",)
-    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score","Text_G/Refiner Prompt","Text_L Prompt",)	
+	RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","STRING","STRING",)
+	RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score","Text_G/Refiner Prompt","Text_L Prompt",)	
 	
-    FUNCTION = "ParameterizerPrompt"
+	FUNCTION = "ParameterizerPrompt"
 
-    CATEGORY="Endless"
+	CATEGORY = "Endless 🌌/Parameters"
 
-    def ParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endlessG,endlessL):
-        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endlessG,endlessL)
+	def ParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endlessG,endlessL):
+		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore,endlessG,endlessL)
 
 # CLIP tect encodee box without prompt
 
 class EndlessNode_XLParameterizer:
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
-                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
-                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
-            }
-        }
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT",)
-    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score",)		
-    FUNCTION = "Parameterizer"
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+				"base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+				"base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_ascore": ("FLOAT", {"default": 6, "min": 0, "max": 0xffffffffffffffff}),
+			}
+		}
+	RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT",)
+	RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Refiner Aesthetic Score",)		
+	FUNCTION = "Parameterizer"
 
-    CATEGORY="Endless"
+	CATEGORY = "Endless 🌌/Parameters"
 
 
-    def Parameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore):
-        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore)
+	def Parameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore):
+		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore)
 
 
 #Text Encode Combo Box with prompt
 
 class EndlessNode_ComboXLParameterizerPrompt: 
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
-                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
-                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_pascore": ("FLOAT", {"default": 6.5, "min": 0, "max": 0xffffffffffffffff}),
-                "refiner_nascore": ("FLOAT", {"default": 2.5, "min": 0, "max": 0xffffffffffffffff}),		
-            },				
-            "optional": {				
-                "PendlessG": ("STRING", {"default": "Positive TEXT_G,acts as main prompt and connects to refiner text input", "multiline": True}),
-                "PendlessL": ("STRING", {"default": "Positive TEXT_L, acts as supporting prompt", "multiline": True}),
-                "NendlessG": ("STRING", {"default": "Negative TEXT_G, acts as main prompt and connects to refiner text input", "multiline": True}),
-                "NendlessL": ("STRING", {"default": "Negative TEXT_L, acts as supporting prompt", "multiline": True}),						
-            }
-        }
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+				"base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+				"base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_pascore": ("FLOAT", {"default": 6.5, "min": 0, "max": 0xffffffffffffffff}),
+				"refiner_nascore": ("FLOAT", {"default": 2.5, "min": 0, "max": 0xffffffffffffffff}),		
+			},				
+			"optional": {				
+				"PendlessG": ("STRING", {"default": "Positive TEXT_G,acts as main prompt and connects to refiner text input", "multiline": True}),
+				"PendlessL": ("STRING", {"default": "Positive TEXT_L, acts as supporting prompt", "multiline": True}),
+				"NendlessG": ("STRING", {"default": "Negative TEXT_G, acts as main prompt and connects to refiner text input", "multiline": True}),
+				"NendlessL": ("STRING", {"default": "Negative TEXT_L, acts as supporting prompt", "multiline": True}),						
+			}
+		}
 
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","FLOAT","STRING","STRING", "STRING","STRING",)
-    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Positive Refiner Aesthetic Score","Negative Refiner Aesthetic Score","Positive Text_G and Refiner Text Prompt","Postive Text_L Prompt","Negative Text_G and Refiner Text Prompt","Negative Text_L Prompt",)	
+	RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","FLOAT","STRING","STRING", "STRING","STRING",)
+	RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Positive Refiner Aesthetic Score","Negative Refiner Aesthetic Score","Positive Text_G and Refiner Text Prompt","Postive Text_L Prompt","Negative Text_G and Refiner Text Prompt","Negative Text_L Prompt",)	
 	
-    FUNCTION = "ComboParameterizerPrompt"
+	FUNCTION = "ComboParameterizerPrompt"
 
-    CATEGORY="Endless"
+	CATEGORY = "Endless 🌌/Parameters"
 
-    def ComboParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore,refiner_nascore,PendlessG,PendlessL,NendlessG,NendlessL):
-        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore,refiner_nascore,PendlessG,PendlessL,NendlessG,NendlessL)
+	def ComboParameterizerPrompt(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore,refiner_nascore,PendlessG,PendlessL,NendlessG,NendlessL):
+		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore,refiner_nascore,PendlessG,PendlessL,NendlessG,NendlessL)
 
 # CLIP text encode box without prompt, COMBO that allows one box for both pos/neg parameters to be fed to CLIP text, with separate POS/NEG Aestheticscore
 
 class EndlessNode_ComboXLParameterizer:
-    def __init__(self):
-        pass
+	def __init__(self):
+		pass
 
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
-                "base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
-                "base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
-                "refiner_pascore": ("FLOAT", {"default": 6.5, "min": 0, "max": 0xffffffffffffffff}),
-                "refiner_nascore": ("FLOAT", {"default": 2.5, "min": 0, "max": 0xffffffffffffffff}),				
-            }
-        }
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","FLOAT")
-    RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Positive Refiner Aesthetic Score","Negative Refiner Aesthetic Score",)		
-    FUNCTION = "ComboParameterizer"
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"base_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_crop_w": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+				"base_crop_h": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 16}),
+				"base_target_w": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"base_target_h": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 16}),
+				"refiner_pascore": ("FLOAT", {"default": 6.5, "min": 0, "max": 0xffffffffffffffff}),
+				"refiner_nascore": ("FLOAT", {"default": 2.5, "min": 0, "max": 0xffffffffffffffff}),
+			}
+		}
+	RETURN_TYPES = ("INT","INT","INT","INT","INT","INT","INT","INT","FLOAT","FLOAT")
+	RETURN_NAMES = ("Base Width","Base Height","Base Cropped Width","Base Cropped Height","Base Target Width","Base Target Height","Refiner Width","Refiner Height","Positive Refiner Aesthetic Score","Negative Refiner Aesthetic Score",)		
+	FUNCTION = "ComboParameterizer"
 
-    CATEGORY="Endless"
+	CATEGORY = "Endless 🌌/Parameters"
 
 
-    def ComboParameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore):
-        return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore)
+	def ComboParameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore):
+		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore)
 
-# FUTURE NODE IDEAS
 
+#--------------------------------------
+## Aesthetic Scoring Type One
+
+folder_paths.folder_names_and_paths["aesthetic"] = ([os.path.join(folder_paths.models_dir,"aesthetic")], folder_paths.supported_pt_extensions)
+
+
+class MLP(pl.LightningModule):
+	def __init__(self, input_size, xcol='emb', ycol='avg_rating'):
+		super().__init__()
+		self.input_size = input_size
+		self.xcol = xcol
+		self.ycol = ycol
+		self.layers = nn.Sequential(
+			nn.Linear(self.input_size, 1024),
+			#nn.ReLU(),
+			nn.Dropout(0.2),
+			nn.Linear(1024, 128),
+			#nn.ReLU(),
+			nn.Dropout(0.2),
+			nn.Linear(128, 64),
+			#nn.ReLU(),
+			nn.Dropout(0.1),
+			nn.Linear(64, 16),
+			#nn.ReLU(),
+			nn.Linear(16, 1)
+		)
+	def forward(self, x):
+		return self.layers(x)
+	def training_step(self, batch, batch_idx):
+			x = batch[self.xcol]
+			y = batch[self.ycol].reshape(-1, 1)
+			x_hat = self.layers(x)
+			loss = F.mse_loss(x_hat, y)
+			return loss
+	def validation_step(self, batch, batch_idx):
+		x = batch[self.xcol]
+		y = batch[self.ycol].reshape(-1, 1)
+		x_hat = self.layers(x)
+		loss = F.mse_loss(x_hat, y)
+		return loss
+	def configure_optimizers(self):
+		optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+		return optimizer
+def normalized(a, axis=-1, order=2):
+	import numpy as np  # pylint: disable=import-outside-toplevel
+	l2 = np.atleast_1d(np.linalg.norm(a, order, axis))
+	l2[l2 == 0] = 1
+	return a / np.expand_dims(l2, axis)
+
+
+class EndlessNode_Scoring:
+	def __init__(self):
+		pass
+
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"model_name": (folder_paths.get_filename_list("aesthetic"), ),
+				"image": ("IMAGE",),
+			}
+		}
+
+	RETURN_TYPES = ("NUM",)
+	FUNCTION = "calc_score"
+	CATEGORY = "Endless 🌌/Scoring"
+
+	def calc_score(self, model_name, image):
+		m_path = folder_paths.folder_names_and_paths["aesthetic"][0]
+		m_path2 = os.path.join(m_path[0], model_name)
+		model = MLP(768)  # CLIP embedding dim is 768 for CLIP ViT L 14
+		s = torch.load(m_path2)
+		model.load_state_dict(s)
+		model.to("cuda")
+		model.eval()
+		device = "cuda" 
+		model2, preprocess = clip.load("ViT-L/14", device=device)  # RN50x64
+		tensor_image = image[0]
+		img = (tensor_image * 255).to(torch.uint8).numpy()
+		pil_image = Image.fromarray(img, mode='RGB')
+		image2 = preprocess(pil_image).unsqueeze(0).to(device)
+		with torch.no_grad():
+			image_features = model2.encode_image(image2)
+		im_emb_arr = normalized(image_features.cpu().detach().numpy() )
+		prediction = model(torch.from_numpy(im_emb_arr).to(device).type(torch.cuda.FloatTensor))
+		final_prediction = round(float(prediction[0]), 2)
+		del model
+		return (final_prediction,)
+
+		
+		##test of image saver ##
+
+
+class EndlessNode_ImageSaver:
+	def __init__(self):
+		self.output_dir = folder_paths.get_output_directory()
+		self.type = "output"
+
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"images": ("IMAGE",),
+				"filename_prefix": ("STRING", {"default": "ComfyUI"}),
+				"subfolder": ("STRING", {"default": None}),  # Add subfolder input
+			},
+			"hidden": {
+				"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
+			},
+		}
+
+	RETURN_TYPES = ()
+	FUNCTION = "save_images"
+
+	OUTPUT_NODE = True
+
+	CATEGORY = "Endless 🌌/IO"
+
+	def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None, subfolder=None):
+
+		# Replace illegal characters in the filename prefix with dashes
+		filename_prefix = re.sub(r'[<>:"\/\\|?*]', '-', filename_prefix)
+
+		# Get the current date in Y-m-d format
+		today = datetime.datetime.now().strftime("%Y-%m-%d")
+
+		# If a custom subfolder is provided, use it; otherwise, use the date
+		if subfolder is not None:
+			full_output_folder = os.path.join(self.output_dir, subfolder)
+		else:
+			full_output_folder = os.path.join(self.output_dir, today)
+
+		# Create the subfolder if it doesn't exist
+		os.makedirs(full_output_folder, exist_ok=True)
+
+		counter = self.get_next_number(full_output_folder)
+
+		results = list()
+		for image in images:
+			i = 255. * image.cpu().numpy()
+			img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
 			
-# Dimension Flipper: flip dimensions
-# WhatThePrompt: add prompt data to sidecar text file
-# ???
+			metadata = PngInfo()
+			if prompt is not None:
+				metadata.add_text("prompt", json.dumps(prompt))
+			if extra_pnginfo is not None:
+				for x in extra_pnginfo:
+					metadata.add_text(x, json.dumps(extra_pnginfo[x]))
+
+			file = f"{counter:05}-c-{filename_prefix}.png"
+			img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=4)
+			results.append({
+				"filename": file,
+				"subfolder": full_output_folder,
+				"type": self.type
+			})
+
+			# Check if a user-specified folder for TEXT files is provided
+			if subfolder is not None:
+				# Create the full path for the TEXT file using the same name as the PNG
+				text_file = os.path.join(subfolder, f"{counter:05}-c-{filename_prefix}.txt")
+			else:
+				# Use the same folder as the image if no custom subfolder is provided
+				text_file = os.path.join(full_output_folder, f"{counter:05}-c-{filename_prefix}.txt")
+
+			# Save some example text content to the TEXT file (you can modify this)
+			with open(text_file, 'w') as text:
+				text.write("This is an example text file.")
+
+			counter += 1
+
+		return {"ui": {"images": results}}
+
+	def get_next_number(self, directory):
+		files = os.listdir(directory)
+		highest_number = 0
+		for file in files:
+			parts = file.split('-')
+			try:
+				num = int(parts[0])
+				if num > highest_number:
+					highest_number = num
+			except ValueError:
+				# If it's not a number, skip this file
+				continue
+
+		# Return the next number
+		return highest_number + 1
 
 
 #--------------------------------------
@@ -361,3 +561,13 @@ class EndlessNode_ComboXLParameterizer:
 # ComfyUI Interface for the basic ideas of what nodes I wanted
 #
 # https://github.com/comfyanonymous/ComfyUI
+#
+# ComfyUI-Strimmlarns-Aesthetic-Score for the original coding for Aesthetic Scoring Type One
+#
+# https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score
+#
+# The scorer uses the MLP class code from Christoph Schuhmann
+# 
+#https://github.com/christophschuhmann/improved-aesthetic-predictor
+#
+#--------------------------------------
