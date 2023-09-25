@@ -1,5 +1,5 @@
 # Endless-Nodes
-Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.
+Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Features switches for text and numbers, parameter collection nodes, and two aesthetic scoring models.
 
 When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface for [Stable Diffusion](https://github.com/Stability-AI/stablediffusion), I sometimes find that the standard nodes and the many, many, many custom nodes out there don't work the way I want them to, or how I think they do.
 
@@ -38,7 +38,7 @@ In Windows, you can then right-click to start a command prompt and type:
 
 You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager)
 
-**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer and ImageReward for the my take on the Image Reward node scorer.  I've added them in the requirement file but if it doesn't work, you will need to download manually**
+**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer and ImageReward for my take on the Image Reward node scorer.  I've added them in the requirement file but if it doesn't work, you will need to download manually**
 
 ## Node List
 
@@ -116,13 +116,14 @@ The scorer adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, y
 
 This node will output a predicted aesthetic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/ZaneA/ComfyUI-ImageReward that in turn scores images using [ImageReward](https://github.com/THUDM/ImageReward).   I combined the model loader and score calculator into one and added output nodes for both the standard deviation calculation (which is what Zane's node does) and the score on a scale of one to ten based on some simple statistic calculations.
 
-The difference between this node and the Aesthetics Scorer is that the underlying ImageReward is based on Reward Feedback Learning (ReFL) and uses 137K input samples that were scored by humans.  It often score much lower than the Aesthetics Scorer, but not always!
+The difference between this node and the Aesthetics Scorer is that the underlying ImageReward is based on Reward Feedback Learning (ReFL) and uses 137K input samples that were scored by humans.  It often scores much lower than the Aesthetics Scorer, but not always!
 
 ![imagereward](./img/imagereward.png)
 
 As with the Aesthetics Scorer, the Image Reward node adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary.  
 
-For added GPU time cycle consumption, put them both in and watch how often they vehemently disagree with the scoring :)
+For added GPU cycle time consumption, put them both in and watch how often they vehemently disagree with the scoring :)
+
 ![disagree](./img/disagree.png)
 
 ## Usage License and Restrictions
