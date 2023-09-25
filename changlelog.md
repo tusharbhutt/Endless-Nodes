@@ -1,3 +1,4 @@
+Sep 24/23: 0.24 - Added In Image Reward scoring model with a single node to load model and output standard deviation and scoring via number or string nodes
 Sep 24/23: 0.23 - Rework Aesthetic Score model and integrate it into single node to display score, added a requirements file
 Sep 23/23: 0.22 - Unreleased, convert ImageReward output to base ten score
 Sep 22/23: 0.21 - Unreleased, recategorized nodes into submenus, added some vanity coding to the node names, changed the ComfyUI manager header text

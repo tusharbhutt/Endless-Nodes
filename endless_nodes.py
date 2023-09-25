@@ -2,10 +2,11 @@
 @author: BiffMunky
 @title: 🌌 An Endless Sea of Stars Nodes 🌌
 @nickname: 🌌 Endless Nodes 🌌
-@description: A small set of nodes I created for various numerical and text inputs.
+@description: A small set of nodes I created for various numerical and text inputs.  Features switches for text and numbers, parameter collection nodes, and two aesthetic scoring modwls.
 """
 
-# Version 0.23 - Aesthetic Scoring TYpe 1 addeded
+# Version 0.24 - Imagr Rearwd nodeaddeded
+#0.23 - Aesthetic Scorer addeded
 #0.22 Unreleased - intro'd asestheic score
 #0.21 unreleased -- trying for display nodes
 #0.20 sorted categories of nodes
@@ -35,7 +36,7 @@ import sys
 import statistics
 import torch
 import torch.nn as nn
-
+import ImageReward as RM
 
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
@@ -416,9 +417,9 @@ class EndlessNode_Scoring:
 	def INPUT_TYPES(cls):
 		return {
 			"required": {
-				"model_name": (folder_paths.get_filename_list("aesthetic"), ),
+				"model_name": (folder_paths.get_filename_list("aesthetic"), {"multiline": False, "default": "chadscorer.pth"}),
 				"image": ("IMAGE",),
-			}
+				}
 		}
 
 	RETURN_TYPES = ("NUM",)
@@ -447,105 +448,150 @@ class EndlessNode_Scoring:
 		del model
 		return (final_prediction,)
 
-		
-		##test of image saver ##
 
 
-class EndlessNode_ImageSaver:
+class EndlessNode_ImageReward:
 	def __init__(self):
-		self.output_dir = folder_paths.get_output_directory()
-		self.type = "output"
+		self.model = None
 
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {
+				"model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
+				"prompt": ("STRING", {"multiline": True, "forceInput": True}),
 				"images": ("IMAGE",),
-				"filename_prefix": ("STRING", {"default": "ComfyUI"}),
-				"subfolder": ("STRING", {"default": None}),  # Add subfolder input
-			},
-			"hidden": {
-				"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
+#				"rounded": ("BOOL", {"default": False})  # Add a boolean input
 			},
 		}
 
-	RETURN_TYPES = ()
-	FUNCTION = "save_images"
+	RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING")
+	RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING")
+	OUTPUT_NODE = False
 
-	OUTPUT_NODE = True
+	CATEGORY = "Endless 🌌/Scoring"
 
-	CATEGORY = "Endless 🌌/IO"
+	FUNCTION = "process_images"
 
-	def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None, subfolder=None):
+	def process_images(self, model, prompt, images,): #rounded):
+		if self.model is None:
+			self.model = RM.load(model)
 
-		# Replace illegal characters in the filename prefix with dashes
-		filename_prefix = re.sub(r'[<>:"\/\\|?*]', '-', filename_prefix)
-
-		# Get the current date in Y-m-d format
-		today = datetime.datetime.now().strftime("%Y-%m-%d")
-
-		# If a custom subfolder is provided, use it; otherwise, use the date
-		if subfolder is not None:
-			full_output_folder = os.path.join(self.output_dir, subfolder)
-		else:
-			full_output_folder = os.path.join(self.output_dir, today)
-
-		# Create the subfolder if it doesn't exist
-		os.makedirs(full_output_folder, exist_ok=True)
-
-		counter = self.get_next_number(full_output_folder)
-
-		results = list()
+		score = 0.0
 		for image in images:
-			i = 255. * image.cpu().numpy()
+			# convert to PIL image
+			i = 255.0 * image.cpu().numpy()
 			img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+			score += self.model.score(prompt, [img])
+		score /= len(images)
+
+		# if rounded:
+			# # Round the score to two decimal places
+			# score = round(score, 2)
+
+		# assume std dev follows normal distribution curve
+		valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10  # *10 to get a value between -10
+		return (score, str(score), valuescale, str(valuescale))
+
+
+		# ##test of image saver ##
+
+
+# class EndlessNode_ImageSaver:
+	# def __init__(self):
+		# self.output_dir = folder_paths.get_output_directory()
+		# self.type = "output"
+
+	# @classmethod
+	# def INPUT_TYPES(cls):
+		# return {
+			# "required": {
+				# "images": ("IMAGE",),
+				# "filename_prefix": ("STRING", {"default": "ComfyUI"}),
+				# "subfolder": ("STRING", {"default": None}),  # Add subfolder input
+			# },
+			# "hidden": {
+				# "prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
+			# },
+		# }
+
+	# RETURN_TYPES = ()
+	# FUNCTION = "save_images"
+
+	# OUTPUT_NODE = True
+
+	# CATEGORY = "Endless 🌌/IO"
+
+	# def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None, subfolder=None):
+
+		# # Replace illegal characters in the filename prefix with dashes
+		# filename_prefix = re.sub(r'[<>:"\/\\|?*]', '-', filename_prefix)
+
+		# # Get the current date in Y-m-d format
+		# today = datetime.datetime.now().strftime("%Y-%m-%d")
+
+		# # If a custom subfolder is provided, use it; otherwise, use the date
+		# if subfolder is not None:
+			# full_output_folder = os.path.join(self.output_dir, subfolder)
+		# else:
+			# full_output_folder = os.path.join(self.output_dir, today)
+
+		# # Create the subfolder if it doesn't exist
+		# os.makedirs(full_output_folder, exist_ok=True)
+
+		# counter = self.get_next_number(full_output_folder)
+
+		# results = list()
+		# for image in images:
+			# i = 255. * image.cpu().numpy()
+			# img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
 			
-			metadata = PngInfo()
-			if prompt is not None:
-				metadata.add_text("prompt", json.dumps(prompt))
-			if extra_pnginfo is not None:
-				for x in extra_pnginfo:
-					metadata.add_text(x, json.dumps(extra_pnginfo[x]))
+			# metadata = PngInfo()
+			# if prompt is not None:
+				# metadata.add_text("prompt", json.dumps(prompt))
+			# if extra_pnginfo is not None:
+				# for x in extra_pnginfo:
+					# metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
-			file = f"{counter:05}-c-{filename_prefix}.png"
-			img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=4)
-			results.append({
-				"filename": file,
-				"subfolder": full_output_folder,
-				"type": self.type
-			})
+			# file = f"{counter:05}-c-{filename_prefix}.png"
+			# img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=4)
+			# results.append({
+				# "filename": file,
+				# "subfolder": full_output_folder,
+				# "type": self.type
+			# })
 
-			# Check if a user-specified folder for TEXT files is provided
-			if subfolder is not None:
-				# Create the full path for the TEXT file using the same name as the PNG
-				text_file = os.path.join(subfolder, f"{counter:05}-c-{filename_prefix}.txt")
-			else:
-				# Use the same folder as the image if no custom subfolder is provided
-				text_file = os.path.join(full_output_folder, f"{counter:05}-c-{filename_prefix}.txt")
+			# # Check if a user-specified folder for TEXT files is provided
+			# if subfolder is not None:
+				# # Create the full path for the TEXT file using the same name as the PNG
+				# text_file = os.path.join(subfolder, f"{counter:05}-c-{filename_prefix}.txt")
+			# else:
+				# # Use the same folder as the image if no custom subfolder is provided
+				# text_file = os.path.join(full_output_folder, f"{counter:05}-c-{filename_prefix}.txt")
 
-			# Save some example text content to the TEXT file (you can modify this)
-			with open(text_file, 'w') as text:
-				text.write("This is an example text file.")
+			# # Save some example text content to the TEXT file (you can modify this)
+			# with open(text_file, 'w') as text:
+				# text.write("This is an example text file.")
 
-			counter += 1
+			# counter += 1
 
-		return {"ui": {"images": results}}
+		# return {"ui": {"images": results}}
 
-	def get_next_number(self, directory):
-		files = os.listdir(directory)
-		highest_number = 0
-		for file in files:
-			parts = file.split('-')
-			try:
-				num = int(parts[0])
-				if num > highest_number:
-					highest_number = num
-			except ValueError:
-				# If it's not a number, skip this file
-				continue
+	# def get_next_number(self, directory):
+		# files = os.listdir(directory)
+		# highest_number = 0
+		# for file in files:
+			# parts = file.split('-')
+			# try:
+				# num = int(parts[0])
+				# if num > highest_number:
+					# highest_number = num
+			# except ValueError:
+				# # If it's not a number, skip this file
+				# continue
 
-		# Return the next number
-		return highest_number + 1
+		# # Return the next number
+		# return highest_number + 1
 
 
 #--------------------------------------
@@ -569,5 +615,7 @@ class EndlessNode_ImageSaver:
 # The scorer uses the MLP class code from Christoph Schuhmann
 # 
 #https://github.com/christophschuhmann/improved-aesthetic-predictor
+#[Zane A's ComfyUI-ImageReward](https://github.com/ZaneA/ComfyUI-ImageReward) for the original coding for the Umagr Reward nodee
 #
+#Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)  
 #--------------------------------------
