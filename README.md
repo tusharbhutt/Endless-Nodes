@@ -8,11 +8,12 @@ Rightly or wrongly, I am pretending to teach myself a bit of Python to get some 
 
 **UPDATE: Sep 24, 2023**
 
++ Took the node from https://github.com/ZaneA/ComfyUI-ImageReward that uses Image Reward and repurposed it
 + Took the node from https://github.com/strimmlarn that does aesthetic scoring and repurposed it
 
 **UPDATE: Sep 20, 2023**
 
-+ Added an eight input number switch because I needed it
++ Added an eight-input number switch because I needed it
 
 **UPDATE: Sep 18, 2023**
 
@@ -27,7 +28,7 @@ Rightly or wrongly, I am pretending to teach myself a bit of Python to get some 
 + Added the Endless Nodes Parameterizer
 
 
-## Install
+## Install and Requirements 
 
 Navigate to your /ComfyUI/custom_nodes/ folder 
 
@@ -37,7 +38,7 @@ In Windows, you can then right-click to start a command prompt and type:
 
 You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager)
 
-**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer!  I've added them in the requirement file but if it doesn't work, yo will need to download manually**
+**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer and ImageReward for the my take on the Image Reward node scorer.  I've added them in the requirement file but if it doesn't work, you will need to download manually**
 
 ## Node List
 
@@ -95,9 +96,9 @@ After making the Parameterizer, I realized having two separate ones for both the
 
 ![comboparameterizerprompt](./img/comboparameterizerprompt.png)
 
-## Aesthetic Scoring Output ##
+## Aesthetic Scorer
 
-This node will output a predicted aestheic score as a number and dispaly it with the appropriate node (e.g., rgthree's "Any" node).  I took the node from https://github.com/strimmlarn that does aesthetic scoring and repurposed it so that it is simpler and outputs the score as a number.  I combined the model loader and score calculator into one, and removed the Aesthetic Score Sorter.  
+This node will output a predicted aestheic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/strimmlarn that does aesthetic scoring and repurposed it so that it is simpler and outputs the score as a number.  I combined the model loader and score calculator into one, and removed the Aesthetic Score Sorter.  
 
 ![aestheticone](./img/aestheticone.png)
 
@@ -105,33 +106,45 @@ You can load a number of scoring models, I use the "chadscorer" model found here
 
 https://github.com/grexzen/SD-Chad/blob/main/chadscorer.pth
 
-As for the original node from strimmlarn,  please refer to this GitHub if you would like to examine it:
+As for the original node from strimmlarn, please refer to this GitHub if you would like to examine it:
 
 https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score
 
 The scorer adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary
 
+## Image Reward
+
+This node will output a predicted aesthetic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/ZaneA/ComfyUI-ImageReward that in turn scores images using [ImageReward](https://github.com/THUDM/ImageReward).   I combined the model loader and score calculator into one and added output nodes for both the standard deviation calculation (which is what Zane's node does) and the score on a scale of one to ten based on some simple statistic calculations.
+
+The difference between this node and the Aesthetics Scorer is that the underlying ImageReward is based on Reward Feedback Learning (ReFL) and uses 137K input samples that were scored by humans.  It often score much lower than the Aesthetics Scorer, but not always!
+
+![imagereward](./img/imagereward.png)
+
+As with the Aesthetics Scorer, the Image Reward node adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary.  
+
+For added GPU time cycle consumption, put them both in and watch how often they vehemently disagree with the scoring :)
+![disagree](./img/disagree.png)
 
 ## Usage License and Restrictions
 
 See GPL Licensing V3 for usage.  You may modify this code as long as you keep the credits for this repository and for those noted in the credit section below.  **YOU ARE EXPRESSLY FORBIDDEN FROM USING THIS NODE TO CREATE ANY IMAGES OR ARTWORK THAT VIOLATES THE STABLE DIFFUSION USAGE NOTES [HERE](https://huggingface.co/stabilityai/stable-diffusion-2#misuse-malicious-use-and-out-of-scope-use) AND [HERE](https://huggingface.co/stabilityai/stable-diffusion-2#misuse-and-malicious-use).**
 
-For example, don't be a mouth-breathing dick who creates fake celebrity nudes or sexual content of **anyone, even** if you have their consent
+For example, don't be a mouth-breather who creates fake celebrity nudes or sexual content of **anyone, even if you have their consent**.  JUST. DON’T. BE. A. DICK/BITCH.
 
 The author expressly disclaims any liability for any images you create using these nodes.
 
 ## Disclaimer
 
-These nodes may or may not be maintained.  They work on my system, but may not on yours.  
+These nodes may or may not be maintained.  They work on my system but may not on yours.  
 
 ## Credits
 
-[Comfyroll Custom Nodes](https://github.com/RockOfFire/ComfyUI_Comfyroll_CustomNode) for the overall node code layout, coding snippets,  and inspiration for the text input and number switches
++[Comfyroll Custom Nodes](https://github.com/RockOfFire/ComfyUI_Comfyroll_CustomNode) for the overall node code layout, coding snippets,  and inspiration for the text input and number switches.
 
- [WLSH Nodes](https://github.com/wallish77/wlsh_nodes) for some coding for the Integer Widget
++[WLSH Nodes](https://github.com/wallish77/wlsh_nodes) for some coding for the Integer Widget.
 
-[ComfyUI](https://github.com/comfyanonymous/ComfyUI) Interface for the basic ideas of what nodes I wanted
++[ComfyUI](https://github.com/comfyanonymous/ComfyUI) Interface for the basic ideas of what nodes I wanted.
 
-[ComfyUI-Strimmlarns-Aesthetic-Score](https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score) for the original coding for Aesthetic Scoring Type One
++[ComfyUI-Strimmlarns-Aesthetic-Score](https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score) for the original coding for the Aesthetic Scorer.  The original scorer, and therefore my derivative too, use the [MLP class code](https://github.com/christophschuhmann/improved-aesthetic-predictor) from Christoph Schuhmann
 
-The orginal scorer, and therefore my derivative too, use the [MLP class code](https://github.com/christophschuhmann/improved-aesthetic-predictor) from Christoph Schuhmann
++[Zane A's ComfyUI-ImageReward](https://github.com/ZaneA/ComfyUI-ImageReward) for the original coding for the Image Reward node.  Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)  
