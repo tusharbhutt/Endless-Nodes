@@ -1,10 +1,21 @@
 # Endless-Nodes
-Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Features switches for text and numbers, parameter collection nodes, and two aesthetic scoring models.
+Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Features:
+
++ An image saver for images and JSON files to base folder, custom folders for one, or custom folders for both.  Also allows for Python timestamping
++ Two aesthetic scoring models, one based on the same as AUTO1111, the other based on Image Reward
++ Converters for various numerical functions to the other (int, float, number) and to strings.  Still in beta
++ Switches for text and numbers
++ Parameter collection nodes
++ MORE TO COME 
 
 When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface for [Stable Diffusion](https://github.com/Stability-AI/stablediffusion), I sometimes find that the standard nodes and the many, many, many custom nodes out there don't work the way I want them to, or how I think they do.
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
+**UPDATE: Oct 3, 2023**
+
++ Added an Image Saver that can place JSON files ***in separate folders***
++ Added nodes to convert from one numeric type to another, and to string.  **Still in beta**
 
 **UPDATE: Sep 24, 2023**
 
@@ -42,25 +53,59 @@ You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata
 
 ## Node List
 
-### Six Text Input Switch
-Allows the user to select between six text inputs and uses a slider to make the selection.  Useful for multiple inputs for prompt creation
+## Endless Image Saver
+
+This is why I tried my hand ay Python in the first place!  There are many, many, many, good image saver nodes out there, so why one more? Well:
+
++ The default saver does not save to UNC in Windows
++ Some savers will allow you to save to UNC but have built-in folder formats
++ You can cobble some savers to save an image together with a text file, but the timestamp on the text file tends to be 2-3 seconds off from the image
++ No saver I know of lets you save the JSON file to a completely different folder
+
+So… this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions]( https://docs.python.org/2/library/time.html#time.sleep),  and you can save the JSON file somewhere else. 
+
+I have more plans for this, but it’s ready for release now.
+
+![imagesaver](./img/imagesaverone.png)
 
 
-![sixtext](./img/sixtext.png)
-
-**NOT SHOWN: There is an eight input variant now too, as of Sep 20, 2023**
-
-### Six Integer Input to Six Integer Output
-I've seen a fair number of 3-, 4-, or more X-way text input and outputs, I wanted to do something for numbers as well.  Use it as you wish.
+Does it work... ?
 
 
-![sixintconnect](./img/sixintconnect.png)
+![imagesaverfile](./img/imagesaverfile.png)
 
+See, it works!
 
-### Six Integer Widget
-As above, but with widgets for entry instead of connectors
+## Aesthetic Scorer
 
-![sixintwidget](./img/sixintwidget.png)
+This node will output a predicted aesthetic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/strimmlarn that does aesthetic scoring and repurposed it so that it is simpler and outputs the score as a number.  I combined the model loader and score calculator into one, and removed the Aesthetic Score Sorter.  
+
+![aestheticone](./img/aestheticone.png)
+
+You can load a number of scoring models, I use the "chadscorer" model found here:
+
+https://github.com/grexzen/SD-Chad/blob/main/chadscorer.pth
+
+As for the original node from strimmlarn, please refer to this GitHub if you would like to examine it:
+
+https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score
+
+The scorer adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary
+
+## Image Reward
+
+This node will output a predicted aesthetic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/ZaneA/ComfyUI-ImageReward that in turn scores images using [ImageReward](https://github.com/THUDM/ImageReward).   I combined the model loader and score calculator into one and added output nodes for both the standard deviation calculation (which is what Zane's node does) and the score on a scale of one to ten based on some simple statistic calculations.
+
+The difference between this node and the Aesthetics Scorer is that the underlying ImageReward is based on Reward Feedback Learning (ReFL) and uses 137K input samples that were scored by humans.  It often scores much lower than the Aesthetics Scorer, but not always!
+
+![imagereward](./img/imagereward.png)
+
+As with the Aesthetics Scorer, the Image Reward node adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary.  
+
+For added GPU cycle time consumption, put them both in and watch how often they vehemently disagree with the scoring :)
+
+![disagree](./img/disagree.png)
+
 
 ### Endless Node Parameterizer 
 
@@ -90,41 +135,38 @@ As above, but with TEXT_G and TEXT_L  outputs
 
 ## COMBO Parameterizer with and without prompt
 
-After making the Parameterizer, I realized having two separate ones for both the positive and negative CLIP encoders is not optimal, because almost everyone will use the same resolution for both the positive and negative base and refiners.  However, you may (well, you *should…*) want separate aesthetic scorers for the positive and negative CLIPs, so also I came up with one that does this for you.  Also comes in a variant that has the prompt boxes for you.
+After making the Parameterizer, I realized having two separate ones for both the positive and negative CLIP encoders is not optimal, because almost everyone will use the same resolution for both the positive and negative base and refiners.  However, you may (well, you *should…*) want separate aesthetic scorers for the positive and negative CLIPs, so I came up with one that does this for you.  Also comes in a variant that has the prompt boxes for you.
 
 ![comboparameterizer](./img/comboparameterizer.png)
 
 ![comboparameterizerprompt](./img/comboparameterizerprompt.png)
 
-## Aesthetic Scorer
+### Six Text Input Switch
+Allows the user to select between six text inputs and uses a slider to make the selection.  Useful for multiple inputs for prompt creation
 
-This node will output a predicted aestheic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/strimmlarn that does aesthetic scoring and repurposed it so that it is simpler and outputs the score as a number.  I combined the model loader and score calculator into one, and removed the Aesthetic Score Sorter.  
 
-![aestheticone](./img/aestheticone.png)
+![sixtext](./img/sixtext.png)
 
-You can load a number of scoring models, I use the "chadscorer" model found here:
+**NOT SHOWN: There is an eight input variant now too, as of Sep 20, 2023**
 
-https://github.com/grexzen/SD-Chad/blob/main/chadscorer.pth
+### Six Integer Input to Six Integer Output
+I've seen a fair number of 3-, 4-, or more X-way text input and outputs, I wanted to do something for numbers as well.  Use it as you wish.
 
-As for the original node from strimmlarn, please refer to this GitHub if you would like to examine it:
 
-https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score
+![sixintconnect](./img/sixintconnect.png)
 
-The scorer adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary
 
-## Image Reward
+### Six Integer Widget
+As above, but with widgets for entry instead of connectors
 
-This node will output a predicted aesthetic score as a number and display it with the appropriate node (e.g., rgthree's ["Any"](https://github.com/rgthree/rgthree-comfy#display-any) node).  I took the node from https://github.com/ZaneA/ComfyUI-ImageReward that in turn scores images using [ImageReward](https://github.com/THUDM/ImageReward).   I combined the model loader and score calculator into one and added output nodes for both the standard deviation calculation (which is what Zane's node does) and the score on a scale of one to ten based on some simple statistic calculations.
+![sixintwidget](./img/sixintwidget.png)
 
-The difference between this node and the Aesthetics Scorer is that the underlying ImageReward is based on Reward Feedback Learning (ReFL) and uses 137K input samples that were scored by humans.  It often scores much lower than the Aesthetics Scorer, but not always!
+### Various converters
 
-![imagereward](./img/imagereward.png)
+You've seen them elsewhere too, but there are few that do X to float or vice versa, so I threw them in.  *Still in beta*, sometimes they work, other times the downstream node complains.
 
-As with the Aesthetics Scorer, the Image Reward node adds about 7-10 seconds to a workflow on my Nvidia 3060 12 GB card, your mileage may vary.  
+![converters](./img/converters.png)
 
-For added GPU cycle time consumption, put them both in and watch how often they vehemently disagree with the scoring :)
-
-![disagree](./img/disagree.png)
 
 ## Usage License and Restrictions
 
@@ -149,3 +191,8 @@ These nodes may or may not be maintained.  They work on my system but may not on
 +[ComfyUI-Strimmlarns-Aesthetic-Score](https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score) for the original coding for the Aesthetic Scorer.  The original scorer, and therefore my derivative too, use the [MLP class code](https://github.com/christophschuhmann/improved-aesthetic-predictor) from Christoph Schuhmann
 
 +[Zane A's ComfyUI-ImageReward](https://github.com/ZaneA/ComfyUI-ImageReward) for the original coding for the Image Reward node.  Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)  
+
++[Mikey nodes](https://github.com/bash-j/mikey_nodes )to grab code snippet to pass scoring metadata to image
+
+# Took some base code from the [WAS save image node](https://github.com/WASasquatch/was-node-suite-comfyui) to repurpose it
+
