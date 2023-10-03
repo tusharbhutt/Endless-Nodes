@@ -1,3 +1,8 @@
+Oct 3/23:  0.29- Save Image module added, saves images and JSON to separate folder if requested
+Sep 28/23: 0.28 - Unreleased -  Added Variable types to X
+Sep 28/23: 0.27 - Unreleased - Corrected scoring nodes to actually add the value of the score into the image metadata .... still goobered!
+Sep 24/23: 0.26 - Unreleased - starting to correct scoring to get to image metadata
+Sep 24/23: 0.25 - Added various X to String Nodes
 Sep 24/23: 0.24 - Added In Image Reward scoring model with a single node to load model and output standard deviation and scoring via number or string nodes
 Sep 24/23: 0.23 - Rework Aesthetic Score model and integrate it into single node to display score, added a requirements file
 Sep 23/23: 0.22 - Unreleased, convert ImageReward output to base ten score
