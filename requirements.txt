@@ -1,3 +1,4 @@
 clip
 pytorch-lightning
 image-reward==1.4
+colorama

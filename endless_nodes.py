@@ -34,7 +34,7 @@ import ImageReward as RM
 import clip
 import colorama
 import datetime
-import folder_paths as endless_paths
+import folder_paths
 import io
 import json
 import math
@@ -559,49 +559,49 @@ class EndlessNode_ImageReward:
 		return (score, str(score), valuescale, str(valuescale))
 	
 
-# #---------------------------------------------- NOT WORKING, NEED TO LOOK AT
-# # Image Reward Scoring with score passed to image
+#---------------------------------------------- NOT WORKING, NEED TO LOOK AT
+# Image Reward Scoring with score passed to image
 
-# class EndlessNode_ImageRewardAutoScore:
-	# def __init__(self):
-		# self.model = None
+class EndlessNode_ImageRewardAutoScore:
+	def __init__(self):
+		self.model = None
 
-	# @classmethod
-	# def INPUT_TYPES(cls):
-		# return {
-			# "required": {
-				# "model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
-				# "prompt": ("STRING", {"multiline": True, "forceInput": True}),
-				# "images": ("IMAGE",),
-			# },
-		# }
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
+				"prompt": ("STRING", {"multiline": True, "forceInput": True}),
+				"images": ("IMAGE",),
+			},
+		}
 
-	# RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING", "IMAGE")
-	# RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING", "TO_IMAGE")
-	# OUTPUT_NODE = True
+	RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING", "IMAGE")
+	RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING", "TO_IMAGE")
+	OUTPUT_NODE = True
 
-	# CATEGORY = "Endless 🌌/Scoring"
+	CATEGORY = "Endless 🌌/Scoring"
 
-	# FUNCTION = "score_meta"
+	FUNCTION = "score_meta"
 
-	# def score_meta(self, model, prompt, images):
-		# if self.model is None:
-			# self.model = RM.load(model)
+	def score_meta(self, model, prompt, images):
+		if self.model is None:
+			self.model = RM.load(model)
 
-		# # Scoring part
-		# score = 0.0
-		# for image in images:
-			# i = 255.0 * image.cpu().numpy()
-			# img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-			# score += self.model.score(prompt, [img])
-		# score /= len(images)
-		# valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10
+		# Scoring part
+		score = 0.0
+		for image in images:
+			i = 255.0 * image.cpu().numpy()
+			img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+			score += self.model.score(prompt, [img])
+		score /= len(images)
+		valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10
 
-		# # Metadata part
-		# extra_pnginfo = {"SCORE": str(score)}
+		# Metadata part
+		extra_pnginfo = {"SCORE": str(score)}
 
-		# # Returning both the score and the modified image
-		# return (score, str(score), valuescale, str(valuescale), images)
+		# Returning both the score and the modified image
+		return (score, str(score), valuescale, str(valuescale), images)
 
 # ______________________________________________________________________________________________________________________________________________________________
 				# IMAGE SAVERS BLOCK				#
@@ -612,7 +612,7 @@ class EndlessNode_ImageReward:
 
 class EndlessNode_ImageSaver:
 	def __init__(self):
-		self.output_dir = endless_paths.get_output_directory()
+		self.output_dir = folder_paths.get_output_directory()
 		self.type = "output"
 
 	@classmethod

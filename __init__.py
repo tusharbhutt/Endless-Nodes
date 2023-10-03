@@ -15,11 +15,11 @@ NODE_CLASS_MAPPINGS = {
 	"Endless Nodes Parameterizer & Prompts": EndlessNode_XLParameterizerPrompt,	
 	"Endless Nodes Combo Parameterizer": EndlessNode_ComboXLParameterizer,
 	"Endless Nodes Combo Parameterizer & Prompts": EndlessNode_ComboXLParameterizerPrompt,
-	"Endless Nodes Image Save with Text File": EndlessNode_ImageSaver,
+	"Endless Nodes Image Saver with JSON": EndlessNode_ImageSaver,
 	"Endless Nodes Aesthetic Scoring": EndlessNode_Scoring,	
-	"Endless Nodes Aesthetic Scoring Auto": EndlessNode_ScoringAutoScore,	
+#	"Endless Nodes Aesthetic Scoring Auto": EndlessNode_ScoringAutoScore,	
 	"Endless Nodes Image Reward": EndlessNode_ImageReward,
-	"Endless Nodes Image Reward Auto": EndlessNode_ImageRewardAutoScore,		
+#	"Endless Nodes Image Reward Auto": EndlessNode_ImageRewardAutoScore,		
 	"Endless Nodes Float to Integer": EndlessNode_FloattoInt,
 	"Endless Nodes Float to Number": EndlessNode_FloattoNum,
 	"Endless Nodes Float to String": EndlessNode_FloattoString,
@@ -29,9 +29,9 @@ NODE_CLASS_MAPPINGS = {
 	"Endless Nodes Integer to Float": EndlessNode_InttoFloat,
 	"Endless Nodes Integer to Number": EndlessNode_InttoNum,	
 	"Endless Nodes Integer to String": EndlessNode_InttoString,	
-	"Endless Nodes Float to X": EndlessNode_FloattoX,
-	"Endless Nodes Integer to X": EndlessNode_InttoX,
-	"Endless Nodes Number to X": EndlessNode_NumtoX,
+	# "Endless Nodes Float to X": EndlessNode_FloattoX,
+	# "Endless Nodes Integer to X": EndlessNode_InttoX,
+	# "Endless Nodes Number to X": EndlessNode_NumtoX,
 	
 	
 }
