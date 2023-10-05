@@ -1,3 +1,4 @@
+Oct 05/23, V0.32: Set rules for image saver so paths + filename length do not exceed 248 (leaves room for extension)
 Oct 04/23, V0.31: Release of V0.28 functionality (int, float, num to X), added String to X, code cleanup, vanity node renaming and recategorization
 Oct 04/23, V0.30: Squished bugs in the various X to X nodes
 Oct 03/23, V0.29: Save Image module added, saves images and JSON to separate folder if requested

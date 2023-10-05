@@ -10,7 +10,7 @@
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #----------------------------------------------
-#
+# Oct 05/23, V0.32: Set rules for image saver so paths + filename length do not exceed 248 (leaves room for extension)
 # Oct 04/23, V0.31: Release of V0.28 functionality (int, float, num to X), added String to X, code cleanup, vanity node renaming and recategorization
 # Oct 04/23, V0.30: Squished bugs in the various X to X nodes
 # Oct 03/23, V0.29: Save Image module added, saves images and JSON to separate folder if requested
@@ -647,6 +647,47 @@ class EndlessNode_ImageSaver:
 	OUTPUT_NODE = True
 	CATEGORY = "Endless 🌊✨/IO"
 
+	def generate_filenames(self, filename_prefix, delimiter, counter, filename_number_padding, filename_number_start, img_extension, img_folder, json_folder):
+		# Determine the maximum allowed length for the complete path and subtract eight for the filename extensino
+		max_path_length = 248
+
+		# Calculate the length of the parts that are constant (excluding the variable counter part)
+		constant_part_length = len(filename_prefix) + len(delimiter) + len(img_extension) + 1  # +1 for the counter itself
+
+		# Calculate the available space for the variable counter part
+		available_space = max_path_length - constant_part_length - len(str(filename_number_padding))
+
+		# Truncate the filename_prefix if it exceeds the available space
+		if len(filename_prefix) > available_space:
+			filename_prefix = filename_prefix[:available_space]
+
+		# Generate the filename with the truncated prefix
+		if filename_number_start == 'true':
+			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
+			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
+		else:
+			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
+			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
+
+		# Calculate the maximum allowed length for image and JSON folders
+		max_folder_length = max_path_length - len(os.path.basename(img_file)) - len(img_extension)
+
+		# Check and truncate img_folder length if necessary
+		if img_folder and len(img_folder) > max_folder_length:
+			img_folder = img_folder[:max_folder_length]
+
+		# Check and truncate json_folder length if necessary
+		if json_folder and len(json_folder) > max_folder_length:
+			json_folder = json_folder[:max_folder_length]
+
+		# Construct full paths for image and text files based on folders provided
+		img_file = os.path.join(img_folder, os.path.basename(img_file)) if img_folder else os.path.join(self.output_dir, img_file)
+		json_file = os.path.join(json_folder, os.path.basename(json_file)) if json_folder else os.path.join(os.path.dirname(img_file), os.path.basename(json_file))
+
+		# ...
+
+		return img_file, json_file
+
 	def save_images(self, images, filename_prefix="ComfyUI", delimiter="_",
 					filename_number_padding=4, filename_number_start='false',
 					img_folder=None, json_folder=None, prompt=None, extra_pnginfo=None):
@@ -705,86 +746,6 @@ class EndlessNode_ImageSaver:
 			counter += 1
 
 		return {"ui": {"results": results}}
-
-	def generate_filenames(self, filename_prefix, delimiter, counter, filename_number_padding, filename_number_start, img_extension, img_folder, json_folder):
-		if filename_number_start == 'true':
-			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
-			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
-		else:
-			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
-			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
-
-		# Construct full paths for image and text files based on folders provided
-
-		if img_folder:
-			img_folder = self.replace_date_time_placeholders(img_folder)		
-			os.makedirs(img_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			img_file = os.path.join(img_folder, img_file)
-		else:
-			img_file = os.path.join(self.output_dir, img_file)
-
-		if json_folder:
-			json_folder = self.replace_date_time_placeholders(json_folder)
-			os.makedirs(json_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			json_file = os.path.join(json_folder, json_file)
-		else:
-			json_file = os.path.join(os.path.dirname(img_file), json_file)
-			
-		# Apply placeholders for date and time in filenames and folder
-		img_file = self.replace_date_time_placeholders(img_file)
-		json_file = self.replace_date_time_placeholders(json_file)
-
-
-
-		# Check if files with the same name exist, increment counter if necessary
-		while os.path.exists(img_file) or os.path.exists(json_file):
-			counter += 1
-			if filename_number_start == 'true':
-				img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
-				json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
-			else:
-				img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
-				json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
-
-		# Construct full paths for image and text files based on folders provided
-
-		if img_folder:
-			img_folder = self.replace_date_time_placeholders(img_folder)
-			os.makedirs(img_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			img_file = os.path.join(img_folder, img_file)
-		else:
-			img_file = os.path.join(self.output_dir, img_file)
-
-		if json_folder:
-			json_folder = self.replace_date_time_placeholders(json_folder)
-			os.makedirs(json_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			json_file = os.path.join(json_folder, json_file)
-		else:
-			json_file = os.path.join(os.path.dirname(img_file), json_file)
-			
-		# Apply placeholders for date and time in filenames and folder
-		img_file = self.replace_date_time_placeholders(img_file)
-		json_file = self.replace_date_time_placeholders(json_file)
-
-		return img_file, json_file
-
-	def replace_date_time_placeholders(self, filename):
-		# Replace date and time placeholders with actual date and time strings
-		now = datetime.datetime.now()
-		placeholders = {
-			'%Y': now.strftime('%Y'),  # Year with century as a decimal number
-			'%y': now.strftime('%y'),  # Year without century as a zero-padded decimal number
-			'%m': now.strftime('%m'),  # Month as a zero-padded decimal number
-			'%d': now.strftime('%d'),  # Day of the month as a zero-padded decimal number
-			'%H': now.strftime('%H'),  # Hour (24-hour clock) as a zero-padded decimal number
-			'%M': now.strftime('%M'),  # Minute as a zero-padded decimal number
-			'%S': now.strftime('%S'),  # Second as a zero-padded decimal number
-		}
-
-		for placeholder, replacement in placeholders.items():
-			filename = filename.replace(placeholder, replacement)
-
-		return filename
 # ______________________________________________________________________________________________________________________________________________________________
 				# CONVERTER NODES BLOCK				#
 #
