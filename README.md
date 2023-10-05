@@ -21,7 +21,7 @@ Rightly or wrongly, I am pretending to teach myself a bit of Python to get some 
 **UPDATE: Oct 3, 2023**
 
 + Added an Image Saver that can place JSON files ***in separate folders***
-+ Added nodes to convert from one numeric type to another, and to string.  **Still in beta**
++ Added nodes to convert from one numeric type to another, and to string.
 
 **UPDATE: Sep 24, 2023**
 
