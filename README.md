@@ -10,7 +10,13 @@ Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Fe
 
 When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface for [Stable Diffusion](https://github.com/Stability-AI/stablediffusion), I sometimes find that the standard nodes and the many, many, many custom nodes out there don't work the way I want them to, or how I think they do.
 
-Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
+Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  Yes, I am using ChatGPT, and yes I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
+
+
+**UPDATE: Oct 4, 2023**
+
++ Squished the bugs in the numeric to numerical and string nodes.  Special thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insight into correcting messy commas in the tuples for the converter nodes, much appreciated!
++ Added nodes to convert from string to numeric values, with some basic error checking.
 
 **UPDATE: Oct 3, 2023**
 
@@ -49,18 +55,18 @@ In Windows, you can then right-click to start a command prompt and type:
 
 You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager)
 
-**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer and ImageReward for my take on the Image Reward node scorer.  I've added them in the requirement file but if it doesn't work, you will need to download manually**
+**NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer and ImageReward for my take on the Image Reward node scorer.  Also require colorama for error messages to console. I've added them in the requirement file but if it doesn't work, you will need to download manually**
 
 ## Node List
 
 ## Endless Image Saver
 
-This is why I tried my hand ay Python in the first place!  There are many, many, many, good image saver nodes out there, so why one more? Well:
+This is why I tried my hand at Python in the first place!  There are many, many, many, good image saver nodes out there, so why one more? Well:
 
-+ The default saver does not save to UNC in Windows
-+ Some savers will allow you to save to UNC but have built-in folder formats
++ The default saver does not save to UNC in Windows, even if you try to put it in the extra paths YAML file
++ Some savers will allow you to save to UNC but have restricted built-in folder formats
 + You can cobble some savers to save an image together with a text file, but the timestamp on the text file tends to be 2-3 seconds off from the image
-+ No saver I know of lets you save the JSON file to a completely different folder
++ No saver I know of lets you save the JSON file to a **completely different folder**
 
 So… this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions]( https://docs.python.org/2/library/time.html#time.sleep),  and you can save the JSON file somewhere else. 
 
@@ -74,7 +80,7 @@ Does it work... ?
 
 ![imagesaverfile](./img/imagesaverfile.png)
 
-See, it works!
+JSONs to the left of me, images to the right of me, and here I am stuck in the midle with you!  It works!
 
 ## Aesthetic Scorer
 
@@ -178,7 +184,7 @@ The author expressly disclaims any liability for any images you create using the
 
 ## Disclaimer
 
-These nodes may or may not be maintained.  They work on my system but may not on yours.  
+These nodes may or may not be maintained.  They work on my system but may not on yours.  Feel free to send in a bug report if you find one! 
 
 ## Credits
 
@@ -194,4 +200,7 @@ These nodes may or may not be maintained.  They work on my system but may not on
 
 +[Mikey nodes](https://github.com/bash-j/mikey_nodes )to grab code snippet to pass scoring metadata to image
 
-# Took some base code from the [WAS save image node](https://github.com/WASasquatch/was-node-suite-comfyui) to repurpose it
++ Took some base code from the [WAS save image node](https://github.com/WASasquatch/was-node-suite-comfyui) to repurpose it
+
++ # Thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insgiht into correcting mesy commas in the tuples for the converter nodes, much appreciated!
+#
