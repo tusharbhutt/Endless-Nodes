@@ -188,19 +188,19 @@ These nodes may or may not be maintained.  They work on my system but may not on
 
 ## Credits
 
-+[Comfyroll Custom Nodes](https://github.com/RockOfFire/ComfyUI_Comfyroll_CustomNode) for the overall node code layout, coding snippets,  and inspiration for the text input and number switches.
++ [Comfyroll Custom Nodes](https://github.com/RockOfFire/ComfyUI_Comfyroll_CustomNode) for the overall node code layout, coding snippets,  and inspiration for the text input and number switches.
 
-+[WLSH Nodes](https://github.com/wallish77/wlsh_nodes) for some coding for the Integer Widget.
++ [WLSH Nodes](https://github.com/wallish77/wlsh_nodes) for some coding for the Integer Widget.
 
-+[ComfyUI](https://github.com/comfyanonymous/ComfyUI) Interface for the basic ideas of what nodes I wanted.
++ [ComfyUI](https://github.com/comfyanonymous/ComfyUI) Interface for the basic ideas of what nodes I wanted.
 
-+[ComfyUI-Strimmlarns-Aesthetic-Score](https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score) for the original coding for the Aesthetic Scorer.  The original scorer, and therefore my derivative too, use the [MLP class code](https://github.com/christophschuhmann/improved-aesthetic-predictor) from Christoph Schuhmann
++ [ComfyUI-Strimmlarns-Aesthetic-Score](https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score) for the original coding for the Aesthetic Scorer.  The original scorer, and therefore my derivative too, use the [MLP class code](https://github.com/christophschuhmann/improved-aesthetic-predictor) from Christoph Schuhmann
 
-+[Zane A's ComfyUI-ImageReward](https://github.com/ZaneA/ComfyUI-ImageReward) for the original coding for the Image Reward node.  Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)  
++ [Zane A's ComfyUI-ImageReward](https://github.com/ZaneA/ComfyUI-ImageReward) for the original coding for the Image Reward node.  Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)  
 
-+[Mikey nodes](https://github.com/bash-j/mikey_nodes )to grab code snippet to pass scoring metadata to image
++ [Mikey nodes](https://github.com/bash-j/mikey_nodes) to grab code snippet to pass scoring metadata to image
 
 + Took some base code from the [WAS save image node](https://github.com/WASasquatch/was-node-suite-comfyui) to repurpose it
 
-+ # Thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insgiht into correcting mesy commas in the tuples for the converter nodes, much appreciated!
++ Thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insgiht into correcting mesy commas in the tuples for the converter nodes, much appreciated!
 #
