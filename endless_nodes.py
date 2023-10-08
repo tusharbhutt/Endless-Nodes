@@ -10,6 +10,9 @@
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #----------------------------------------------
+# Oct 06/23, V0.35: Reverted the Image Saver module as I had inadvertently removed the ability to add date and time to the filenames
+# Oct 05/23, V0.34: Renamed nodes to make them shorter and easier to search for, breaks names of previous workflows though
+# Oct 05/23, V0.33: Added random text input choice for six and eight nodes inputs
 # Oct 05/23, V0.32: Set rules for image saver so paths + filename length do not exceed 248 (leaves room for extension)
 # Oct 04/23, V0.31: Release of V0.28 functionality (int, float, num to X), added String to X, code cleanup, vanity node renaming and recategorization
 # Oct 04/23, V0.30: Squished bugs in the various X to X nodes
@@ -41,8 +44,8 @@ from PIL.PngImagePlugin import PngInfo
 from colorama import init, Fore, Back, Style
 from os.path import join
 from warnings import filterwarnings
-import ImageReward as RM
-import clip
+# import ImageReward as RM
+# import clip
 import colorama
 import datetime
 import folder_paths
@@ -59,7 +62,7 @@ import sys
 import time
 import torch
 import torch.nn as nn
-
+# import random
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
 
@@ -103,7 +106,7 @@ class EndlessNode_SixTextInputSwitch:
 	RETURN_NAMES = ("Output",)
 
 	FUNCTION = "six_text_switch"
-	CATEGORY = "Endless 🌊✨/Switches"
+	CATEGORY = "Endless 🌊✨/Switches/Fixed"
 
 	def six_text_switch(self, Input, text1=None,text2=None,text3=None,text4=None,text5=None,text6=None):
 
@@ -151,7 +154,7 @@ class EndlessNode_EightTextInputSwitch:
 	RETURN_NAMES = ("Output",)
 
 	FUNCTION = "eight_text_switch"
-	CATEGORY = "Endless 🌊✨/Switches"
+	CATEGORY = "Endless 🌊✨/Switches/Fixed"
 
 	def eight_text_switch(self,Input,text1=None,text2=None,text3=None,text4=None,text5=None,text6=None,text7=None,text8=None,):
 
@@ -199,7 +202,7 @@ class EndlessNode_SixIntIOSwitch:
 	RETURN_NAMES = ("INT1","INT2","INT3","INT4","INT5","INT6",)
 
 	FUNCTION = "six_intIO_switch"
-	CATEGORY = "Endless 🌊✨/Switches"
+	CATEGORY = "Endless 🌊✨/Switches/Fixed"
 
 	def six_intIO_switch(self, Input, INT1=0, INT2=0, INT3=0, INT4=0, INT5=0, INT6=0):
 
@@ -241,7 +244,7 @@ class EndlessNode_SixIntIOWidget:
 	RETURN_NAMES = ("INT1","INT2","INT3","INT4","INT5","INT6",)
 	FUNCTION = "six_int_widget"
 
-	CATEGORY = "Endless 🌊✨/Switches"
+	CATEGORY = "Endless 🌊✨/Switches/Fixed"
 
 
 	def six_int_widget(self,int1,int2,int3,int4,int5,int6):
@@ -394,96 +397,96 @@ class EndlessNode_ComboXLParameterizer:
 		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore)
 
 #______________________________________________________________________________________________________________________________________________________________
-#				IMAGE SCORING BLOCK				#
+#				IMAGE SCORING BLOCK				# IT'S DEAD JIM, WHY CAN'T WE HAVE NICE THINGS?
 
 #----------------------------------------------
 # Aesthetic Scoring Node
 
-folder_paths.folder_names_and_paths["aesthetic"] = ([os.path.join(folder_paths.models_dir,"aesthetic")], folder_paths.supported_pt_extensions)
+# folder_paths.folder_names_and_paths["aesthetic"] = ([os.path.join(folder_paths.models_dir,"aesthetic")], folder_paths.supported_pt_extensions)
 
 
-class MLP(pl.LightningModule):
-	def __init__(self, input_size, xcol='emb', ycol='avg_rating'):
-		super().__init__()
-		self.input_size = input_size
-		self.xcol = xcol
-		self.ycol = ycol
-		self.layers = nn.Sequential(
-			nn.Linear(self.input_size, 1024),
-			#nn.ReLU(),
-			nn.Dropout(0.2),
-			nn.Linear(1024, 128),
-			#nn.ReLU(),
-			nn.Dropout(0.2),
-			nn.Linear(128, 64),
-			#nn.ReLU(),
-			nn.Dropout(0.1),
-			nn.Linear(64, 16),
-			#nn.ReLU(),
-			nn.Linear(16, 1)
-		)
-	def forward(self, x):
-		return self.layers(x)
-	def training_step(self, batch, batch_idx):
-			x = batch[self.xcol]
-			y = batch[self.ycol].reshape(-1, 1)
-			x_hat = self.layers(x)
-			loss = F.mse_loss(x_hat, y)
-			return loss
-	def validation_step(self, batch, batch_idx):
-		x = batch[self.xcol]
-		y = batch[self.ycol].reshape(-1, 1)
-		x_hat = self.layers(x)
-		loss = F.mse_loss(x_hat, y)
-		return loss
-	def configure_optimizers(self):
-		optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
-		return optimizer
-def normalized(a, axis=-1, order=2):
-	import numpy as np  # pylint: disable=import-outside-toplevel
-	l2 = np.atleast_1d(np.linalg.norm(a, order, axis))
-	l2[l2 == 0] = 1
-	return a / np.expand_dims(l2, axis)
+# class MLP(pl.LightningModule):
+	# def __init__(self, input_size, xcol='emb', ycol='avg_rating'):
+		# super().__init__()
+		# self.input_size = input_size
+		# self.xcol = xcol
+		# self.ycol = ycol
+		# self.layers = nn.Sequential(
+			# nn.Linear(self.input_size, 1024),
+			# #nn.ReLU(),
+			# nn.Dropout(0.2),
+			# nn.Linear(1024, 128),
+			# #nn.ReLU(),
+			# nn.Dropout(0.2),
+			# nn.Linear(128, 64),
+			# #nn.ReLU(),
+			# nn.Dropout(0.1),
+			# nn.Linear(64, 16),
+			# #nn.ReLU(),
+			# nn.Linear(16, 1)
+		# )
+	# def forward(self, x):
+		# return self.layers(x)
+	# def training_step(self, batch, batch_idx):
+			# x = batch[self.xcol]
+			# y = batch[self.ycol].reshape(-1, 1)
+			# x_hat = self.layers(x)
+			# loss = F.mse_loss(x_hat, y)
+			# return loss
+	# def validation_step(self, batch, batch_idx):
+		# x = batch[self.xcol]
+		# y = batch[self.ycol].reshape(-1, 1)
+		# x_hat = self.layers(x)
+		# loss = F.mse_loss(x_hat, y)
+		# return loss
+	# def configure_optimizers(self):
+		# optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+		# return optimizer
+# def normalized(a, axis=-1, order=2):
+	# import numpy as np  # pylint: disable=import-outside-toplevel
+	# l2 = np.atleast_1d(np.linalg.norm(a, order, axis))
+	# l2[l2 == 0] = 1
+	# return a / np.expand_dims(l2, axis)
 
 
-class EndlessNode_Scoring:
-	def __init__(self):
-		pass
+# class EndlessNode_Scoring:
+	# def __init__(self):
+		# pass
 
-	@classmethod
-	def INPUT_TYPES(cls):
-		return {
-			"required": {
-				"model_name": (folder_paths.get_filename_list("aesthetic"), {"multiline": False, "default": "chadscorer.pth"}),
-				"image": ("IMAGE",),
-				}
-		}
+	# @classmethod
+	# def INPUT_TYPES(cls):
+		# return {
+			# "required": {
+				# "model_name": (folder_paths.get_filename_list("aesthetic"), {"multiline": False, "default": "chadscorer.pth"}),
+				# "image": ("IMAGE",),
+				# }
+		# }
 
-	RETURN_TYPES = ("NUMBER","IMAGE")
-	FUNCTION = "calc_score"
-	CATEGORY = "Endless 🌊✨/Scoring"
+	# RETURN_TYPES = ("NUMBER","IMAGE")
+	# FUNCTION = "calc_score"
+	# CATEGORY = "Endless 🌊✨/Scoring"
 
-	def calc_score(self, model_name, image):
-		m_path = folder_paths.folder_names_and_paths["aesthetic"][0]
-		m_path2 = os.path.join(m_path[0], model_name)
-		model = MLP(768)  # CLIP embedding dim is 768 for CLIP ViT L 14
-		s = torch.load(m_path2)
-		model.load_state_dict(s)
-		model.to("cuda")
-		model.eval()
-		device = "cuda" 
-		model2, preprocess = clip.load("ViT-L/14", device=device)  # RN50x64
-		tensor_image = image[0]
-		img = (tensor_image * 255).to(torch.uint8).numpy()
-		pil_image = Image.fromarray(img, mode='RGB')
-		image2 = preprocess(pil_image).unsqueeze(0).to(device)
-		with torch.no_grad():
-			image_features = model2.encode_image(image2)
-		im_emb_arr = normalized(image_features.cpu().detach().numpy())
-		prediction = model(torch.from_numpy(im_emb_arr).to(device).type(torch.cuda.FloatTensor))
-		final_prediction = round(float(prediction[0]), 2)
-		del model
-		return (final_prediction,)
+	# def calc_score(self, model_name, image):
+		# m_path = folder_paths.folder_names_and_paths["aesthetic"][0]
+		# m_path2 = os.path.join(m_path[0], model_name)
+		# model = MLP(768)  # CLIP embedding dim is 768 for CLIP ViT L 14
+		# s = torch.load(m_path2)
+		# model.load_state_dict(s)
+		# model.to("cuda")
+		# model.eval()
+		# device = "cuda" 
+		# model2, preprocess = clip.load("ViT-L/14", device=device)  # RN50x64
+		# tensor_image = image[0]
+		# img = (tensor_image * 255).to(torch.uint8).numpy()
+		# pil_image = Image.fromarray(img, mode='RGB')
+		# image2 = preprocess(pil_image).unsqueeze(0).to(device)
+		# with torch.no_grad():
+			# image_features = model2.encode_image(image2)
+		# im_emb_arr = normalized(image_features.cpu().detach().numpy())
+		# prediction = model(torch.from_numpy(im_emb_arr).to(device).type(torch.cuda.FloatTensor))
+		# final_prediction = round(float(prediction[0]), 2)
+		# del model
+		# return (final_prediction,)
 
 # #---------------------------------------------- NOT WORKING, NEED TO LOOK AT IT
 # # Aesthetic Scoring Node with Scoring passed to image
@@ -533,86 +536,86 @@ class EndlessNode_Scoring:
 #----------------------------------------------
 # Image Reward Scoring
 
-class EndlessNode_ImageReward:
-	def __init__(self):
-		self.model = None
+# class EndlessNode_ImageReward:
+	# def __init__(self):
+		# self.model = None
 
-	@classmethod
-	def INPUT_TYPES(cls):
-		return {
-			"required": {
-				"model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
-				"prompt": ("STRING", {"multiline": True, "forceInput": True}),
-				"images": ("IMAGE",),
-			},
-		}
+	# @classmethod
+	# def INPUT_TYPES(cls):
+		# return {
+			# "required": {
+				# "model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
+				# "prompt": ("STRING", {"multiline": True, "forceInput": True}),
+				# "images": ("IMAGE",),
+			# },
+		# }
 
-	RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING")
-	RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING")
+	# RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING")
+	# RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING")
 
-	CATEGORY = "Endless 🌊✨/Scoring"
+	# CATEGORY = "Endless 🌊✨/Scoring"
 
-	FUNCTION = "process_images"
+	# FUNCTION = "process_images"
 
-	def process_images(self, model, prompt, images,): #rounded):
-		if self.model is None:
-			self.model = RM.load(model)
+	# def process_images(self, model, prompt, images,): #rounded):
+		# if self.model is None:
+			# self.model = RM.load(model)
 
-		score = 0.0
-		for image in images:
-			# convert to PIL image
-			i = 255.0 * image.cpu().numpy()
-			img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-			score += self.model.score(prompt, [img])
-		score /= len(images)
-		# assume std dev follows normal distribution curve
-		valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10  # *10 to get a value between -10
-		return (score, str(score), valuescale, str(valuescale))
+		# score = 0.0
+		# for image in images:
+			# # convert to PIL image
+			# i = 255.0 * image.cpu().numpy()
+			# img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+			# score += self.model.score(prompt, [img])
+		# score /= len(images)
+		# # assume std dev follows normal distribution curve
+		# valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10  # *10 to get a value between -10
+		# return (score, str(score), valuescale, str(valuescale))
 	
 
-#---------------------------------------------- NOT WORKING, NEED TO LOOK AT
-# Image Reward Scoring with score passed to image
+# #---------------------------------------------- NOT WORKING, NEED TO LOOK AT
+# # Image Reward Scoring with score passed to image
 
-class EndlessNode_ImageRewardAutoScore:
-	def __init__(self):
-		self.model = None
+# class EndlessNode_ImageRewardAutoScore:
+	# def __init__(self):
+		# self.model = None
 
-	@classmethod
-	def INPUT_TYPES(cls):
-		return {
-			"required": {
-				"model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
-				"prompt": ("STRING", {"multiline": True, "forceInput": True}),
-				"images": ("IMAGE",),
-			},
-		}
+	# @classmethod
+	# def INPUT_TYPES(cls):
+		# return {
+			# "required": {
+				# "model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
+				# "prompt": ("STRING", {"multiline": True, "forceInput": True}),
+				# "images": ("IMAGE",),
+			# },
+		# }
 
-	RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING", "IMAGE")
-	RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING", "TO_IMAGE")
-	OUTPUT_NODE = True
+	# RETURN_TYPES = ("FLOAT", "STRING", "FLOAT", "STRING", "IMAGE")
+	# RETURN_NAMES = ("SCORE_FLOAT", "SCORE_STRING", "VALUE_FLOAT", "VALUE_STRING", "TO_IMAGE")
+	# OUTPUT_NODE = True
 
-	CATEGORY = "Endless 🌊✨/Scoring"
+	# CATEGORY = "Endless 🌊✨/Scoring"
 
-	FUNCTION = "score_meta"
+	# FUNCTION = "score_meta"
 
-	def score_meta(self, model, prompt, images):
-		if self.model is None:
-			self.model = RM.load(model)
+	# def score_meta(self, model, prompt, images):
+		# if self.model is None:
+			# self.model = RM.load(model)
 
-		# Scoring part
-		score = 0.0
-		for image in images:
-			i = 255.0 * image.cpu().numpy()
-			img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-			score += self.model.score(prompt, [img])
-		score /= len(images)
-		valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10
+		# # Scoring part
+		# score = 0.0
+		# for image in images:
+			# i = 255.0 * image.cpu().numpy()
+			# img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+			# score += self.model.score(prompt, [img])
+		# score /= len(images)
+		# valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10
 
-		# Metadata part
-		extra_pnginfo = {"SCORE": str(score)}
+		# # Metadata part
+		# extra_pnginfo = {"SCORE": str(score)}
 
-		# Returning both the score and the modified image
-		return (score, str(score), valuescale, str(valuescale), images)
+		# # Returning both the score and the modified image
+		# return (score, str(score), valuescale, str(valuescale), images)
 
 # ______________________________________________________________________________________________________________________________________________________________
 				# IMAGE SAVERS BLOCK				#
@@ -642,51 +645,11 @@ class EndlessNode_ImageSaver:
 				"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
 			},
 		}
+
 	RETURN_TYPES = ()
 	FUNCTION = "save_images"
 	OUTPUT_NODE = True
 	CATEGORY = "Endless 🌊✨/IO"
-
-	def generate_filenames(self, filename_prefix, delimiter, counter, filename_number_padding, filename_number_start, img_extension, img_folder, json_folder):
-		# Determine the maximum allowed length for the complete path and subtract eight for the filename extensino
-		max_path_length = 248
-
-		# Calculate the length of the parts that are constant (excluding the variable counter part)
-		constant_part_length = len(filename_prefix) + len(delimiter) + len(img_extension) + 1  # +1 for the counter itself
-
-		# Calculate the available space for the variable counter part
-		available_space = max_path_length - constant_part_length - len(str(filename_number_padding))
-
-		# Truncate the filename_prefix if it exceeds the available space
-		if len(filename_prefix) > available_space:
-			filename_prefix = filename_prefix[:available_space]
-
-		# Generate the filename with the truncated prefix
-		if filename_number_start == 'true':
-			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
-			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
-		else:
-			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
-			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
-
-		# Calculate the maximum allowed length for image and JSON folders
-		max_folder_length = max_path_length - len(os.path.basename(img_file)) - len(img_extension)
-
-		# Check and truncate img_folder length if necessary
-		if img_folder and len(img_folder) > max_folder_length:
-			img_folder = img_folder[:max_folder_length]
-
-		# Check and truncate json_folder length if necessary
-		if json_folder and len(json_folder) > max_folder_length:
-			json_folder = json_folder[:max_folder_length]
-
-		# Construct full paths for image and text files based on folders provided
-		img_file = os.path.join(img_folder, os.path.basename(img_file)) if img_folder else os.path.join(self.output_dir, img_file)
-		json_file = os.path.join(json_folder, os.path.basename(json_file)) if json_folder else os.path.join(os.path.dirname(img_file), os.path.basename(json_file))
-
-		# ...
-
-		return img_file, json_file
 
 	def save_images(self, images, filename_prefix="ComfyUI", delimiter="_",
 					filename_number_padding=4, filename_number_start='false',
@@ -713,7 +676,9 @@ class EndlessNode_ImageSaver:
 				for x in extra_pnginfo:
 					metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
-			img_file, json_file = self.generate_filenames(filename_prefix, delimiter, counter,filename_number_padding, filename_number_start,img_extension, img_folder, json_folder)
+			img_file, json_file = self.generate_filenames(filename_prefix, delimiter, counter,
+														 filename_number_padding, filename_number_start,
+														 img_extension, img_folder, json_folder)
 
 			try:
 				if img_extension == '.png':
@@ -746,6 +711,90 @@ class EndlessNode_ImageSaver:
 			counter += 1
 
 		return {"ui": {"results": results}}
+
+	def generate_filenames(self, filename_prefix, delimiter, counter,
+						filename_number_padding, filename_number_start, img_extension,
+						img_folder, json_folder):
+		if filename_number_start == 'true':
+			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
+			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
+		else:
+			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
+			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
+
+		# Construct full paths for image and text files based on folders provided
+
+		if img_folder:
+			img_folder = self.replace_date_time_placeholders(img_folder)		
+			os.makedirs(img_folder, exist_ok=True)  # Create the image folder if it doesn't exist
+			img_file = os.path.join(img_folder, img_file)
+		else:
+			img_file = os.path.join(self.output_dir, img_file)
+
+		if json_folder:
+			json_folder = self.replace_date_time_placeholders(json_folder)
+			os.makedirs(json_folder, exist_ok=True)  # Create the image folder if it doesn't exist
+			json_file = os.path.join(json_folder, json_file)
+		else:
+			json_file = os.path.join(os.path.dirname(img_file), json_file)
+			
+		# Apply placeholders for date and time in filenames and folder
+		img_file = self.replace_date_time_placeholders(img_file)
+		json_file = self.replace_date_time_placeholders(json_file)
+
+
+
+		# Check if files with the same name exist, increment counter if necessary
+		while os.path.exists(img_file) or os.path.exists(json_file):
+			counter += 1
+			if filename_number_start == 'true':
+				img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
+				json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
+			else:
+				img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
+				json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
+
+		# Construct full paths for image and text files based on folders provided
+
+		if img_folder:
+			img_folder = self.replace_date_time_placeholders(img_folder)		
+			os.makedirs(img_folder, exist_ok=True)  # Create the image folder if it doesn't exist
+			img_file = os.path.join(img_folder, img_file)
+		else:
+			img_file = os.path.join(self.output_dir, img_file)
+
+		if json_folder:
+			json_folder = self.replace_date_time_placeholders(json_folder)
+			os.makedirs(json_folder, exist_ok=True)  # Create the image folder if it doesn't exist
+			json_file = os.path.join(json_folder, json_file)
+		else:
+			json_file = os.path.join(os.path.dirname(img_file), json_file)
+			
+		# Apply placeholders for date and time in filenames and folder
+		img_file = self.replace_date_time_placeholders(img_file)
+		json_file = self.replace_date_time_placeholders(json_file)
+
+		return img_file, json_file
+
+	def replace_date_time_placeholders(self, filename):
+		# Replace date and time placeholders with actual date and time strings
+		now = datetime.datetime.now()
+		placeholders = {
+			'%Y': now.strftime('%Y'),  # Year with century as a decimal number
+			'%y': now.strftime('%y'),  # Year without century as a zero-padded decimal number
+			'%m': now.strftime('%m'),  # Month as a zero-padded decimal number
+			'%d': now.strftime('%d'),  # Day of the month as a zero-padded decimal number
+			'%H': now.strftime('%H'),  # Hour (24-hour clock) as a zero-padded decimal number
+			'%M': now.strftime('%M'),  # Minute as a zero-padded decimal number
+			'%S': now.strftime('%S'),  # Second as a zero-padded decimal number
+		}
+
+		for placeholder, replacement in placeholders.items():
+			filename = filename.replace(placeholder, replacement)
+
+		return filename
+		
+		
 # ______________________________________________________________________________________________________________________________________________________________
 				# CONVERTER NODES BLOCK				#
 #
@@ -771,7 +820,7 @@ class EndlessNode_FloattoInt:
 		return (int(FloatValue),)
 
 # ----------------------------------------------
-# Float value to Number. There is no real "Number" function in Python, this is here so that nodes that need a NUMBER can take the FLOAT value
+# Float to Number. There is no real "Number" function in Python, this is here so that nodes that need a NUMBER can take the FLOAT value
 
 class EndlessNode_FloattoNum:
 	CATEGORY = "Endless 🌊✨/Converters/Float"
@@ -814,7 +863,7 @@ class EndlessNode_FloattoString:
 		return(str(FloatValue),)
 
 # ----------------------------------------------
-# Float value to X
+# Float to X
 
 class EndlessNode_FloattoX:
 	CATEGORY = "Endless 🌊✨/Converters/Float"
@@ -1097,7 +1146,9 @@ class EndlessNode_StringtoX:
 			return(int(float(StringValue)), float(StringValue),float(StringValue),) # int(float(x)) in case the user puts in a decimal
 		except (ValueError, TypeError):  # Handle non-numerical input here by returning default value of 0
 			return 0, 0.0, 0.0
-		
+	
+
+	
 #______________________________________________________________________________________________________________________________________________________________
 #				CREDITS				#
 #

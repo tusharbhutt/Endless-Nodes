@@ -12,16 +12,20 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  Yes, I am using ChatGPT, and yes I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
 
+**UPDATE: Oct 7, 2023**
+
++ ***REMOVED THE AESTHERIC SCORERS, TOO MANY PEOPLE CAN'T GET CLIP LOADED.  WILL REVISIT AFTER VACATION***
+
 
 **UPDATE: Oct 4, 2023**
 
-+ Squished the bugs in the numeric to numerical and string nodes.  Special thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insight into correcting messy commas in the tuples for the converter nodes, much appreciated!
++ Squished the bugs in the numeric to numeric and string nodes.  Special thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insight into correcting messy commas in the tuples for the converter nodes, much appreciated!
 + Added nodes to convert from string to numeric values, with some basic error checking.
 
 **UPDATE: Oct 3, 2023**
 
 + Added an Image Saver that can place JSON files ***in separate folders***
-+ Added nodes to convert from one numeric type to another, and to string.
++ Added nodes to convert from one numeric type to another, and to string.  **Still in beta**
 
 **UPDATE: Sep 24, 2023**
 
