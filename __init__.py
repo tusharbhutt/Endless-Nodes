@@ -51,9 +51,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 	"ESS Combo Parameterizer": "♾️🌊✨ Combo Parameterizer",
 	"ESS Combo Parameterizer & Prompts": "♾️🌊✨ Combo Parameterizer & Prompts",
 	"ESS Image Saver with JSON": "♾️🌊✨ Image Saver with JSON",
-	"ESS Aesthetic Scoring": "♾️🌊✨ Aesthetic Scoring",
+#	"ESS Aesthetic Scoring": "♾️🌊✨ Aesthetic Scoring",
 #	"ESS Aesthetic Scoring Auto": "♾️🌊✨ Aesthetic Scoring Auto",
-	"ESS Image Reward": "♾️🌊✨ Image Reward",
+#	"ESS Image Reward": "♾️🌊✨ Image Reward",
 #	"ESS Image Reward Auto": "♾️🌊✨ Image Reward Auto",
 	"ESS Float to Integer": "♾️🌊✨ Float to Integer",
 	"ESS Float to Number": "♾️🌊✨ Float to Number",
@@ -75,4 +75,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
  
-print("\033[36m An Endless Sea of Stars Custom Nodes V0.31 \033[34m: \033[92mLoaded\033[0m")
+print("\033[36m An Endless Sea of Stars Custom Nodes V0.37 \033[34m: \033[92mLoaded\033[0m")

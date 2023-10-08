@@ -10,6 +10,8 @@
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #----------------------------------------------
+# Oct 08/23, V0.37: Bug fix in Image Saver module that would overwrite files was corrected
+# Oct 07/23, V0.36: Killed the scorers until I figure out why CLIP won't load for some people
 # Oct 06/23, V0.35: Reverted the Image Saver module as I had inadvertently removed the ability to add date and time to the filenames
 # Oct 05/23, V0.34: Renamed nodes to make them shorter and easier to search for, breaks names of previous workflows though
 # Oct 05/23, V0.33: Added random text input choice for six and eight nodes inputs
@@ -54,7 +56,7 @@ import json
 import math
 import numpy as np
 import os
-import pytorch_lightning as pl
+#import pytorch_lightning as pl
 import re
 import socket
 import statistics
@@ -623,7 +625,6 @@ class EndlessNode_ComboXLParameterizer:
 # ----------------------------------------------
 # Saver type one: saves IMAGE and JSON files, can specify separate folders for each, or one, or none, and use Python timestamps
 
-
 class EndlessNode_ImageSaver:
 	def __init__(self):
 		self.output_dir = folder_paths.get_output_directory()
@@ -638,7 +639,7 @@ class EndlessNode_ImageSaver:
 				"delimiter": ("STRING", {"default": "_"}),
 				"filename_number_padding": ("INT", {"default": 4, "min": 1, "max": 9, "step": 1}),
 				"filename_number_start": (["false", "true"],),
-				"img_folder": ("STRING", {"default": None}),
+				"image_folder": ("STRING", {"default": None}),
 				"json_folder": ("STRING", {"default": None}),
 			},
 			"hidden": {
@@ -653,7 +654,7 @@ class EndlessNode_ImageSaver:
 
 	def save_images(self, images, filename_prefix="ComfyUI", delimiter="_",
 					filename_number_padding=4, filename_number_start='false',
-					img_folder=None, json_folder=None, prompt=None, extra_pnginfo=None):
+					image_folder=None, json_folder=None, prompt=None, extra_pnginfo=None):
 
 		# Replace illegal characters in the filename prefix with dashes
 		filename_prefix = re.sub(r'[<>:"\/\\|?*]', '-', filename_prefix)
@@ -678,7 +679,7 @@ class EndlessNode_ImageSaver:
 
 			img_file, json_file = self.generate_filenames(filename_prefix, delimiter, counter,
 														 filename_number_padding, filename_number_start,
-														 img_extension, img_folder, json_folder)
+														 img_extension, image_folder, json_folder)
 
 			try:
 				if img_extension == '.png':
@@ -696,7 +697,7 @@ class EndlessNode_ImageSaver:
 					"image_filename": os.path.basename(img_file),
 					"image_path": img_file,
 					"json_filename": os.path.basename(json_file),
-					"text_path": json_file,
+					"json_path": json_file,
 					"type": self.type
 				})
 
@@ -713,8 +714,8 @@ class EndlessNode_ImageSaver:
 		return {"ui": {"results": results}}
 
 	def generate_filenames(self, filename_prefix, delimiter, counter,
-						filename_number_padding, filename_number_start, img_extension,
-						img_folder, json_folder):
+						   filename_number_padding, filename_number_start, img_extension,
+						   image_folder, json_folder):
 		if filename_number_start == 'true':
 			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
 			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
@@ -722,27 +723,20 @@ class EndlessNode_ImageSaver:
 			img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
 			json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
 
-		# Construct full paths for image and text files based on folders provided
+		# Apply placeholders for date and time in filenames
+		img_file = self.replace_date_time_placeholders(img_file)
+		json_file = self.replace_date_time_placeholders(json_file)
 
-		if img_folder:
-			img_folder = self.replace_date_time_placeholders(img_folder)		
-			os.makedirs(img_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			img_file = os.path.join(img_folder, img_file)
+		# Construct full paths for image and text files based on folders provided
+		if image_folder:
+			img_file = os.path.join(image_folder, img_file)
 		else:
 			img_file = os.path.join(self.output_dir, img_file)
 
 		if json_folder:
-			json_folder = self.replace_date_time_placeholders(json_folder)
-			os.makedirs(json_folder, exist_ok=True)  # Create the image folder if it doesn't exist
 			json_file = os.path.join(json_folder, json_file)
 		else:
 			json_file = os.path.join(os.path.dirname(img_file), json_file)
-			
-		# Apply placeholders for date and time in filenames and folder
-		img_file = self.replace_date_time_placeholders(img_file)
-		json_file = self.replace_date_time_placeholders(json_file)
-
-
 
 		# Check if files with the same name exist, increment counter if necessary
 		while os.path.exists(img_file) or os.path.exists(json_file):
@@ -754,25 +748,19 @@ class EndlessNode_ImageSaver:
 				img_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}{img_extension}"
 				json_file = f"{filename_prefix}{delimiter}{counter:0{filename_number_padding}}.json"
 
-		# Construct full paths for image and text files based on folders provided
+			# Apply placeholders for date and time in filenames
+			img_file = self.replace_date_time_placeholders(img_file)
+			json_file = self.replace_date_time_placeholders(json_file)
 
-		if img_folder:
-			img_folder = self.replace_date_time_placeholders(img_folder)		
-			os.makedirs(img_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			img_file = os.path.join(img_folder, img_file)
-		else:
-			img_file = os.path.join(self.output_dir, img_file)
+			if image_folder:
+				img_file = os.path.join(image_folder, img_file)
+			else:
+				img_file = os.path.join(self.output_dir, img_file)
 
-		if json_folder:
-			json_folder = self.replace_date_time_placeholders(json_folder)
-			os.makedirs(json_folder, exist_ok=True)  # Create the image folder if it doesn't exist
-			json_file = os.path.join(json_folder, json_file)
-		else:
-			json_file = os.path.join(os.path.dirname(img_file), json_file)
-			
-		# Apply placeholders for date and time in filenames and folder
-		img_file = self.replace_date_time_placeholders(img_file)
-		json_file = self.replace_date_time_placeholders(json_file)
+			if json_folder:
+				json_file = os.path.join(json_folder, json_file)
+			else:
+				json_file = os.path.join(os.path.dirname(img_file), json_file)
 
 		return img_file, json_file
 
@@ -793,8 +781,6 @@ class EndlessNode_ImageSaver:
 			filename = filename.replace(placeholder, replacement)
 
 		return filename
-		
-		
 # ______________________________________________________________________________________________________________________________________________________________
 				# CONVERTER NODES BLOCK				#
 #

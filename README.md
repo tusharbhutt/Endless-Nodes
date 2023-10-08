@@ -2,7 +2,7 @@
 Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Features:
 
 + An image saver for images and JSON files to base folder, custom folders for one, or custom folders for both.  Also allows for Python timestamping
-+ Two aesthetic scoring models, one based on the same as AUTO1111, the other based on Image Reward
++ (REMOVED FOR NOW) Two aesthetic scoring models, one based on the same as AUTO1111, the other based on Image Reward
 + Converters for various numerical functions to the other (int, float, number) and to strings.  Still in beta
 + Switches for text and numbers
 + Parameter collection nodes
@@ -11,6 +11,11 @@ Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Fe
 When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface for [Stable Diffusion](https://github.com/Stability-AI/stablediffusion), I sometimes find that the standard nodes and the many, many, many custom nodes out there don't work the way I want them to, or how I think they do.
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  Yes, I am using ChatGPT, and yes I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
+
+**UPDATE: Oct 8, 2023**
+
++ ***Added a standalone saver node. Fixed bug in this node and main node where image files were overwritten***
+
 
 **UPDATE: Oct 7, 2023**
 
@@ -25,7 +30,7 @@ Rightly or wrongly, I am pretending to teach myself a bit of Python to get some 
 **UPDATE: Oct 3, 2023**
 
 + Added an Image Saver that can place JSON files ***in separate folders***
-+ Added nodes to convert from one numeric type to another, and to string.  **Still in beta**
++ Added nodes to convert from one numeric type to another, and to string.
 
 **UPDATE: Sep 24, 2023**
 
