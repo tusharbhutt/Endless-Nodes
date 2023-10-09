@@ -9,8 +9,8 @@ from .endless_nodes import *
 NODE_CLASS_MAPPINGS = {
 	"ESS Six Input Text Switch": EndlessNode_SixTextInputSwitch,
 	"ESS Eight Input Text Switch": EndlessNode_EightTextInputSwitch,
-	"ESS Six Input Random": EndlessNode_SixTextRandomSwitch,
-	"ESS Eight Input Random": EndlessNode_EightTextRandomSwitch,
+#	"ESS Six Input Random": EndlessNode_SixTextRandomSwitch,
+#	"ESS Eight Input Random": EndlessNode_EightTextRandomSwitch,
 	"ESS Six Integer IO Switch": EndlessNode_SixIntIOSwitch,
 	"ESS Six Integer IO Widget": EndlessNode_SixIntIOWidget,
 	"ESS Parameterizer": EndlessNode_XLParameterizer,
