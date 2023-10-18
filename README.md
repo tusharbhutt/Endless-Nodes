@@ -78,7 +78,7 @@ Some people are reporting having issues with installing Clip from OpenAI, especi
 
 This is what I did:
 
-**TL;DR: Install GIT and Python, ensure the location of Python and Pip are in your PATH, and then use GIT to install Emndles-Nodes, whih
+**TL;DR: Install GIT and Python, ensure the location of Python and Pip are in your PATH, and then use GIT to install Endless-Nodes**
 
 - Installed the Windows standalone version of ComfyUI
 - This will install a portable version of Python for you and add the Python folder to your Win
