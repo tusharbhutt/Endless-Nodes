@@ -1,1 +1,4 @@
+lightning
+clip @ git+https://github.com/openai/CLIP.git
 colorama
+image-reward==1.4
