@@ -92,19 +92,20 @@ This is what I did:
 - If you do not have both folders added, the program will fail to find Pip and will not correctly install Clip
 - Once you have added that PATH, go to the custom folder for Endless Nodes, open up a command prompt (right-click and choose "Command Prompt here") and type the following:
 
-```python -m pip install -r requirements.txt>```
+```python -m pip install -r requirements.txt```
 
 - Note the '-m' and '-r' in the command!  You should see a tonne of programs loading and then a success notice.   Now Endless-Nodes should load properly
 - If you did a GIT install of ComfyUI and the ComfyUI Manager fails you, using the command noted above should work for you too, or you may be able to drop the -m part
 
 ### What to do if installation fails
 
-You can try to install Clip directly via the following commands(still within the Endless-Nodes folder):
+You can try to install Clip directly via the following commands (still within the Endless-Nodes folder):
 
 ```pip install ftfy regex tqdm
-pip install git+https://github.com/openai/CLIP.git```
+pip install git+https://github.com/openai/CLIP.git
+```
 
-If **_that_** does not work, then it likely some configuration on your machine is preventing the install.  Ask me **nicely** for a specific module if you're looking for one and I'll see if I can separate it out for you.  Your tone matters, I'm too old to pay attention to people who think I blew up their machines and I will be as short and presumptuous with you as you are with me.  If that bothers you, some self-relfection may be in order.
+If **_that_** does not work, then it likely some configuration on your machine is preventing the install.  Ask me **nicely** for a specific module if you're looking for one and I'll see if I can separate it out for you.  Your tone matters, I'm too old to pay attention to people who think I blew up their machines and I will be as short and presumptuous with you as you are with me.  If that bothers you, some self-reflection may be in order.
 
 
 ## Node List
@@ -264,5 +265,5 @@ These nodes may or may not be maintained.  They work on my system but may not on
 
 + Took some base code from the [WAS save image node](https://github.com/WASasquatch/was-node-suite-comfyui) to repurpose it
 
-+ Thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insgiht into correcting mesy commas in the tuples for the converter nodes, much appreciated!
++ Thanks to [chrisgoringe](https://github.com/chrisgoringe) for some vital insight into correcting messy commas in the tuples for the converter nodes, much appreciated!
 #
