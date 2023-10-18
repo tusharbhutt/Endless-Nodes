@@ -2,7 +2,7 @@
 Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Features:
 
 + An image saver for images and JSON files to base folder, custom folders for one, or custom folders for both.  Also allows for Python timestamping
-+ (REMOVED FOR NOW) Two aesthetic scoring models, one based on the same as AUTO1111, the other based on Image Reward
++ Two aesthetic scoring models, one based on the same as AUTO1111, the other based on Image Reward
 + Converters for various numerical functions to the other (int, float, number) and to strings.  Still in beta
 + Switches for text and numbers
 + Parameter collection nodes
@@ -11,6 +11,12 @@ Some basic custom nodes for the ComfyUI user interface for Stable Diffusion.  Fe
 When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface for [Stable Diffusion](https://github.com/Stability-AI/stablediffusion), I sometimes find that the standard nodes and the many, many, many custom nodes out there don't work the way I want them to, or how I think they do.
 
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like.  Yes, I am using ChatGPT, and yes I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them.  Feel free to do with them as you wish, according to the license model.
+
+**UPDATE: Oct 14, 2023**
+
++ ***REINSTATED the Aesthetic Scorers and provided instructions on how to add Clip to your system if you are having issues*** 
++ Added the Global Envoy, which allows you to add height, width, and steps to many modules.  The steps include start, stop and when to cut over to refinement, if you want (either as discrete steps, or a percentage)
+
 
 **UPDATE: Oct 8, 2023**
 
@@ -66,6 +72,41 @@ You can also get the nodes via the [ComfyUI Manager](https://github.com/ltdrdata
 
 **NOTE: Requires CLIP and Pytorch-Lightning for the Aesthetic Scorer and ImageReward for my take on the Image Reward node scorer.  Also require colorama for error messages to console. I've added them in the requirement file but if it doesn't work, you will need to download manually**
 
+## IF YOU HAVE ISSUES WITH CLIP....
+
+Some people are reporting having issues with installing Clip from OpenAI, especially if using ComfyUI Manager.  I can tell you in looking at the issues on OpenAI's GitHub, it's not an uncommon complaint.  So, I started from scratch on a new PC that had no software on it other than Windows and tested to see if I could get CLIP installed.  After some minor issues, I was able to get the Python module loaded and working.  If I can do this, I'm sure you can as well, but it will take a bit of effort and you need to have some basic skill in installing software in Windows.  For users of other platforms or if you installed the other Windows version, I'm assuming you have Python and GIT installed already, so the first few instructions will not apply, but the remainder could.
+
+This is what I did:
+
+**TL;DR: Install GIT and Python, ensure the location of Python and Pip are in your PATH, and then use GIT to install Emndles-Nodes, whih
+
+- Installed the Windows standalone version of ComfyUI
+- This will install a portable version of Python for you and add the Python folder to your Win
+- Downloaded GIT from here: https://git-scm.com/download/win
+- **IMPORTANT** This is where having the standalone version may trip you up: both the C:\ComfyUI\python_embeded\Scripts _and_ C:\ComfyUI\python_embeded\ folders need to be in the PATH sectiom of your system variables (_not_ the user variables).  If I recall only the former is added, so you will have to add the second one manually 
+
+![environ](./img/environ.png)
+
+
+- If you do not know how to add environmental variables, [here's a link for you to read](https://www.howtogeek.com/787217/how-to-edit-environment-variables-on-windows-10-or-11/)
+- If you do not have both folders added, the program will fail to find Pip and will not correctly install Clip
+- Once you have added that PATH, go to the custom folder for Endless Nodes, open up a command prompt (right-click and choose "Command Prompt here") and type the following:
+
+```python -m pip install -r requirements.txt>```
+
+- Note the '-m' and '-r' in the command!  You should see a tonne of programs loading and then a success notice.   Now Endless-Nodes should load properly
+- If you did a GIT install of ComfyUI and the ComfyUI Manager fails you, using the command noted above should work for you too, or you may be able to drop the -m part
+
+### What to do if installation fails
+
+You can try to install Clip directly via the following commands(still within the Endless-Nodes folder):
+
+```pip install ftfy regex tqdm
+pip install git+https://github.com/openai/CLIP.git```
+
+If **_that_** does not work, then it likely some configuration on your machine is preventing the install.  Ask me **nicely** for a specific module if you're looking for one and I'll see if I can separate it out for you.  Your tone matters, I'm too old to pay attention to people who think I blew up their machines and I will be as short and presumptuous with you as you are with me.  If that bothers you, some self-relfection may be in order.
+
+
 ## Node List
 
 ## Endless Image Saver
@@ -77,7 +118,7 @@ This is why I tried my hand at Python in the first place!  There are many, many,
 + You can cobble some savers to save an image together with a text file, but the timestamp on the text file tends to be 2-3 seconds off from the image
 + No saver I know of lets you save the JSON file to a **completely different folder**
 
-So… this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions]( https://docs.python.org/2/library/time.html#time.sleep),  and you can save the JSON file somewhere else. 
+So… this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions](https://strftime.org/) and you can save the JSON file somewhere else. 
 
 I have more plans for this, but it’s ready for release now.
 
@@ -89,7 +130,19 @@ Does it work... ?
 
 ![imagesaverfile](./img/imagesaverfile.png)
 
-JSONs to the left of me, images to the right of me, and here I am stuck in the midle with you!  It works!
+JSONs to the left of me, images to the right of me, and here I am stuck in the middle with you!  It works!
+
+** NOTE: this module is [available separately here](https://github.com/tusharbhutt/Endless-Nodes/blob/main/endless_nodes.py), just toss it in the ComfyUI custom_nodes folder if you don't want the remaining nodes
+
+### A note on timestamp formats
+
+This module uses the standard Python date and time stamp formats, it **_does not_** use the date and time format popular in the WAS Suite.  See below for equivalency examples:
+
+ - WAS Suite would use: ```[time(%Y-%m-%d__%I-%M%p)]```
+ - Python stadndard is: ```%Y_%m_%d__%I-%M%p``` 
+
+Note that there is no need to use "\[time(your string here)\]"
+
 
 ## Aesthetic Scorer
 
