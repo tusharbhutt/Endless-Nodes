@@ -15,12 +15,12 @@ Rightly or wrongly, I am pretending to teach myself a bit of Python to get some 
 
 **UPDATE: Oct 20 2023**
 
-+ ***Updated the Image Saver to trun off JSON add to Image Metadata if the user chooses** 
++ ***Updated the Image Saver to trun off JSON add to Image Metadata if the user chooses*** 
 
 
 **UPDATE: Oct 16 2023**
 
-+ ***Added a node that allows for six float values to output to six different output slots** 
++ ***Added a node that allows for six float values to output to six different output slots*** 
 
 
 **UPDATE: Oct 14, 2023**
@@ -134,6 +134,10 @@ Allows you to connect six float values to any other float input. What is the use
 
 ***UPDATED*** to allow the user to save JSON data to the image (default is OFF); the previous versions automatically saved the JSON data but if you have other nodes doing it, this is redundant. ***_Warning:_*** turning this off will not allow you to drag and drop an image into ComfyUI to rework it unless you had some other mechanism to save the JSON to metadata.
 
+
+![jsonsave](./img/jsonsave.png)
+
+
 This is why I tried my hand at Python in the first place! There are many, many, many, good image saver nodes out there, so why one more? Well:
 
 + The default saver does not save to UNC in Windows, even if you try to put it in the extra paths YAML file
@@ -165,6 +169,10 @@ This module uses the standard Python date and time stamp formats, it **_does not
  - Python stadndard is: ```%Y_%m_%d__%I-%M%p``` 
 
 Note that there is no need to use "\[time(your string here)\]"
+
+If you want, grab the file below which should have metadata builtin that will show you how to save a file with the date and time as part of the filename
+
+![imagesaveguide](./img/imagesaveguide.png)
 
 
 ## Aesthetic Scorer
