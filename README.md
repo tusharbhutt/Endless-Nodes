@@ -170,7 +170,7 @@ This module uses the standard Python date and time stamp formats, it **_does not
 
 Note that there is no need to use "\[time(your string here)\]"
 
-If you want, grab the file below which should have metadata builtin that will show you how to save a file with the date and time as part of the filename
+If you want, grab the file below which should have metadata built in that will show you how to save a file with the date and time as part of the filename
 
 ![imagesaveguide](./img/imagesaveguide.png)
 
