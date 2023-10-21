@@ -10,7 +10,10 @@
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #----------------------------------------------
-# Oct 08/23, V0.37: Bug fix in Image Saver module that would overwrite files was corrected
+# Oct 20/23, V0.40: Updated ImageSaver to turn off  JSOPN save to image data
+# Oct 18/23, V0.39: Added six float output node
+# Oct 18/23, V0.38: (UNRELEASED)Putting in hooks for future fixes and improvements
+# Oct 18/23, V0.37: Bug fix in Image Saver module that would overwrite files was corrected
 # Oct 07/23, V0.36: Killed the scorers until I figure out why CLIP won't load for some people
 # Oct 06/23, V0.35: Reverted the Image Saver module as I had inadvertently removed the ability to add date and time to the filenames
 # Oct 05/23, V0.34: Renamed nodes to make them shorter and easier to search for, breaks names of previous workflows though
@@ -434,6 +437,39 @@ class EndlessNode_ComboXLParameterizer:
 	def ComboParameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore):
 		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_pascore, refiner_nascore)
 
+
+
+#----------------------------------------------
+# A node that allows for numerical outputs
+
+class EndlessNode_SixIntOutput:
+	def __init__(self):
+		pass
+
+	@classmethod
+	def INPUT_TYPES(cls):
+		return {
+			"required": {
+				"FLOAT1": ("FLOAT", {"default": 0.0,}),
+				"FLOAT2": ("FLOAT", {"default": 0.0,}),
+				"FLOAT3": ("FLOAT", {"default": 0.0,}),
+				"FLOAT4": ("FLOAT", {"default": 0.0,}),
+				"FLOAT5": ("FLOAT", {"default": 0.0,}),
+				"FLOAT6": ("FLOAT", {"default": 0.0,}),
+			}
+		}
+	RETURN_TYPES = ("FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT",)
+	RETURN_NAMES = ("FLOAT1","FLOAT2","FLOAT3","FLOAT4","FLOAT5","FLOAT6",)
+	FUNCTION = "FloatOut"
+
+	
+	CATEGORY = "Endless 🌊✨/Switches/Fixed"
+
+
+	def FloatOut(self,FLOAT1,FLOAT2,FLOAT3,FLOAT4,FLOAT5,FLOAT6):
+		return(FLOAT1,FLOAT2,FLOAT3,FLOAT4,FLOAT5,FLOAT6)
+
+		
 #______________________________________________________________________________________________________________________________________________________________
 #				IMAGE SCORING BLOCK				# IT'S DEAD JIM, WHY CAN'T WE HAVE NICE THINGS?
 
@@ -703,6 +739,7 @@ class EndlessNode_ImageSaver:
 				"filename_number_start": (["false", "true"],),
 				"image_folder": ("STRING", {"default": None}),
 				"json_folder": ("STRING", {"default": None}),
+				"save_json_metadata": ("BOOLEAN", {"default": False}),  # New input for saving JSON metadata
 			},
 			"hidden": {
 				"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
@@ -716,7 +753,8 @@ class EndlessNode_ImageSaver:
 
 	def save_images(self, images, filename_prefix="ComfyUI", delimiter="_",
 					filename_number_padding=4, filename_number_start='false',
-					image_folder=None, json_folder=None, prompt=None, extra_pnginfo=None):
+					image_folder=None, json_folder=None, prompt=None, extra_pnginfo=None,
+					save_json_metadata=False):
 
 		# Replace illegal characters in the filename prefix with dashes
 		filename_prefix = re.sub(r'[<>:"/\\|?*]', '-', filename_prefix)
@@ -752,7 +790,10 @@ class EndlessNode_ImageSaver:
 														 
 			try:
 				if img_extension == '.png':
-					img.save(img_file, pnginfo=metadata, compress_level=4)
+					if save_json_metadata:
+						img.save(img_file, pnginfo=metadata, compress_level=4)
+					else:
+						img.save(img_file, compress_level=4) #skip the JSON add
 				elif img_extension == '.jpeg':
 					img.save(img_file, quality=100, optimize=True)
 				with open(json_file, 'w', encoding='utf-8', newline='\n') as f:
