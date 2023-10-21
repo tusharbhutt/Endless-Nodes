@@ -13,6 +13,11 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like. Yes, I am using ChatGPT, and yes I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them. Feel free to do with them as you wish, according to the license model.
 
 
+**UPDATE: Oct 20 2023**
+
++ ***Updated the Image Saver to trun off JSON add to Image Metadata if the user chooses** 
+
+
 **UPDATE: Oct 16 2023**
 
 + ***Added a node that allows for six float values to output to six different output slots** 
