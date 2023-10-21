@@ -1,7 +1,3 @@
-Oct 18/23: V0.38: (UNRELEASED)Putting in hooks for future fixes and improvements
-Oct 18/23: V0.37: (UNRELEASED) Attempt to pass scoring metadata to image saver
-Oct 18/23: V0.36: (UNRELEASED) Attempt to add new node to simplify resolution input and steps
-Oct 14/23: V0.35: Fixed issues with scoring nodes and updated image saver for some bugs
 Oct 07/23, V0.33: Removed Aesthetic Scorer and ImageReward until I can figure out why the CLIP module isn't working for a few people
 Oct 05/23, V0.32: (UNRELEASED)Set rules for image saver so paths + filename length do not exceed 248 (leaves room for extension)
 Oct 04/23, V0.31: Release of V0.28 functionality (int, float, num to X), added String to X, code cleanup, vanity node renaming and recategorization
