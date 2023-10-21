@@ -10,7 +10,7 @@
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #----------------------------------------------
-# Oct 20/23, V0.40: Updated ImageSaver to turn off  JSOPN save to image data
+# Oct 20/23, V0.40: Updated ImageSaver to turn off  JSON save to image data
 # Oct 18/23, V0.39: Added six float output node
 # Oct 18/23, V0.38: (UNRELEASED)Putting in hooks for future fixes and improvements
 # Oct 18/23, V0.37: Bug fix in Image Saver module that would overwrite files was corrected
