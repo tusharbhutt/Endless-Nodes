@@ -1,0 +1,15 @@
+[project]
+name = "endless-nodes"
+description = "A small set of nodes I created for various numerical and text inputs.  Features image saver with ability to have JSON saved to separate folder, parameter collection nodes, two aesthetic scoring models, switches for text and numbers, and conversion of string to numeric and vice versa."
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["colorama"]
+
+[project.urls]
+Repository = "https://github.com/tusharbhutt/Endless-Nodes"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "Endless-Nodes"
+Icon = ""
