@@ -79,4 +79,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
  
-print("\033[36m An Endless Sea of Stars Custom Nodes V0.38b \033[34m: \033[92mLoaded\033[0m")
+print("\033[36m An Endless Sea of Stars Custom Nodes V0.41 \033[34m: \033[92m Loaded \033[0m")

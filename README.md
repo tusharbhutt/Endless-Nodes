@@ -13,14 +13,13 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 Rightly or wrongly, I am pretending to teach myself a bit of Python to get some nodes up and running to do what I'd like. Yes, I am using ChatGPT, and yes I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them. Feel free to do with them as you wish, according to the license model.
 
 
-**UPDATE: Oct 20 2023**
+**UPDATE: Aug 19 2024**
 
-+ ***Updated the Image Saver to trun off JSON add to Image Metadata if the user chooses*** 
-
++ ***Fixed Image Saver node so it appears again** 
 
 **UPDATE: Oct 16 2023**
 
-+ ***Added a node that allows for six float values to output to six different output slots*** 
++ ***Added a node that allows for six float values to output to six different output slots** 
 
 
 **UPDATE: Oct 14, 2023**
@@ -61,8 +60,8 @@ Rightly or wrongly, I am pretending to teach myself a bit of Python to get some 
 **UPDATE: Sep 18, 2023**
 
 + Added the Endless Nodes Parameterizer with Text_G and Text_L prompt box
-+ Added the Parameterizer with a_score for both pos/neg
-+ Added the Parameterizer with a_score for both pos/neg and Text_G and Text_L prompt box
++ Added the Parameterizer with a score for both pos/neg
++ Added the Parameterizer with a score for both pos/neg and Text_G and Text_L prompt box
 + Fixed some typos
 
 
@@ -94,7 +93,7 @@ This is what I did:
 - Installed the Windows standalone version of ComfyUI
 - This will install a portable version of Python for you and add the Python folder to your Win
 - Downloaded GIT from here: https://git-scm.com/download/win
-- **IMPORTANT** This is where having the standalone version may trip you up: both the C:\ComfyUI\python_embeded\Scripts _and_ C:\ComfyUI\python_embeded\ folders need to be in the PATH sectiom of your system variables (_not_ the user variables). If I recall only the former is added, so you will have to add the second one manually 
+- **IMPORTANT** This is where having the standalone version may trip you up: both the C:\ComfyUI\python_embeded\Scripts _and_ C:\ComfyUI\python_embeded\ folders need to be in the PATH section of your system variables (_not_ the user variables). If I recall only the former is added, so you will have to add the second one manually 
 
 ![environ](./img/environ.png)
 
@@ -134,10 +133,6 @@ Allows you to connect six float values to any other float input. What is the use
 
 ***UPDATED*** to allow the user to save JSON data to the image (default is OFF); the previous versions automatically saved the JSON data but if you have other nodes doing it, this is redundant. ***_Warning:_*** turning this off will not allow you to drag and drop an image into ComfyUI to rework it unless you had some other mechanism to save the JSON to metadata.
 
-
-![jsonsave](./img/jsonsave.png)
-
-
 This is why I tried my hand at Python in the first place! There are many, many, many, good image saver nodes out there, so why one more? Well:
 
 + The default saver does not save to UNC in Windows, even if you try to put it in the extra paths YAML file
@@ -166,13 +161,9 @@ JSONs to the left of me, images to the right of me, and here I am stuck in the m
 This module uses the standard Python date and time stamp formats, it **_does not_** use the date and time format popular in the WAS Suite. See below for equivalency examples:
 
  - WAS Suite would use: ```[time(%Y-%m-%d__%I-%M%p)]```
- - Python stadndard is: ```%Y_%m_%d__%I-%M%p``` 
+ - Python standard is: ```%Y_%m_%d__%I-%M%p``` 
 
 Note that there is no need to use "\[time(your string here)\]"
-
-If you want, grab the file below which should have metadata built in that will show you how to save a file with the date and time as part of the filename
-
-![imagesaveguide](./img/imagesaveguide.png)
 
 
 ## Aesthetic Scorer

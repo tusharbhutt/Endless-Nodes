@@ -1,3 +1,11 @@
+Aug 19/24, V0.41: Fixed Image Saver node so it appears
+Oct 20/23, V0.40: Updated ImageSaver to turn off  JSON save to image data
+Oct 18/23, V0.39: Added six float output node
+Oct 18/23, V0.38: (UNRELEASED)Putting in hooks for future fixes and improvements
+Oct 18/23, V0.37: Bug fix in Image Saver module that would overwrite files was corrected
+Oct 07/23, V0.36: Killed the scorers until I figure out why CLIP won't load for some people
+Oct 06/23, V0.35: Reverted the Image Saver module as I had inadvertently removed the ability to add date and time to the filenames
+Oct 05/23, V0.33: Renamed nodes to make them shorter and easier to search for, breaks names of previous workflows though
 Oct 07/23, V0.33: Removed Aesthetic Scorer and ImageReward until I can figure out why the CLIP module isn't working for a few people
 Oct 05/23, V0.32: (UNRELEASED)Set rules for image saver so paths + filename length do not exceed 248 (leaves room for extension)
 Oct 04/23, V0.31: Release of V0.28 functionality (int, float, num to X), added String to X, code cleanup, vanity node renaming and recategorization

@@ -10,6 +10,7 @@
 # Endless Sea of Stars Custom Node Collection
 #https://github.com/tusharbhutt/Endless-Nodes
 #----------------------------------------------
+# Aug 19/24, V0.41: Updated ImageSaver so the node actaully appears on loading
 # Oct 20/23, V0.40: Updated ImageSaver to turn off  JSON save to image data
 # Oct 18/23, V0.39: Added six float output node
 # Oct 18/23, V0.38: (UNRELEASED)Putting in hooks for future fixes and improvements
@@ -724,6 +725,8 @@ class EndlessNode_ImageReward:
 # Saver type one: saves IMAGE and JSON files, can specify separate folders for each, or one, or none, and use Python timestamps
 
 class EndlessNode_ImageSaver:
+	CATEGORY = "Endless 🌊✨/IO"
+
 	def __init__(self):
 		self.output_dir = folder_paths.get_output_directory()
 		self.type = "output"
@@ -737,8 +740,8 @@ class EndlessNode_ImageSaver:
 				"delimiter": ("STRING", {"default": "_"}),
 				"filename_number_padding": ("INT", {"default": 4, "min": 1, "max": 9, "step": 1}),
 				"filename_number_start": (["false", "true"],),
-				"image_folder": ("STRING", {"default": None}),
-				"json_folder": ("STRING", {"default": None}),
+				"image_folder": ("STRING", {"default": ""}),
+				"json_folder": ("STRING", {"default": ""}),
 				"save_json_metadata": ("BOOLEAN", {"default": False}),  # New input for saving JSON metadata
 			},
 			"hidden": {
@@ -749,7 +752,7 @@ class EndlessNode_ImageSaver:
 	RETURN_TYPES = ()
 	FUNCTION = "save_images"
 	OUTPUT_NODE = True
-	CATEGORY = "Endless 🌊✨/IO"
+
 
 	def save_images(self, images, filename_prefix="ComfyUI", delimiter="_",
 					filename_number_padding=4, filename_number_start='false',
