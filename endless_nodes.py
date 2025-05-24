@@ -33,7 +33,7 @@
 # Sep 22/23, V0.21: (UNRELEASED) Introduced aestheticscore, recategorized nodes into submenus, added some vanity coding to the node names, changed the ComfyUI manager header text
 # Sep 21/23, V0.20: (UNRELEASED) Skeleton for save image
 # Sep 21/23, V0.19: (UNRELEASED) Attempt for basic display nodes
-# Sep 20/23, V0.16: Added Eight Input Number String 
+# Sep 20/23, V0.16: Added Eight Input Number String
 # Sep 18/23, V0.15: Added Combo Parameterizers to reduce number of nodes, allows for common resolution parameters to go to both pos/neg CLIP encode and adds separate pos/neg aesthetic score.  Also has a version with pos/neg prompts
 # Sep 18/23, V0.13: Fixed typos, added Paramaterizer with Prompt (unreleased to GitHub)
 # Sep 18/23, V0.12: Added "Parameterizer", allows for parameters to be added to CLIP Encode
@@ -95,16 +95,16 @@ class EndlessNode_SixTextInputSwitch:
 	def INPUT_TYPES(cls):
 		return {
 			"required": {
-				"Input": ("INT", {"default": 1, "min": 1, "max": 6, "step": 1, "display": "slider"}),	  
+				"Input": ("INT", {"default": 1, "min": 1, "max": 6, "step": 1, "display": "slider"}),
 #I like the slider idea, it's better for a touch screen
-				"text1": ("STRING", {"forceInput": True}),
+				"text1": ("STRING", {"default": "", "forceInput": True}),
 			},
 			"optional": {
-				"text2": ("STRING", {"forceInput": True}),
-				"text3": ("STRING", {"forceInput": True}),
-				"text4": ("STRING", {"forceInput": True}),
-				"text5": ("STRING", {"forceInput": True}),
-				"text6": ("STRING", {"forceInput": True}),
+				"text2": ("STRING", {"default": "", "forceInput": True}),
+				"text3": ("STRING", {"default": "", "forceInput": True}),
+				"text4": ("STRING", {"default": "", "forceInput": True}),
+				"text5": ("STRING", {"default": "", "forceInput": True}),
+				"text6": ("STRING", {"default": "", "forceInput": True}),
 			}
 		}
 
@@ -141,18 +141,18 @@ class EndlessNode_EightTextInputSwitch:
 	def INPUT_TYPES(cls):
 		return {
 			"required": {
-				"Input": ("INT", {"default": 1, "min": 1, "max": 8, "step": 1, "display": "slider"}),	  
+				"Input": ("INT", {"default": 1, "min": 1, "max": 8, "step": 1, "display": "slider"}),
 #I like the slider idea, it's better for a touch screen
-				"text1": ("STRING", {"forceInput": True}),
+				"text1": ("STRING", {"default": "", "forceInput": True}),
 			},
 			"optional": {
-				"text2": ("STRING", {"forceInput": True}),
-				"text3": ("STRING", {"forceInput": True}),
-				"text4": ("STRING", {"forceInput": True}),
-				"text5": ("STRING", {"forceInput": True}),
-				"text6": ("STRING", {"forceInput": True}),
-				"text7": ("STRING", {"forceInput": True}),
-				"text8": ("STRING", {"forceInput": True}),
+				"text2": ("STRING", {"default": "", "forceInput": True}),
+				"text3": ("STRING", {"default": "", "forceInput": True}),
+				"text4": ("STRING", {"default": "", "forceInput": True}),
+				"text5": ("STRING", {"default": "", "forceInput": True}),
+				"text6": ("STRING", {"default": "", "forceInput": True}),
+				"text7": ("STRING", {"default": "", "forceInput": True}),
+				"text8": ("STRING", {"default": "", "forceInput": True}),
 			}
 		}
 
@@ -193,14 +193,14 @@ class EndlessNode_SixIntIOSwitch:
 	def INPUT_TYPES(cls):
 		return {
 			"required": {
-				"INT1": ("INT", {"forceInput": True}),
+				"INT1": ("INT", {"default": 0, "forceInput": True}),
 			},
 			"optional": {
-				"INT2": ("INT", {"forceInput": True}),
-				"INT3": ("INT", {"forceInput": True}),
-				"INT4": ("INT", {"forceInput": True}),
-				"INT5": ("INT", {"forceInput": True}),
-				"INT6": ("INT", {"forceInput": True}),
+				"INT2": ("INT", {"default": 0, "forceInput": True}),
+				"INT3": ("INT", {"default": 0, "forceInput": True}),
+				"INT4": ("INT", {"default": 0, "forceInput": True}),
+				"INT5": ("INT", {"default": 0, "forceInput": True}),
+				"INT6": ("INT", {"default": 0, "forceInput": True}),
 			}
 		}
 
@@ -263,7 +263,7 @@ class EndlessNode_SixIntIOWidget:
 #----------------------------------------------
 # Text Encode Combo Box with prompt
 
-class EndlessNode_XLParameterizerPrompt: 
+class EndlessNode_XLParameterizerPrompt:
 	def __init__(self):
 		pass
 
@@ -328,8 +328,8 @@ class EndlessNode_XLParameterizer:
 
 	def Parameterizer(self,base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore):
 		return(base_width,base_height,base_crop_w,base_crop_h,base_target_w,base_target_h,refiner_width,refiner_height,refiner_ascore)
-		
-		
+
+
 
 
 #----------------------------------------------
@@ -349,12 +349,10 @@ class EndlessNode_XLGlobalEnvoy:
 				"switchover": ("INT", {"default": 0, "min": 0, "max": 2048, "step": 1}),
 				"stop": ("INT", {"default": 1, "min": 1, "max": 2048, "step": 1}),
 				"percstep": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.01}),
-			},
-			"display_names": {"percstep": "Switchover Percentage",
 			}
 		}
 	RETURN_TYPES = ("INT","INT","INT","INT","INT",)
-	RETURN_NAMES = ("Width","Height","Start Step", "Switchover at Step", "End Step")
+	RETURN_NAMES = ("Width","Height","Start Step", "Switchover at Step", "End Step",)
 	FUNCTION = "global_envoy"
 
 	CATEGORY = "Endless 🌊✨/Parameters"
@@ -368,7 +366,7 @@ class EndlessNode_XLGlobalEnvoy:
 #----------------------------------------------
 # Text Encode Combo Box with prompt
 
-class EndlessNode_ComboXLParameterizerPrompt: 
+class EndlessNode_ComboXLParameterizerPrompt:
 	def __init__(self):
 		pass
 
@@ -443,7 +441,7 @@ class EndlessNode_ComboXLParameterizer:
 #----------------------------------------------
 # A node that allows for numerical outputs
 
-class EndlessNode_SixIntOutput:
+class EndlessNode_SixFloatOutput:
 	def __init__(self):
 		pass
 
@@ -463,14 +461,14 @@ class EndlessNode_SixIntOutput:
 	RETURN_NAMES = ("FLOAT1","FLOAT2","FLOAT3","FLOAT4","FLOAT5","FLOAT6",)
 	FUNCTION = "FloatOut"
 
-	
+
 	CATEGORY = "Endless 🌊✨/Switches/Fixed"
 
 
 	def FloatOut(self,FLOAT1,FLOAT2,FLOAT3,FLOAT4,FLOAT5,FLOAT6):
 		return(FLOAT1,FLOAT2,FLOAT3,FLOAT4,FLOAT5,FLOAT6)
 
-		
+
 #______________________________________________________________________________________________________________________________________________________________
 #				IMAGE SCORING BLOCK				# IT'S DEAD JIM, WHY CAN'T WE HAVE NICE THINGS?
 
@@ -537,7 +535,7 @@ class EndlessNode_Scoring:
 				}
 		}
 
-	RETURN_TYPES = ("NUMBER","FLOAT","STRING")
+	RETURN_TYPES = ("NUMBER", "FLOAT", "STRING",)
 	FUNCTION = "calc_score"
 	CATEGORY = "Endless 🌊✨/Scoring"
 
@@ -549,7 +547,7 @@ class EndlessNode_Scoring:
 		model.load_state_dict(s)
 		model.to("cuda")
 		model.eval()
-		device = "cuda" 
+		device = "cuda"
 		model2, preprocess = clip.load("ViT-L/14", device=device)  # RN50x64
 		tensor_image = image[0]
 		img = (tensor_image * 255).to(torch.uint8).numpy()
@@ -562,10 +560,10 @@ class EndlessNode_Scoring:
 		final_prediction = round(float(prediction[0]), 2)
 		del model
 		return (final_prediction,final_prediction,str(final_prediction),)
-		
-		
-		
-## This may help in some way to return the score results to a dialog box.		
+
+
+
+## This may help in some way to return the score results to a dialog box.
 # class OutputString:
     # @classmethod
     # def INPUT_TYPES(cls):
@@ -618,7 +616,7 @@ class EndlessNode_Scoring:
 		# model.load_state_dict(s)
 		# model.to("cuda")
 		# model.eval()
-		# device = "cuda" 
+		# device = "cuda"
 		# model2, preprocess = clip.load("ViT-L/14", device=device)  # RN50x64
 		# tensor_image = image[0]
 		# img = (tensor_image * 255).to(torch.uint8).numpy()
@@ -645,8 +643,8 @@ class EndlessNode_ImageReward:
 	def INPUT_TYPES(cls):
 		return {
 			"required": {
-				"model": ("STRING", {"multiline": False, "default": "ImageReward-v1.0"}),
-				"prompt": ("STRING", {"multiline": True, "forceInput": True}),
+				"model": ("STRING", {"default": "ImageReward-v1.0", "multiline": False}),
+				"prompt": ("STRING", {"default": "", "multiline": True, "forceInput": True}),
 				"images": ("IMAGE",),
 			},
 		}
@@ -672,7 +670,7 @@ class EndlessNode_ImageReward:
 		# assume std dev follows normal distribution curve
 		valuescale = 0.5 * (1 + math.erf(score / math.sqrt(2))) * 10  # *10 to get a value between -10
 		return (score, str(score), valuescale, str(valuescale),)
-	
+
 
 # #---------------------------------------------- NOT WORKING, NEED TO LOOK AT
 # # Image Reward Scoring with score passed to image
@@ -766,7 +764,7 @@ class EndlessNode_ImageSaver:
 		img_extension = '.png'
 
 		counter = 1
-	
+
 		results = list()
 
 		for image in images:
@@ -774,13 +772,13 @@ class EndlessNode_ImageSaver:
 			img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
 
 			metadata = PngInfo()
-		
+
 			def encode_emoji(obj):
 				if isinstance(obj, str):
 					return obj.encode('utf-8', 'surrogatepass').decode('utf-8')
 				return obj
-	
-		
+
+
 			if prompt is not None:
 				metadata.add_text("prompt", json.dumps(prompt))
 			if extra_pnginfo is not None:
@@ -790,7 +788,7 @@ class EndlessNode_ImageSaver:
 			img_file, json_file = self.generate_filenames(filename_prefix, delimiter, counter,
 														 filename_number_padding, filename_number_start,
 														 img_extension, image_folder, json_folder)
-														 
+
 			try:
 				if img_extension == '.png':
 					if save_json_metadata:
@@ -909,7 +907,7 @@ class EndlessNode_ImageSaver:
 		filename = re.sub(pattern, replace_match, filename)
 
 		return filename
-		
+
 	# def truncate_string(s, length):
 		# if len(s) > length:
 			# return s[:length]
@@ -925,15 +923,15 @@ class EndlessNode_FloattoInt:
 	CATEGORY = "Endless 🌊✨/Converters/Float"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"FloatValue": ("FLOAT", {"default": 0.0})},
 		}
 
-	RETURN_TYPES = ("INT",) 
+	RETURN_TYPES = ("INT",)
 	FUNCTION = "inputfloat"
 
 	def inputfloat(self, FloatValue):
@@ -946,15 +944,15 @@ class EndlessNode_FloattoNum:
 	CATEGORY = "Endless 🌊✨/Converters/Float"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"FloatValue": ("FLOAT", {"default": 0.0})},
 		}
 
-	RETURN_TYPES = ("NUMBER",) 
+	RETURN_TYPES = ("NUMBER",)
 	FUNCTION = "inputfloat"
 
 	def inputfloat(self, FloatValue):
@@ -968,15 +966,15 @@ class EndlessNode_FloattoString:
 	CATEGORY = "Endless 🌊✨/Converters/Float"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"FloatValue": ("FLOAT", {"default": 0.0})},
 		}
 
-	RETURN_TYPES = ("STRING") 
+	RETURN_TYPES = ("STRING",)
 	FUNCTION = "inputfloat"
 
 	def inputfloat(self, FloatValue):
@@ -989,15 +987,15 @@ class EndlessNode_FloattoX:
 	CATEGORY = "Endless 🌊✨/Converters/Float"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"FloatValue": ("FLOAT", {"default": 0.0})},
 		}
 
-	RETURN_TYPES = ("INT", "NUMBER","STRING") 
+	RETURN_TYPES = ("INT", "NUMBER", "STRING",)
 	FUNCTION = "inputfloat"
 
 	def inputfloat(self, FloatValue):
@@ -1009,7 +1007,7 @@ class EndlessNode_FloattoX:
 class EndlessNode_InttoFloat:
 	CATEGORY = "Endless 🌊✨/Converters/Int"
 	def __init__(self):
-		pass	
+		pass
 
 	@classmethod
 	def INPUT_TYPES(cls):
@@ -1017,12 +1015,12 @@ class EndlessNode_InttoFloat:
 			"required": {"IntegerValue": ("INT", {"default": 0})},
 		}
 
-	RETURN_TYPES = ("FLOAT",) 
+	RETURN_TYPES = ("FLOAT",)
 	FUNCTION = "inputint"
 
 	def inputint(self, IntegerValue):
 		return (int(IntegerValue),)
-		
+
 
 # ----------------------------------------------
 # Integer to Number (for compatability purposes)
@@ -1030,7 +1028,7 @@ class EndlessNode_InttoFloat:
 class EndlessNode_InttoNum:
 	CATEGORY = "Endless 🌊✨/Converters/Int"
 	def __init__(self):
-		pass	
+		pass
 
 	@classmethod
 	def INPUT_TYPES(cls):
@@ -1038,7 +1036,7 @@ class EndlessNode_InttoNum:
 			"required": {"IntegerValue": ("INT", {"default": 0})},
 		}
 
-	RETURN_TYPES = ("NUMBER") 
+	RETURN_TYPES = ("NUMBER",)
 	FUNCTION = "inputint"
 
 	def inputint(self, IntegerValue):
@@ -1055,7 +1053,7 @@ class EndlessNode_InttoString:
 		return {
 			"required": {"IntegerValue": ("INT", {"default": 0})},
 		}
-	RETURN_TYPES = ("STRING") 
+	RETURN_TYPES = ("STRING",)
 	FUNCTION = "inputint"
 
 	def inputint(self, IntegerValue):
@@ -1069,15 +1067,15 @@ class EndlessNode_InttoX:
 	CATEGORY = "Endless 🌊✨/Converters/Int"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"IntegerValue": ("INT", {"default": 0})},
 		}
 
-	RETURN_TYPES = ("FLOAT", "NUMBER","STRING") 
+	RETURN_TYPES = ("FLOAT", "NUMBER","STRING",)
 	FUNCTION = "inputint"
 
 	def inputint(self, IntegerValue):
@@ -1088,9 +1086,9 @@ class EndlessNode_InttoX:
 
 class EndlessNode_NumtoFloat:
 	CATEGORY = "Endless 🌊✨/Converters/Number"
-	
+
 	def __init__(self):
-		pass	
+		pass
 
 	@classmethod
 	def INPUT_TYPES(cls):
@@ -1098,20 +1096,20 @@ class EndlessNode_NumtoFloat:
 			"required": {"NumberValue": ("NUMBER",),}
 		}
 
-	RETURN_TYPES = ("FLOAT",) 
+	RETURN_TYPES = ("FLOAT",)
 	FUNCTION = "inputnum"
 
 	def inputnum(self, NumberValue):
 		return (float(NumberValue),)
-		
-		
+
+
 # ----------------------------------------------
 # Number to Integer
 
 class EndlessNode_NumtoInt:
 	CATEGORY = "Endless 🌊✨/Converters/Number"
 	def __init__(self):
-		pass	
+		pass
 
 	@classmethod
 	def INPUT_TYPES(cls):
@@ -1140,8 +1138,8 @@ class EndlessNode_NumtoString:
 		return {
 			"required": {"NumberValue": ("NUMBER",)},
 		}
-		
-	RETURN_TYPES = ("STRING",) 
+
+	RETURN_TYPES = ("STRING",)
 	FUNCTION = "inputnum"
 
 	def inputnum(self, NumberValue):
@@ -1161,9 +1159,9 @@ class EndlessNode_NumtoX:
 		return {
 			"required": {"NumberValue": ("NUMBER",)},
 		}
-		
-	RETURN_TYPES = ("FLOAT", "INT", "STRING") 
-	RETURN_NAMES = ("FLOAT", "INT", "STRING") 
+
+	RETURN_TYPES = ("FLOAT", "INT", "STRING",)
+	RETURN_NAMES = ("FLOAT", "INT", "STRING",)
 	FUNCTION = "inputnum"
 
 	def inputnum(self, NumberValue):
@@ -1177,20 +1175,20 @@ class EndlessNode_StringtoFloat:
 	CATEGORY = "Endless 🌊✨/Converters/String"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"StringValue": ("STRING", {"default": ""})},
 		}
 
-	RETURN_TYPES = ("FLOAT",) 
+	RETURN_TYPES = ("FLOAT",)
 	FUNCTION = "inputstring"
 
 	def inputstring(self, StringValue):
 		try:
-			return(float(StringValue),) 
+			return(float(StringValue),)
 		except (ValueError, TypeError):  # Handle non-numerical input here by returning default value of 0
 			return 0.0
 
@@ -1201,15 +1199,15 @@ class EndlessNode_StringtoInt:
 	CATEGORY = "Endless 🌊✨/Converters/String"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"StringValue": ("STRING", {"default": ""})},
 		}
 
-	RETURN_TYPES = ("INT",) 
+	RETURN_TYPES = ("INT",)
 	FUNCTION = "inputstring"
 
 	def inputstring(self, StringValue):
@@ -1218,7 +1216,7 @@ class EndlessNode_StringtoInt:
 		except (ValueError, TypeError):  # Handle non-numerical input here by returning default value of 0
 			return 0
 
-		
+
 # ----------------------------------------------
 # String to Number.  There is no real "Number" function in Python, this is here so that nodes that need a NUMBER can take the FLOAT value
 
@@ -1226,20 +1224,20 @@ class EndlessNode_StringtoNum:
 	CATEGORY = "Endless 🌊✨/Converters/String"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"StringValue": ("STRING", {"default": ""})},
 		}
 
-	RETURN_TYPES = ("NUMBER",) 
+	RETURN_TYPES = ("NUMBER",)
 	FUNCTION = "inputstring"
 
 	def inputstring(self, StringValue):
 		try:
-			return(float(StringValue),) 
+			return(float(StringValue),)
 		except (ValueError, TypeError):  # Handle non-numerical input here by returning default value of 0
 			return 0.0
 
@@ -1250,15 +1248,15 @@ class EndlessNode_StringtoX:
 	CATEGORY = "Endless 🌊✨/Converters/String"
 
 	def __init__(self):
-		pass	
-		
+		pass
+
 	@classmethod
 	def INPUT_TYPES(cls):
 		return {
 			"required": {"StringValue": ("STRING", {"default": ""})},
 		}
 
-	RETURN_TYPES = ("INT", "FLOAT","NUMBER") 
+	RETURN_TYPES = ("INT", "FLOAT","NUMBER",)
 	FUNCTION = "inputstring"
 
 	def inputstring(self, StringValue):
@@ -1266,9 +1264,9 @@ class EndlessNode_StringtoX:
 			return(int(float(StringValue)), float(StringValue),float(StringValue),) # int(float(x)) in case the user puts in a decimal
 		except (ValueError, TypeError):  # Handle non-numerical input here by returning default value of 0
 			return 0, 0.0, 0.0
-	
 
-	
+
+
 #______________________________________________________________________________________________________________________________________________________________
 #				CREDITS				#
 #
@@ -1289,11 +1287,11 @@ class EndlessNode_StringtoX:
 # https://github.com/strimmlarn/ComfyUI-Strimmlarns-Aesthetic-Score
 #
 # The scorer uses the MLP class code from Christoph Schuhmann
-# 
+#
 #https://github.com/christophschuhmann/improved-aesthetic-predictor
 #[Zane A's ComfyUI-ImageReward](https://github.com/ZaneA/ComfyUI-ImageReward) for the original coding for the Image Reward node
 #
-#Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)  
+#Zane's node in turn uses [ImageReward](https://github.com/THUDM/ImageReward)
 #
 #
 #Mikey nodes to grab code snippet to pass scoring metadata to image

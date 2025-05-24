@@ -1,1 +1,4 @@
 colorama
+image-reward
+pytorch-lightning
+git+https://github.com/openai/CLIP.git#egg=clip

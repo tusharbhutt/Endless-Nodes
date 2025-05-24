@@ -28,8 +28,8 @@ class EndlessNode_ImageSaver:
 				"delimiter": ("STRING", {"default": "_"}),
 				"filename_number_padding": ("INT", {"default": 4, "min": 1, "max": 9, "step": 1}),
 				"filename_number_start": (["false", "true"],),
-				"image_folder": ("STRING", {"default": None}),
-				"json_folder": ("STRING", {"default": None}),
+				"image_folder": ("STRING", {"default": ""}),
+				"json_folder": ("STRING", {"default": ""}),
 			},
 			"hidden": {
 				"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
