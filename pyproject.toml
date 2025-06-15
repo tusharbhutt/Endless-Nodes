@@ -1,15 +1,14 @@
 [project]
 name = "endless-nodes"
-description = "A small set of nodes I created for various numerical and text inputs.  Features image saver with ability to have JSON saved to separate folder, parameter collection nodes, two aesthetic scoring models, switches for text and numbers, and conversion of string to numeric and vice versa."
-version = "1.0.0"
+description = "A small set of nodes I created for various myself. Features image saver with ability to have JSON saved to separate folder, parameter collection nodes, two aesthetic scoring models, switches for text and numbers, and conversion of string to numeric and vice versa."
+version = "0.43"
 license = { file = "LICENSE" }
-dependencies = ["colorama"]
-
+dependencies = ["colorama","image-reward","pytorch-lightning","git+https://github.com/openai/CLIP.git#egg=clip"]
 [project.urls]
 Repository = "https://github.com/tusharbhutt/Endless-Nodes"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "tusharbhutt"
 DisplayName = "Endless-Nodes"
 Icon = ""
