@@ -1,7 +1,7 @@
 [project]
 name = "endless-nodes"
-description = "A small set of nodes I created for myself. Features image saver with ability to have JSON saved to separate folder, parameter collection nodes, two aesthetic scoring models, switches for text and numbers, and conversion of string to numeric and vice versa."
-version = "0.44"
+description = "A small set of nodes I created for myself. Features image saver with ability to have JSON saved to separate folder, parameter collection nodes, two aesthetic scoring models, switches for text and numbers, and conversion nodes."
+version = "0.44b"
 license = { file = "LICENSE" }
 dependencies = ["colorama","image-reward","pytorch-lightning","git+https://github.com/openai/CLIP.git#egg=clip"]
 [project.urls]
