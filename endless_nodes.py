@@ -976,7 +976,7 @@ class EndlessNode_FloattoString:
 			"required": {"FloatValue": ("FLOAT", {"default": 0.0})},
 		}
 
-	RETURN_TYPES = ("STRING") 
+	RETURN_TYPES = ("STRING",)
 	FUNCTION = "inputfloat"
 
 	def inputfloat(self, FloatValue):
@@ -1038,7 +1038,7 @@ class EndlessNode_InttoNum:
 			"required": {"IntegerValue": ("INT", {"default": 0})},
 		}
 
-	RETURN_TYPES = ("NUMBER") 
+	RETURN_TYPES = ("NUMBER",)
 	FUNCTION = "inputint"
 
 	def inputint(self, IntegerValue):
@@ -1055,7 +1055,7 @@ class EndlessNode_InttoString:
 		return {
 			"required": {"IntegerValue": ("INT", {"default": 0})},
 		}
-	RETURN_TYPES = ("STRING") 
+	RETURN_TYPES = ("STRING",)
 	FUNCTION = "inputint"
 
 	def inputint(self, IntegerValue):
