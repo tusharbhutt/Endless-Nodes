@@ -26,7 +26,7 @@ It’s preferable to install from the ComfyUI Node Manager, but for direct insta
 
 `git clone https://github.com/tusharbhutt/Endless-Nodes`
 
-If installed correctly, you should see an menu choice in the main ComfyUI menu that look like this: 
+If installed correctly, you should see a menu choice in the main ComfyUI menu that look like this: 
 
 Endless 🌊✨
 
@@ -36,7 +36,7 @@ with several submenus for you to select from.
 
 I am not a programmer, nor do I care to be.  I have a fulltime job that eats up 50-60 houts a week and I made these nodes for myself.   I’ve tested the nodes on my system and uploaded them as they see to work. They may or may not work for you or on your system.  
 
-If you have issues, ask me **nicely** for help. Your tone matters; I'm too old and tired to pay attention to people who think I blew up their machines and I will be as short and presumptuous with you as you are with me. If how I react to you if you are difficult bothers you, some self-reflection is in order on your part.  In simple terms: the world has too many self-important people, so stop adding to the list.
+If you have issues, ask me **nicely** for help. Your tone matters; I'm too old and tired to pay attention to people who think I blew up their machines, and I will be as short and presumptuous with you as you are with me. If how I react to you if you are difficult bothers you, some self-reflection is in order on your part.  In simple terms: the world has too many self-important people, so stop adding to the list.
 
 ## Node List
 
@@ -177,7 +177,7 @@ These nodes may or may not be maintained. They work on my system but may not on 
 
 ## Credits
 
-+ Claude and ChatGPT for coding creation/assistance
++ Anthropic Claude and ChatGPT for coding creation/assistance
 + Thanks to all the node creators out there, most who toil away with little or no appreciation
 
 #
