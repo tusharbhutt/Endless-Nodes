@@ -1,3 +1,5 @@
+Jun 22/25, V1.1.1: Minor typos and trying to align version numbers
+
 Jun 21/25, V1.00: Blew it all up and started again
 
 Aug 19/24, V0.41: Fixed Image Saver node so it appears
