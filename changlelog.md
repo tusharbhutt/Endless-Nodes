@@ -1,6 +1,8 @@
+Jun 23/23, V1.2.0: Added the Endless Pandemonium node, a black box that randomly and invisibly changes parameters on you.  Put in ability to use 64 or 16 as the minimum steps for the dimensions in the Randomizer nodes, added CFG Guidance outputs for Flux.  Fixed typos and added better credits in README.  Some bug squishing.
+
 Jun 22/25, V1.1.1: Minor typos and trying to align version numbers
 
-Jun 21/25, V1.00: Blew it all up and started again
+Jun 21/25, V1.0.0: Blew it all up and started again
 
 Aug 19/24, V0.41: Fixed Image Saver node so it appears
 
@@ -61,5 +63,3 @@ Sep 15/23, V0.10: Added Six Input Number Widget, first release to GitHub
 Sep 12/23, V0.05: Added Six Input Number String
 
 Sep 08/23, V0.00: Basic Flow for Six Input Text Switch
-
-\

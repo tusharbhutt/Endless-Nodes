@@ -5,13 +5,13 @@ from .endless_randomizers import (
 )
 
 NODE_CLASS_MAPPINGS = {
-    "Randomzier_Mayhem": EndlessNode_Mayhem,
-    "Randomzier_Chaos": EndlessNode_Chaos,
-    # "Randomzier_Pandemonium": EndlessNode_Pandemonium,
+    "Randomizer_Mayhem": EndlessNode_Mayhem,
+    "Randomizer_Chaos": EndlessNode_Chaos,
+    "Randomizer_Pandemonium": EndlessNode_Pandemonium,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "Randomzier_Mayhem": "Mayhem Randomizer",
-    "Randomzier_Chaos": "Chaos Randomizer",
-    # "Randomzier_Pandemonium": "Pandemonium Randomizer",
+    "Randomizer_Mayhem": "Mayhem Randomizer",
+    "Randomizer_Chaos": "Chaos Randomizer",
+    "Randomizer_Pandemonium": "Pandemonium Randomizer",
 }
