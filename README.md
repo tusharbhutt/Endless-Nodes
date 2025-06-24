@@ -6,17 +6,27 @@ Some basic custom nodes for the ComfyUI user interface for Stable Diffusion. Fea
 + An image saver for images and JSON files to base folder, custom folders for one, or custom folders for both. Also allows for Python timestamping
 + Switches for text and numbers
 + Random prompt selectors
++ Parameter randomizers
 + Image Analysis nodes for novelty and complexity
-+ MORE TO COME 
++ More to come (maybe)
 
 When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface for AI art generation, I sometimes find that the standard nodes and the many custom nodes out there don't work the way I want them to, or how I think they should.
 
-Rightly or wrongly, I am teaching myself a bit of Python to get some nodes up and running to do what I'd like. Yes, I am using ChatGPT, Copilot, Claude and others, and yes, I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them. Feel free to do with them as you wish, according to the license model.
+Rightly or wrongly, I was teaching myself a bit of Python back in 2023 to get some nodes up and running to do what I'd like, and I am starting to do that again. Yes, I am using ChatGPT, Copilot, Claude and others, and yes, I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them. Feel free to do with them as you wish, according to the license model.
 
-**UPDATE: JUN 21, 2025**
+***
+**UPDATE: JUN 23, 2025**
 
-**Blew everything up and removed all the old nodes.  Nodes with new coding have been uploaded and will be updated semi-frequently until mid-July 2025**
+**Added Endless Pandemonium node, repurposed Endless Chaos node, cleaned up some typos, did some bug squishing.**
++ There was little difference between the Mayhem and Chaos nodes, with the exception of flipping the orientation.  So, that function was moved into the Mayhem node and the Chaos node now randomly changes the aspect on you.
++ Introducing the Endless Pandemonium node, a black box that randomly and invisibly changes parameters on you
++ Added the ability to use 64 or 16 as the minimum steps for the dimensions in the Randomizer nodes
++ The Randomizer nodes now have CFG Guidance outputs for Flux
 
+UPDATE: JUN 21, 2025
+
+Blew everything up and removed all the old nodes.  Nodes with new coding have been uploaded and will be updated semi-frequently until mid-July 2025
+***
 ## Installation Instructions
 
 It’s preferable to install from the ComfyUI Node Manager, but for direct installation, do this:
@@ -31,13 +41,13 @@ If installed correctly, you should see a menu choice in the main ComfyUI menu th
 Endless 🌊✨
 
 with several submenus for you to select from.
-
+***
 ## Assistance Requests
 
-I am not a programmer, nor do I care to be.  I have a fulltime job that eats up 50-60 houts a week and I made these nodes for myself.   I’ve tested the nodes on my system and uploaded them as they see to work. They may or may not work for you or on your system.  
+I am not a programmer, nor do I care to be.  I have a fulltime job that eats up 50-60 hours a week and I made these nodes for myself.   I’ve tested the nodes on my system and uploaded them as they seem to work. They may or may not work for you or on your system.  
 
-If you have issues, ask me **nicely** for help. Your tone matters; I'm too old and tired to pay attention to people who think I blew up their machines, and I will be as short and presumptuous with you as you are with me. If how I react to you if you are difficult bothers you, some self-reflection is in order on your part.  In simple terms: the world has too many self-important people, so stop adding to the list.
-
+If you have issues, ask me **nicely** for help. Your tone matters; I'm too old and tired to pay attention to people who think I blew up their machines, and if how I react to you if you are difficult bothers you, some self-reflection is in order on your part.  You are not "forthright" or "honest" or "direct", you're merely an ass if you think badgering people is justified to get what you want.  The world has too many assholes, don't make me think you're another one.
+***
 ## Node List
 
 ### Batch Multiprompt Node for SD, SDXL, and FLUX
@@ -48,11 +58,11 @@ See the video!
 
 ![sample](./img/batchsample.gif)
 
-As far as I know, ComfyUI does not have native capability to allow for different prompts to be run within the *same* batch.  I always found this to be a waste if you have a fast card with a lot of VRAM.  With ComfyUI native, you can set the batch size to, say, create 56 images of the same prompt, or you can change the queue to have multiple runs of different prompts; if you have a fast card, this may not be an issue for you. 
+As far as I know, ComfyUI does not have native capability to allow for different prompts to be run within the *same* batch.  With ComfyUI native, you can set the batch size to, say, create 56 images of the same prompt or you can change the queue to have 56 runs of different prompts one prompt at a time. I always found both methods to be "wasteful" if you have  powerful card with a lot of VRAM.  I don't, by the way :)
 
 Also, there are some nodes that will create multiple prompts in batches, but the ones I looked at showed they were just doing what is essentially queue management and prompts were still being done only one at a time.  This set of nodes will allow you to create as many prompts as your VRAM can hold and does them simultaneously.  Nodes are available for SDx, SDXL, and Flux. 
 
-Try this out too: pair a node with an endless queue and use wildcards to make an endless random image generator.  
+You can try this out too: pair a wildcard node in the front end with the batch sampler, set your queue to "Run (instant)" and enjoy endless random batched prompts
 
 ![dynamicbatch](./img/dynamic.png)
 
@@ -61,11 +71,11 @@ Try this out too: pair a node with an endless queue and use wildcards to make an
 + SDXL node
 + Negative prompt node … yep, make your negative prompts go through simultaneously too
 + Flux node with built-in guidance scale
-+ Prompt Counter node can show you the prompts that were run
++ Prompt Counter node that can show you the prompts that were run
 
 Inputs:
 + CLIP 
-+ Prompts: enter up to 64 prompts at once, the node figures out how many you have.  You can enter prompts directly or via  multiline input node.
++ Prompts: enter up to 64 prompts at once, the node figures out how many you have.  You can enter prompts directly or via a multiline input node.
 + Print output to console 
 + Maximum batch size (leave at zero to match your line input)
 
@@ -74,7 +84,7 @@ Output:
 + Prompt List: For downstream node usage
 + Prompt Count: Counts how many prompts you had
 
-The image below should have a Flux workflow built in, but if not, check out the workflows folder too.  The image is set up for the Flux node, but all you have to do is swap out the Batch Flux node for the other variants in the Endless 🌊✨/BatchProcessing menu. 
+The image below should have a Flux workflow built in but if not, check out the workflows folder too.  The image is set up for the Flux node but all you have to do is swap out the Batch Flux node for the other variants in the Endless 🌊✨/BatchProcessing menu. 
 
 ![fluxbatchworkflow](./img/fluxbatchworkflowembedded.png)
 
@@ -84,24 +94,25 @@ The image below should have a Flux workflow built in, but if not, check out the 
 
 This is why I tried my hand at Python in the first place! There are many good image saver nodes out there, so why one more? Well:
 
-+ The default saver does not save to UNC in Windows, even if you try to put it in the extra paths YAML file
++ The default saver at the time did not save to UNC in Windows, even if you tried to put it in the extra paths YAML file
 + Some savers will allow you to save to UNC but have restricted built-in folder formats
 + You can cobble some savers to save an image together with a text file, but the timestamp on the text file tends to be 2-3 seconds off from the image
 + No saver I know of lets you save the JSON file to a **completely different folder**
 
-So… this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions](https://strftime.org/) and you can save the JSON file somewhere else.  The feature list includes:
+So: this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions](https://strftime.org/) and you can save the JSON file somewhere else.  The feature list includes:
 
-+ Allows multiprompts to be saved as part fo the file name via the prompt_list input
++ Allows multiprompts to be saved as part of the file name via the `prompt_list` input
 + Add timestamps in varying formats
-+ image format for PNG, JPG, WEBP
-+ Custom delimiter
-+ Add set number of words from the  positive prompt to the file name
-+ Embed JSON metadata
++ Saves images in three formats (PNG, JPG, WEBP)
++ Custom delimiter to replace spaces
++ Add a set number of words from the positive prompt to the file name
++ Choose to embed workflow in the PNG (you should **really** do this)
 + Save separate JSON file
 + Filename number padding at start or end (placed *after* timestamp if timestamp is enabled)
-+ Filename prefix
- + OS independent, UNC enabled custom JSON and Output folders, which can be separate from one another
++ Filename prefix of your choice
++ OS independent, UNC enabled custom JSON and image output folders, which can be separate from one another
 + Negative prompt list (**meh**, not sure if it really works yet)
++ A `saved_paths` output to display the complete path for each file after each run
 
 Does it work...? You betcha!
 
@@ -118,13 +129,16 @@ This module uses the standard Python date and time stamp formats, it **_does not
 
 ### Image Analysis Nodes
 
-You can use these two node to see how novel or complex your images are.  The Novelty Score node match your image against one or more reference images and computes how different your image is.  The higher the score, the more novel your image is.
+You can use these two node to see how novel or complex your images are.  
 
 ![noveltyscore](./img/novelty.png)
 
-Similarly, the Complexity Score node indicate how complex an image is, with more complex images scoring higher.  This is based on edge detection and other variances found in the image.
+The Novelty Score node match your image against one or more reference images and computes how different your image is.  The higher the score, the more novel your image is.  The calculates CLIP embeddings for the input image and compares them to a list of reference embeddings using cosine similarity.  You can compare it to another image, but it's more fun to compare to a range of them.
 
 ![complexitycore](./img/complexity.png)
+
+Similarly, the Complexity Score node indicate how complex an image is, with more complex images scoring higher.  This is based on edge detection and other variances found in the image.  The node converts the image to grayscale, applies `FIND_EDGES` from `PIL`, and calculates what percent of pixels are above a threshold.
+
 
 ### Randomizer Nodes
 
@@ -132,15 +146,31 @@ There are two sets of nodes, for text selection and to randomize parameters.
 
 **Text Randomizers**
 
-These nodes will randomly select text from the input. There are two nodes, one that picks one line from the list, and one that selects *x* lines from the list.  Useful for randomly picking prompts.
-
 ![textrandom](./img/randomprompts.png)
+
+These nodes will randomly select text from the input. There are two nodes, one that picks one line from the list, and one that selects *x* lines from the list.  Useful for randomly picking prompts.
 
 **Parameter Randomizers**
 
-There are two nodes: Endless Mayhem and Endless Chaos.  Both allow you to randomly select parameters such as steps, CFG value, height, width, and the seed.  The Chaos node will also randomly flip the height and width values on you, so the image moves from portrait to landscape, for example.
+There are three nodes: Endless Mayhem, Endless Chaos, and Endless Pandemonium.  Both of the first two allow you to randomly select parameters such as steps, CFG value (CFG Guidance for Flux is available as well), height, width, and the seed, with minimum and maximum values. 
 
-![random](./img/randomizers.png)
+All nodes have a Boolean flag to set the dimensions to be divisible by 64; if left off, the dimensions will be divisible by 16.  The Mayhem and Chaos nodes have sanity checks so if one value in a pair you put in is lower than its counterpart, they are automatically flipped. For example if you put in "10" for the minimum steps and put in "3" for the max instead of the "30" you probably wanted, the node will make "3" the minimum and "10" the maximum. 
+
+![mayhem](./img/mayhem.png)
+
+The Mayhem node will randomly flip the height and width values on you, so the image moves from portrait to landscape, if you wish.
+
+![chaos](./img/chaos.png)
+
+The Chaos node allows you to select an orientation: square, portrait, landscape, or random. Selecting square will give you random dimensions between the minimum and maximums you set but keep the aspect ratio at 1:1. Otherwise, the node will give you a random aspect ratio from the list below and will use either portrait, landscape, or randomly select an orientation. See below for a set of images that are identical in parameters except for a randomly applied aspect ratio
+
+![chaosmulti](./img/chaosmulti.png)
+
+
+![pandemonium](./img/pandemonium.png)
+
+The Pandemonium node is a black box. It's very similar to the Chaos node, but you have no input into the minimum and maximum values.  Is it silly?  Sure.  Does it make your image creation more random?  Absolutely. 
+
 
 ### Text Input Switch
 
@@ -156,28 +186,31 @@ As above, but for integers.  There is also an Integer Input Switch Widget (not s
 ![integerswitch](./img/integerswitch.png)
 
 ### Nodes that don’t work (yet!)
+
 I do have some nodes that are half-way done, but not ready for prime time.  They’ll be uploaded when I get to them.
 
 + Image Aesthetic Scoring (Aesthetic values, NIMA, and BRISQUE methods)
 + Batch image loader
 + Multiple input/output converter
 + Additional image analysis nodes 
-
+***
 ## Usage License and Restrictions
 
-See GPL Licensing V3 for usage. You may modify this code as long as you keep the credits for this repository and for those noted in the credit section below. **YOU ARE EXPRESSLY FORBIDDEN FROM USING THESE NODES TO CREATE ANY IMAGES OR ARTWORK THAT VIOLATES THE STABLE DIFFUSION [ACCEPTABLE US POLICY] (https://stability.ai/use-policy) OR THE USAGE POLICY FROM [BLACK FOREST LABS]( https://bfl.ai/legal/usage-policy).**
+See GPL Licensing V3 for usage. You may modify this code as long as you keep the credits for this repository and for those noted in the credit section below. **YOU ARE EXPRESSLY FORBIDDEN FROM USING THESE NODES TO CREATE ANY IMAGES OR ARTWORK THAT VIOLATES THE STABLE DIFFUSION [ACCEPTABLE USE POLICY] (https://stability.ai/use-policy) OR THE USAGE POLICY FROM [BLACK FOREST LABS](https://bfl.ai/legal/usage-policy).**
 
 For example, don't be a mouth-breather who creates fake nudes or sexual content of **anyone, even if you have their consent**. JUST. DON’T. BE. AN. ASSHOLE.
 
 The author expressly disclaims any liability for any images you create using these nodes.
-
+***
 ## Disclaimer
 
 These nodes may or may not be maintained. They work on my system but may not on yours. Feel free to send in a bug report if you find one! 
-
+***
 ## Credits
 
-+ Anthropic Claude and ChatGPT for coding creation/assistance
++ Inspiration for the batch multiprompt node came quite by accident when I used [FizzNodes](https://github.com/FizzleDorf/ComfyUI_FizzNodes) by [@FizzleDorf](https://github.com/FizzleDorf) and wrestled them into creating images instead of the intended use for video
++ Anthropic Claude and OpenAI ChatGPT for coding creation/assistance
++ The image novelty node uses OpenAI's CLIP (ViT-B/32) model to assess image novelty based on cosine distance from reference embeddings
 + Thanks to all the node creators out there, most who toil away with little or no appreciation
 
 #
