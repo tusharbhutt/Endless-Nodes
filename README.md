@@ -18,7 +18,7 @@ Rightly or wrongly, I was teaching myself a bit of Python back in 2023 to get so
 **UPDATE: JUN 23, 2025**
 
 **Added Endless Pandemonium node, repurposed Endless Chaos node, cleaned up some typos, did some bug squishing.**
-+ There was little difference between the Mayhem and Chaos nodes, with the exception of flipping the orientation.  So, that function was moved into the Mayhem node and the Chaos node now randomly changes the aspect on you.
++ There was little difference between the Mayhem and Chaos nodes, with the exception of flipping the image orientation.  So, that function was moved into the Mayhem node and the Chaos node now randomly changes the aspect ratio on you.
 + Introducing the Endless Pandemonium node, a black box that randomly and invisibly changes parameters on you
 + Added the ability to use 64 or 16 as the minimum steps for the dimensions in the Randomizer nodes
 + The Randomizer nodes now have CFG Guidance outputs for Flux
@@ -46,7 +46,7 @@ with several submenus for you to select from.
 
 I am not a programmer, nor do I care to be.  I have a fulltime job that eats up 50-60 hours a week and I made these nodes for myself.   I’ve tested the nodes on my system and uploaded them as they seem to work. They may or may not work for you or on your system.  
 
-If you have issues, ask me **nicely** for help. Your tone matters; I'm too old and tired to pay attention to people who think I blew up their machines, and if how I react to you if you are difficult bothers you, some self-reflection is in order on your part.  You are not "forthright" or "honest" or "direct", you're merely an ass if you think badgering people is justified to get what you want.  The world has too many assholes, don't make me think you're another one.
+If you have issues, ask me **nicely** for help. Your tone matters; I'm too old and tired to pay attention to people who think I blew up their machines, and if how I react to you if you are difficult bothers you, some self-reflection is in order on your part.  You are not "forthright" or "honest" or "direct", you're merely an ass if you think badgering people is justifiable to get what you want.  The world has too many assholes, don't make me think you're another one.
 ***
 ## Node List
 
@@ -58,9 +58,9 @@ See the video!
 
 ![sample](./img/batchsample.gif)
 
-As far as I know, ComfyUI does not have native capability to allow for different prompts to be run within the *same* batch.  With ComfyUI native, you can set the batch size to, say, create 56 images of the same prompt or you can change the queue to have 56 runs of different prompts one prompt at a time. I always found both methods to be "wasteful" if you have  powerful card with a lot of VRAM.  I don't, by the way :)
+As far as I know, ComfyUI does not have native capability to allow for different prompts to be run within the *same* batch.  With ComfyUI native, you can set the batch size to, say, create 12 images of the same prompt or you can change the queue to have 30 runs of different prompts, one prompt at a time. I always found both methods to be "wasteful" if you have  powerful card with a lot of VRAM.  I don't, by the way :)
 
-Also, there are some nodes that will create multiple prompts in batches, but the ones I looked at showed they were just doing what is essentially queue management and prompts were still being done only one at a time.  This set of nodes will allow you to create as many prompts as your VRAM can hold and does them simultaneously.  Nodes are available for SDx, SDXL, and Flux. 
+Also, there are some nodes that will create multiple prompts in batches, but the ones I looked at showed they were just doing what is essentially queue management and prompts were still being done one at a time.  This set of nodes will allow you to create as many prompts as your VRAM can hold and does them *simultaneously*.  Nodes are available for SDx, SDXL, and Flux. 
 
 You can try this out too: pair a wildcard node in the front end with the batch sampler, set your queue to "Run (instant)" and enjoy endless random batched prompts
 
@@ -96,7 +96,7 @@ This is why I tried my hand at Python in the first place! There are many good im
 
 + The default saver at the time did not save to UNC in Windows, even if you tried to put it in the extra paths YAML file
 + Some savers will allow you to save to UNC but have restricted built-in folder formats
-+ You can cobble some savers to save an image together with a text file, but the timestamp on the text file tends to be 2-3 seconds off from the image
++ You can cobble some savers and text nodes together to save an image together with a text file, but the timestamp on the text file tends to be 2-3 seconds off from the image
 + No saver I know of lets you save the JSON file to a **completely different folder**
 
 So: this node will allow you to save your image file wherever you want, with full support for standard [Python date and time conventions](https://strftime.org/) and you can save the JSON file somewhere else.  The feature list includes:
@@ -129,15 +129,15 @@ This module uses the standard Python date and time stamp formats, it **_does not
 
 ### Image Analysis Nodes
 
-You can use these two node to see how novel or complex your images are.  
+You can use these two nodes to see how novel or complex your images are.  
 
 ![noveltyscore](./img/novelty.png)
 
-The Novelty Score node match your image against one or more reference images and computes how different your image is.  The higher the score, the more novel your image is.  The calculates CLIP embeddings for the input image and compares them to a list of reference embeddings using cosine similarity.  You can compare it to another image, but it's more fun to compare to a range of them.
+The Novelty Score node matches your image against one or more reference images and computes how different your image is.  The higher the score, the more novel your image is.  The node calculates CLIP embeddings for the input image and compares them to a list of reference embeddings using cosine similarity.  You can compare it to one other image, but it's more fun to compare to a range of them.
 
 ![complexitycore](./img/complexity.png)
 
-Similarly, the Complexity Score node indicate how complex an image is, with more complex images scoring higher.  This is based on edge detection and other variances found in the image.  The node converts the image to grayscale, applies `FIND_EDGES` from `PIL`, and calculates what percent of pixels are above a threshold.
+Similarly, the Complexity Score node indicates how complex an image is, with more complex images scoring higher.  This is based on edge detection and other variances found in the image.  The node converts the image to grayscale, applies `FIND_EDGES` from `PIL`, and calculates what percent of pixels are above a threshold.
 
 
 ### Randomizer Nodes
@@ -148,21 +148,39 @@ There are two sets of nodes, for text selection and to randomize parameters.
 
 ![textrandom](./img/randomprompts.png)
 
-These nodes will randomly select text from the input. There are two nodes, one that picks one line from the list, and one that selects *x* lines from the list.  Useful for randomly picking prompts.
+These nodes will randomly select text from the input. There are two nodes, one that picks one line from the list, and one that selects *x* number of lines from the list.  Useful for randomly picking prompts.
 
 **Parameter Randomizers**
 
-There are three nodes: Endless Mayhem, Endless Chaos, and Endless Pandemonium.  Both of the first two allow you to randomly select parameters such as steps, CFG value (CFG Guidance for Flux is available as well), height, width, and the seed, with minimum and maximum values. 
+There are three nodes: Endless Mayhem, Endless Chaos, and Endless Pandemonium.  Each of the first two allow you to randomly select parameters such as steps, CFG value (CFG Guidance for Flux is available as well), height, width, and the seed, with minimum and maximum values. 
 
-All nodes have a Boolean flag to set the dimensions to be divisible by 64; if left off, the dimensions will be divisible by 16.  The Mayhem and Chaos nodes have sanity checks so if one value in a pair you put in is lower than its counterpart, they are automatically flipped. For example if you put in "10" for the minimum steps and put in "3" for the max instead of the "30" you probably wanted, the node will make "3" the minimum and "10" the maximum. 
+All nodes have a Boolean flag to set the dimensions to be divisible by 64; if left off, the dimensions will be divisible by 16.  The Mayhem and Chaos nodes have sanity checks so if one value in a pair you put in is lower than its counterpart, they are automatically flipped. For example if you put in "10" for the minimum steps and put in "3" for the maximum instead of the "30" you probably wanted, the node will make "3" the minimum and "10" the maximum. 
 
 ![mayhem](./img/mayhem.png)
 
-The Mayhem node will randomly flip the height and width values on you, so the image moves from portrait to landscape, if you wish.
+The Mayhem node will optionally randomly flip the height and width values on you, so the image moves from portrait to landscape. Why? Why not? Actually it's based on something I jimmy rigged into a Google Colab notebook back at the dawn of widely available code for AI art ... late 2021!
 
 ![chaos](./img/chaos.png)
 
-The Chaos node allows you to select an orientation: square, portrait, landscape, or random. Selecting square will give you random dimensions between the minimum and maximums you set but keep the aspect ratio at 1:1. Otherwise, the node will give you a random aspect ratio from the list below and will use either portrait, landscape, or randomly select an orientation. See below for a set of images that are identical in parameters except for a randomly applied aspect ratio
+The Chaos node allows you to select an orientation: square, portrait, landscape, or random. Selecting square will give you random dimensions between the minimum and maximums you set but keeps the aspect ratio at 1:1. Otherwise, the node will attempt to give you a random aspect ratio from the list below and will use either portrait, landscape, or randomly select an orientation. If it fails to find a suitable aspect ratio, it reverts to square.
+
+Potential aspect ratios, with the inverse ratios also available:
+
++ 5:4
++ 4:3 Classic
++ 7:5
++ 3:2 Classic photo
++ 8:5
++ 5:3
++ 16:9 Widescreen
++ 1.85:1 Cinema
++ 1.92:1 Instagram Stories
++ 2.2:1 70mm Cinema
++ 21:9 Ultrawide (2.33:1)
++ 2.39:1 Anamorphic
++ 2.8:1 Facebook Cover (approx.)
+
+See below for a set of images that are identical in parameters except for a randomly applied aspect ratio:
 
 ![chaosmulti](./img/chaosmulti.png)
 
