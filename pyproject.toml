@@ -1,7 +1,7 @@
 [project]
 name = "endless-nodes"
 description = "A small set of nodes I created for myself. Features multiple simultaneous prompts in batches, an image saver with ability to have JSON saved to separate folder, image analysis nodes, switches for text and numbers, and more."
-version = "1.2.1"
+version = "1.2.2"
 license = { file = "LICENSE" }
 dependencies = ""
 
