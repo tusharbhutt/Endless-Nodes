@@ -1,8 +1,8 @@
 {
-  "id": "64c85f2c-2f42-43db-a373-c30c74c02d1b",
+  "id": "e46d0093-5920-4a1f-88dd-7fb2c5f57b8d",
   "revision": 0,
-  "last_node_id": 24,
-  "last_link_id": 46,
+  "last_node_id": 28,
+  "last_link_id": 54,
   "nodes": [
     {
       "id": 6,
@@ -16,7 +16,7 @@
         106
       ],
       "flags": {},
-      "order": 5,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -60,7 +60,7 @@
         440
       ],
       "flags": {},
-      "order": 11,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -103,63 +103,6 @@
         "Batch",
         "",
         ""
-      ]
-    },
-    {
-      "id": 15,
-      "type": "FluxBatchPrompts",
-      "pos": [
-        -1400,
-        -440
-      ],
-      "size": [
-        400,
-        220
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 38
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            30
-          ]
-        },
-        {
-          "name": "PROMPT_LIST",
-          "type": "STRING",
-          "links": [
-            31
-          ]
-        },
-        {
-          "name": "PROMPT_COUNT",
-          "type": "INT",
-          "links": [
-            25,
-            35
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "endless-nodes",
-        "ver": "1.1.1",
-        "Node name for S&R": "FluxBatchPrompts"
-      },
-      "widgets_values": [
-        "beautiful landscape\nmountain sunset\nocean waves\nfield of sunflowers",
-        3.5,
-        true,
-        0
       ]
     },
     {
@@ -208,7 +151,7 @@
         46
       ],
       "flags": {},
-      "order": 9,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -284,7 +227,7 @@
         88
       ],
       "flags": {},
-      "order": 6,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
@@ -298,43 +241,6 @@
         "cnr_id": "comfy-core",
         "ver": "0.3.41",
         "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 23,
-      "type": "ConditioningZeroOut",
-      "pos": [
-        -856,
-        -88
-      ],
-      "size": [
-        197.66665649414062,
-        26
-      ],
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "conditioning",
-          "type": "CONDITIONING",
-          "link": 40
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            41
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.43",
-        "Node name for S&R": "ConditioningZeroOut"
       },
       "widgets_values": []
     },
@@ -376,6 +282,35 @@
       ]
     },
     {
+      "id": 3,
+      "type": "PreviewImage",
+      "pos": [
+        248.35340881347656,
+        -610
+      ],
+      "size": [
+        1312,
+        1352
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
       "id": 12,
       "type": "KSampler",
       "pos": [
@@ -387,7 +322,7 @@
         262
       ],
       "flags": {},
-      "order": 8,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -403,7 +338,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 41
+          "link": 50
         },
         {
           "name": "latent_image",
@@ -439,12 +374,12 @@
       "id": 2,
       "type": "CLIPTextEncode",
       "pos": [
-        -1400,
-        -85.9647445678711
+        -1398.7327880859375,
+        -174.992431640625
       ],
       "size": [
-        400,
-        130
+        210.25,
+        88
       ],
       "flags": {},
       "order": 4,
@@ -475,33 +410,216 @@
       ]
     },
     {
-      "id": 3,
-      "type": "PreviewImage",
+      "id": 26,
+      "type": "PromptCounter",
       "pos": [
-        248.35340881347656,
-        -610
+        -1635.57666015625,
+        -93.49887084960938
       ],
       "size": [
-        1312,
-        1352
+        210,
+        78
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompts",
+          "type": "STRING",
+          "link": 48
+        }
+      ],
+      "outputs": [
+        {
+          "name": "count",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "preview",
+          "type": "STRING",
+          "links": [
+            54
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "endless-nodes",
+        "ver": "1.1.1",
+        "Node name for S&R": "PromptCounter"
+      },
+      "widgets_values": [
+        false
+      ]
+    },
+    {
+      "id": 23,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        -867.0982055664062,
+        -94.68279266357422
+      ],
+      "size": [
+        197.66665649414062,
+        26
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 40
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            50
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.43",
+        "Node name for S&R": "ConditioningZeroOut"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 27,
+      "type": "PreviewAny",
+      "pos": [
+        -1393.1824951171875,
+        -28.13119125366211
+      ],
+      "size": [
+        416.4487609863281,
+        391.9450378417969
       ],
       "flags": {},
       "order": 10,
       "mode": 0,
       "inputs": [
         {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 2
+          "name": "source",
+          "type": "*",
+          "link": 54
         }
       ],
       "outputs": [],
       "properties": {
         "cnr_id": "comfy-core",
-        "ver": "0.3.39",
-        "Node name for S&R": "PreviewImage"
+        "ver": "0.3.43",
+        "Node name for S&R": "PreviewAny"
       },
       "widgets_values": []
+    },
+    {
+      "id": 25,
+      "type": "DPRandomGenerator",
+      "pos": [
+        -2132.96533203125,
+        -211.8988800048828
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            47,
+            48
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-dynamicprompts",
+        "ver": "3f2fff32358cf39e21b8b440ca87eac9a8e2bade",
+        "Node name for S&R": "DPRandomGenerator"
+      },
+      "widgets_values": [
+        "{yellow|pink|green} stuffed octopus toy holding a sign saying \"Multiple dynamic prompts!\"\n{beige|brown|black} teddy bear holding a sign saying \"Multiple dynamic prompts!\"\n{black|white|grey} stuffed toy kitten holding a sign saying \"Multiple dynamic prompts!\"\n{purple|pink|magenta} sock monkey holding a sign saying \"Multiple dynamic prompts!\"",
+        1999,
+        "randomize",
+        "No"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "FluxBatchPrompts",
+      "pos": [
+        -1400,
+        -440
+      ],
+      "size": [
+        400,
+        220
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 38
+        },
+        {
+          "name": "prompts",
+          "type": "STRING",
+          "widget": {
+            "name": "prompts"
+          },
+          "link": 47
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            30
+          ]
+        },
+        {
+          "name": "PROMPT_LIST",
+          "type": "STRING",
+          "links": [
+            31
+          ]
+        },
+        {
+          "name": "PROMPT_COUNT",
+          "type": "INT",
+          "links": [
+            25,
+            35
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "endless-nodes",
+        "ver": "1.1.1",
+        "Node name for S&R": "FluxBatchPrompts"
+      },
+      "widgets_values": [
+        "beautiful landscape\nmountain sunset\nocean waves\nfield of sunflowers",
+        3.5,
+        true,
+        0
+      ]
     }
   ],
   "links": [
@@ -594,14 +712,6 @@
       "CONDITIONING"
     ],
     [
-      41,
-      23,
-      0,
-      12,
-      2,
-      "CONDITIONING"
-    ],
-    [
       45,
       19,
       0,
@@ -616,6 +726,38 @@
       8,
       1,
       "VAE"
+    ],
+    [
+      47,
+      25,
+      0,
+      15,
+      1,
+      "STRING"
+    ],
+    [
+      48,
+      25,
+      0,
+      26,
+      0,
+      "STRING"
+    ],
+    [
+      50,
+      23,
+      0,
+      12,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      54,
+      26,
+      1,
+      27,
+      0,
+      "*"
     ]
   ],
   "groups": [],
@@ -624,7 +766,7 @@
     "ds": {
       "scale": 0.7107709827523159,
       "offset": [
-        2786.0938120286073,
+        2942.5764780442323,
         1160.2591857910156
       ]
     },
@@ -643,8 +785,8 @@
       {
         "id": 3,
         "pos": [
-          -920,
-          -30
+          -916.1812133789062,
+          493.6399230957031
         ],
         "linkIds": [
           31

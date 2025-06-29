@@ -1,4 +1,8 @@
-Jun 23/23, V1.2.0: Added the Endless Pandemonium node, a black box that randomly and invisibly changes parameters on you.  Put in ability to use 64 or 16 as the minimum steps for the dimensions in the Randomizer nodes, added CFG Guidance outputs for Flux.  Fixed typos and added better credits in README.  Some bug squishing.
+June 28/25: V1.2.2: Corrected Prompt Counter Node so it can accept pipe or newline characters as line breaks, allowing it to be connected immediately to the Batch Prompt node (unlike before), or somewhere else downstream from the prompt creation node(s).  Uploaded JSON files for SD1x and SD2x, SDXL, and updated Flux batch workflow was standardized loader nodes appropriate to the model.  Added an example dynamic prompt workflow for Flux that can be repurposed for other models.  Added images with embedded workflows for the above.
+
+Jun 24/23, V1.2.1: Added parent level requirements.txt file
+
+Jun 23/25, V1.2.0: Added the Endless Pandemonium node, a black box that randomly and invisibly changes parameters on you.  Put in ability to use 64 or 16 as the minimum steps for the dimensions in the Randomizer nodes, added CFG Guidance outputs for Flux.  Fixed typos and added better credits in README.  Some bug squishing.
 
 Jun 22/25, V1.1.1: Minor typos and trying to align version numbers
 
