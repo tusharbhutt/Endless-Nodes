@@ -15,6 +15,14 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 Rightly or wrongly, I was teaching myself a bit of Python back in 2023 to get some nodes up and running to do what I'd like, and I am starting to do that again. Yes, I am using ChatGPT, Copilot, Claude and others, and yes, I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them. Feel free to do with them as you wish, according to the license model.
 
 ***
+**UPDATE: JUN 28, 2025**
+
+**Updated Batch Flux node to handle separate Clip and T5 text encoders along with separate Flux weight files.  Updated the SDXL node to handle separate Clip-L and CLip-G encoders**
++ Corrected Prompt Counter Node so it can accept either pipe (**\|**) or newline characters as line breaks, allowing it to be connected immediately to the Batch Prompt node (unlike before), or somewhere else downstream from the prompt creation node(s).
++ Uploaded JSON files for SD1*x* and SD2*x*, SDXL, and updated Flux batch workflow with standardized loader nodes appropriate to the model. Aso uploade dynamci workflow JSON.
++ Added an example dynamic prompt workflow for Flux that can be repurposed for other models.  Added images with embedded workflows for the above.
+
+***
 **UPDATE: JUN 23, 2025**
 
 **Added Endless Pandemonium node, repurposed Endless Chaos node, cleaned up some typos, did some bug squishing.**
@@ -23,7 +31,7 @@ Rightly or wrongly, I was teaching myself a bit of Python back in 2023 to get so
 + Added the ability to use 64 or 16 as the minimum steps for the dimensions in the Randomizer nodes
 + The Randomizer nodes now have CFG Guidance outputs for Flux
 
-UPDATE: JUN 21, 2025
+**UPDATE: JUN 21, 2025**
 
 Blew everything up and removed all the old nodes.  Nodes with new coding have been uploaded and will be updated semi-frequently until mid-July 2025
 ***
@@ -84,9 +92,19 @@ Output:
 + Prompt List: For downstream node usage
 + Prompt Count: Counts how many prompts you had
 
-The image below should have a Flux workflow built in but if not, check out the workflows folder too.  The image is set up for the Flux node but all you have to do is swap out the Batch Flux node for the other variants in the Endless 🌊✨/BatchProcessing menu. 
+The images below should have workflows built in but if not, check out the workflows folder too.  The image of the beaver is set up for the SD1.*x*/SD2.*x* node (called the "Simple Batch Prompts" node), the goose superhero is for SDXL, the moose overlord is for Flux, and the pink sock monkey is an example of using the Flux batcher with Dynamic Prompts.  That (sadly,abandoned) custom node is available [here if you need it](https://github.com/adieyal/comfyui-dynamicprompts)
 
-![fluxbatchworkflow](./img/fluxbatchworkflowembedded.png)
+![fluxbatchworkflow](./img/fluxworkflow.png)
+Image with embedded Flux workflow
+
+![sdxlbatchworkflow](./img/sdxlworkflow.png)
+Image with embedded SDXL workflow
+
+![simplebatchworkflow](./img/sdsimpleworkflow.png)<br>
+Image with embedded  SD1.*x*/SD2.*x* workflow
+
+![dynamicfluxbatchworkflow](./img/dynamicfluxworkflow.png)
+Image with embedded [Dynamic Prompts](https://github.com/adieyal/comfyui-dynamicprompts) and Flux workflow
 
 ## Endless Image Saver
 
@@ -214,7 +232,7 @@ I do have some nodes that are half-way done, but not ready for prime time.  They
 ***
 ## Usage License and Restrictions
 
-See GPL Licensing V3 for usage. You may modify this code as long as you keep the credits for this repository and for those noted in the credit section below. **YOU ARE EXPRESSLY FORBIDDEN FROM USING THESE NODES TO CREATE ANY IMAGES OR ARTWORK THAT VIOLATES THE STABLE DIFFUSION [ACCEPTABLE USE POLICY] (https://stability.ai/use-policy) OR THE USAGE POLICY FROM [BLACK FOREST LABS](https://bfl.ai/legal/usage-policy).**
+See [GPL Licensing V3](https://www.gnu.org/licenses/gpl-3.0.en.html#license-text) for usage. You may modify this code as long as you keep the credits for this repository and for those noted in the credit section below. **YOU ARE EXPRESSLY FORBIDDEN FROM USING THESE NODES TO CREATE ANY IMAGES OR ARTWORK THAT VIOLATES THE STABLE DIFFUSION [ACCEPTABLE USE POLICY](https://stability.ai/use-policy) OR THE USAGE POLICY FROM [BLACK FOREST LABS](https://bfl.ai/legal/usage-policy).**
 
 For example, don't be a mouth-breather who creates fake nudes or sexual content of **anyone, even if you have their consent**. JUST. DON’T. BE. AN. ASSHOLE.
 
