@@ -1,7 +1,9 @@
 import os
 import json
 import re
+from server import PromptServer
 from datetime import datetime
+
 from PIL import Image, PngImagePlugin
 import numpy as np
 import torch
@@ -9,6 +11,28 @@ import folder_paths
 from PIL.PngImagePlugin import PngInfo
 import platform
 
+def get_workflow(prompt=None, extra_pnginfo=None):
+    from server import PromptServer
+
+    # ✅ First: try directly from prompt
+    if isinstance(prompt, dict) and "workflow" in prompt:
+        return prompt["workflow"]
+
+    # ✅ Second: try from extra_pnginfo
+    if isinstance(extra_pnginfo, dict) and "workflow" in extra_pnginfo:
+        print("[INFO] Workflow recovered from extra_pnginfo.")
+        return extra_pnginfo["workflow"]
+
+    # ✅ Third: fallback from PromptServer
+    last = getattr(PromptServer.instance, "last_prompt", {})
+    workflow = last.get("workflow")
+    if workflow:
+        print("[INFO] Workflow recovered from PromptServer.last_prompt.")
+        return workflow
+
+    raise ValueError("🚫 No workflow found in prompt, extra_pnginfo, or PromptServer context.")
+
+        
 class EndlessNode_Imagesaver:
     """
     Enhanced batch image saver with comprehensive metadata support
@@ -32,6 +56,9 @@ class EndlessNode_Imagesaver:
             return 255  # ext4/APFS limit
         else:
             return 200  # Conservative fallback
+
+
+
 
     @classmethod
     def INPUT_TYPES(s):
@@ -190,24 +217,59 @@ class EndlessNode_Imagesaver:
             counter += 1
 
     def save_json_metadata(self, json_path, prompt_text, negative_text, 
-                          batch_index, creation_time, prompt=None, extra_pnginfo=None):
-        """Save JSON metadata file"""
-        metadata = {
-            "prompt": prompt_text,
-            "negative_prompt": negative_text,
-            "batch_index": batch_index,
-            "creation_time": creation_time,
-            "workflow_prompt": prompt,
-            "extra_pnginfo": extra_pnginfo
-        }
-        
+                           batch_index, creation_time, prompt=None, extra_pnginfo=None):
+        """Exports a drag-and-drop-compatible ComfyUI workflow JSON with optional metadata."""
+
+        import json
+        import math
+
+        def sanitize_json(obj):
+            if isinstance(obj, dict):
+                return {k: sanitize_json(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [sanitize_json(v) for v in obj]
+            elif isinstance(obj, float) and math.isnan(obj):
+                return None
+            else:
+                return obj
+
         try:
-            with open(json_path, 'w', encoding='utf-8', newline='\n') as f:
-                json.dump(metadata, f, indent=2, default=self.encode_emoji, ensure_ascii=False)
+            workflow = get_workflow(prompt)
+
+            # ✅ Ensure core fields
+            workflow.setdefault("version", 1)
+            workflow.setdefault("nodes", [])
+            workflow.setdefault("links", [])
+            if "state" not in workflow:
+                max_id = max((n.get("id", 0) for n in workflow["nodes"]), default=0)
+                workflow["state"] = {"idCounter": max_id + 1}
+
+            # ✅ Remove sidecar metadata if present
+            workflow.pop("extra_pnginfo", None)
+
+            # ✅ Embed custom metadata
+            workflow["extra"] = workflow.get("extra", {})
+            workflow["extra"].update({
+                "prompt": prompt_text,
+                "negative_prompt": negative_text,
+                "batch_index": batch_index,
+                "creation_time": creation_time,
+                "source": "FluxSaver"
+            })
+
+            clean_json = sanitize_json(workflow)
+
+            with open(json_path, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(clean_json, f, indent=2, default=self.encode_emoji, ensure_ascii=False)
+
+            print(f"[SUCCESS] Workflow JSON saved: {json_path}")
             return True
+
         except Exception as e:
-            print(f"Failed to save JSON metadata: {e}")
+            print(f"[ERROR] Failed to save workflow JSON: {e}")
             return False
+
+
 
     def generate_numbered_filename(self, filename_prefix, delimiter, counter, 
                                  filename_number_padding, filename_number_start, 
@@ -243,18 +305,28 @@ class EndlessNode_Imagesaver:
         return filename
 
     def save_batch_images(self, images, prompt_list, include_timestamp=True, 
-                         timestamp_format="%Y-%m-%d_%H-%M-%S", image_format="PNG", 
-                         jpeg_quality=95, delimiter="_", 
-                         prompt_words_limit=8, embed_workflow=True, save_json_metadata=False,
-                         enable_filename_numbering=True, filename_number_padding=2, 
-                         filename_number_start=False, embed_png_metadata=True, 
-                         output_path="", filename_prefix="batch", 
-                         negative_prompt_list="", json_folder="", prompt=None, extra_pnginfo=None):
-        
+                          timestamp_format="%Y-%m-%d_%H-%M-%S", image_format="PNG", 
+                          jpeg_quality=95, delimiter="_", 
+                          prompt_words_limit=8, embed_workflow=True, save_json_metadata=False,
+                          enable_filename_numbering=True, filename_number_padding=2, 
+                          filename_number_start=False, embed_png_metadata=True, 
+                          output_path="", filename_prefix="batch", 
+                          negative_prompt_list="", json_folder="", prompt=None, extra_pnginfo=None):
+
         # Debug: Print tensor information
         print(f"DEBUG: Images tensor shape: {images.shape}")
         print(f"DEBUG: Images tensor type: {type(images)}")
-        
+
+        # ✅ Fallback: repair prompt if missing or partial
+        if prompt is None or not isinstance(prompt, dict) or "workflow" not in prompt:
+            if extra_pnginfo and "workflow" in extra_pnginfo:
+                print("[INFO] Workflow recovered from extra_pnginfo.")
+                prompt = {"workflow": extra_pnginfo["workflow"]}
+            else:
+                print("[INFO] Workflow recovered from PromptServer.last_prompt.")
+                prompt = PromptServer.instance.last_prompt or {}
+
+
         # Process output path with date/time validation (always process regardless of timestamp toggle)
         processed_output_path = self.validate_and_process_path(output_path, delimiter)
         
@@ -389,27 +461,25 @@ class EndlessNode_Imagesaver:
                         if image_format == "PNG":
                             # ITEM #3: Conditional PNG metadata embedding
                             if embed_png_metadata:
-                                # Prepare PNG metadata
                                 metadata = PngImagePlugin.PngInfo()
                                 metadata.add_text("prompt", prompt_text)
                                 metadata.add_text("negative_prompt", negative_text)
-                                metadata.add_text("batch_index", str(i+1))
+                                metadata.add_text("batch_index", str(i + 1))
                                 metadata.add_text("creation_time", now.isoformat())
-                                
-                                # Add workflow data if requested
-                                if embed_workflow:
-                                    if prompt is not None:
-                                        metadata.add_text("workflow", json.dumps(prompt, default=self.encode_emoji))
-                                    if extra_pnginfo is not None:
-                                        for key, value in extra_pnginfo.items():
-                                            metadata.add_text(key, json.dumps(value, default=self.encode_emoji))
-                                
-                                img.save(file_path, format="PNG", optimize=True, 
-                                       compress_level=self.compress_level, pnginfo=metadata)
+
+                                if embed_workflow and prompt and "workflow" in prompt:
+                                    metadata.add_text("workflow", json.dumps(prompt, default=self.encode_emoji))
+
+                                if extra_pnginfo:
+                                    for key, value in extra_pnginfo.items():
+                                        metadata.add_text(key, json.dumps(value, default=self.encode_emoji))
+
+                                img.save(file_path, format="PNG", optimize=True,
+                                         compress_level=self.compress_level, pnginfo=metadata)
                             else:
-                                # ITEM #3: Save clean PNG without metadata
-                                img.save(file_path, format="PNG", optimize=True, 
-                                       compress_level=self.compress_level)
+                                img.save(file_path, format="PNG", optimize=True,
+                                         compress_level=self.compress_level)
+
                             
                         elif image_format == "JPEG":
                             # Convert RGBA to RGB for JPEG
