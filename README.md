@@ -17,7 +17,7 @@ Rightly or wrongly, I was teaching myself a bit of Python back in 2023 to get so
 ***
 **UPDATE: JUL 8, 2025**
 
-**Updated Batch prompt nodes to handle Flux Kontext.  You can set multiple prompts in the node and they will be processed simultaneously by the GPU.  Corrected JSON export capability so a saved JSON properly loads the workflow when dragged and dropped onto the UI.
+**Updated Batch prompt nodes to handle Flux Kontext.  You can set multiple prompts in the node and they will be processed simultaneously by the GPU.  Corrected JSON export capability so a saved JSON properly loads the workflow when dragged and dropped onto the UI.**
 + You can now use the batch prompt node with Flux Kontext Dev.  The process works the same way as the other nodes, except here the prompts are used to make changes to the image(s).  You cannot iterate within the prompt set (e.g, set up a list of prompts for a sequence of changes), it is designed to allow you to process multiple scenarios at once.
 + Corrected the JSON files that were being exported.  They will now load the workflow when dragged back to the UI.  As a bonus, if the PNGINfo is also selected, the JSON will remove that, lowering the size of the file.
 
@@ -66,7 +66,7 @@ If you have issues, ask me **nicely** for help. Your tone matters; I'm too old a
 ***
 ## Node List
 
-### Batch Multiprompt Node for SD, SDXL, and FLUX
+### Batch Multiprompt Node for SD, SDXL, FLUX, and FLUX Kontext
 
 ![fluxbatch](./img/batchprompts.png)
 
