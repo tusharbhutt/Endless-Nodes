@@ -15,11 +15,19 @@ When using the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) interface fo
 Rightly or wrongly, I was teaching myself a bit of Python back in 2023 to get some nodes up and running to do what I'd like, and I am starting to do that again. Yes, I am using ChatGPT, Copilot, Claude and others, and yes, I am a glutton for punishment. There are no promises that these nodes will work for you or that I will maintain them. Feel free to do with them as you wish, according to the license model.
 
 ***
+**UPDATE: JUL 8, 2025**
+
+**Updated Batch prompt nodes to handle Flux Kontext.  You can set multiple prompts in the node and they will be processed simultaneously by the GPU.  Corrected JSON export capability so a saved JSON properly loads the workflow when dragged and dropped onto the UI.
++ You can now use the batch prompt node with Flux Kontext Dev.  The process works the same way as the other nodes, except here the prompts are used to make changes to the image(s).  You cannot iterate within the prompt set (e.g, set up a list of prompts for a sequence of changes), it is designed to allow you to process multiple scenarios at once.
++ Corrected the JSON files that were being exported.  They will now load the workflow when dragged back to the UI.  As a bonus, if the PNGINfo is also selected, the JSON will remove that, lowering the size of the file.
+
+
+***
 **UPDATE: JUN 28, 2025**
 
 **Updated Batch Flux node to handle separate Clip and T5 text encoders along with separate Flux weight files.  Updated the SDXL node to handle separate Clip-L and CLip-G encoders**
 + Corrected Prompt Counter Node so it can accept either pipe (**\|**) or newline characters as line breaks, allowing it to be connected immediately to the Batch Prompt node (unlike before), or somewhere else downstream from the prompt creation node(s).
-+ Uploaded JSON files for SD1*x* and SD2*x*, SDXL, and updated Flux batch workflow with standardized loader nodes appropriate to the model. Aso uploade dynamci workflow JSON.
++ Uploaded JSON files for SD1*x* and SD2*x*, SDXL, and updated Flux batch workflow with standardized loader nodes appropriate to the model. Also uploaded dynamic workflow JSON.
 + Added an example dynamic prompt workflow for Flux that can be repurposed for other models.  Added images with embedded workflows for the above.
 
 ***
@@ -92,7 +100,11 @@ Output:
 + Prompt List: For downstream node usage
 + Prompt Count: Counts how many prompts you had
 
-The images below should have workflows built in but if not, check out the workflows folder too.  The image of the beaver is set up for the SD1.*x*/SD2.*x* node (called the "Simple Batch Prompts" node), the goose superhero is for SDXL, the moose overlord is for Flux, and the pink sock monkey is an example of using the Flux batcher with Dynamic Prompts.  That (sadly,abandoned) custom node is available [here if you need it](https://github.com/adieyal/comfyui-dynamicprompts)
+The images below should have workflows built in but if not, check out the workflows folder too.  The image of the beaver is set up for the SD1.*x*/SD2.*x* node (called the "Simple Batch Prompts" node), the goose superhero is for SDXL, the moose overlord is for Flux, and Vermeer's Girl With the Pearl Earring is for Kontext.  If you want to try your hand with randomness, the pink sock monkey is an example of using the Flux batcher with Dynamic Prompts.  That (sadly,abandoned) custom node is available [here if you need it](https://github.com/adieyal/comfyui-dynamicprompts)
+
+
+![kontextbatchworkflow](./img/kontextworkflow.png)
+Image with embedded workflow for Flux Kontext
 
 ![fluxbatchworkflow](./img/fluxworkflow.png)
 Image with embedded Flux workflow

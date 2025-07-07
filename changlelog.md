@@ -1,4 +1,8 @@
-June 28/25: V1.2.2: Corrected Prompt Counter Node so it can accept pipe or newline characters as line breaks, allowing it to be connected immediately to the Batch Prompt node (unlike before), or somewhere else downstream from the prompt creation node(s).  Uploaded JSON files for SD1x and SD2x, SDXL, and updated Flux batch workflow was standardized loader nodes appropriate to the model.  Added an example dynamic prompt workflow for Flux that can be repurposed for other models.  Added images with embedded workflows for the above.
+July 7/25, V 1.2.4: You can now use the batch prompt node with Flux Kontext Dev.  The process works the same way as the other nodes, except here the prompts are used to make changes to the image(s).  You cannot iterate within the prompt set (e.g, set up a list of prompts for a sequence of changes), it is designed to allow you to process multiple scenarios at once.
+
+July 6/25, V1.2.3: Corrected the JSON files that were being exported.  They will now load the workflow when dragged back to the UI.  As a bonus, if the PNGINfo is also selected, the JSON will remove that, lowering the size of the file.
+
+June 28/25, V1.2.2: Corrected Prompt Counter Node so it can accept pipe or newline characters as line breaks, allowing it to be connected immediately to the Batch Prompt node (unlike before), or somewhere else downstream from the prompt creation node(s).  Uploaded JSON files for SD1x and SD2x, SDXL, and updated Flux batch workflow was standardized loader nodes appropriate to the model.  Added an example dynamic prompt workflow for Flux that can be repurposed for other models.  Added images with embedded workflows for the above.
 
 Jun 24/23, V1.2.1: Added parent level requirements.txt file
 
