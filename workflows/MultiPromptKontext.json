@@ -1,0 +1,1059 @@
+{
+  "id": "7cbcec68-7fa6-47bb-a38a-da689949a001",
+  "revision": 0,
+  "last_node_id": 200,
+  "last_link_id": 327,
+  "nodes": [
+    {
+      "id": 142,
+      "type": "LoadImageOutput",
+      "pos": [
+        -493.6612854003906,
+        491.6781005859375
+      ],
+      "size": [
+        320,
+        374
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            309
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "LoadImageOutput"
+      },
+      "widgets_values": [
+        "Johannes_Vermeer_(1632-1675)_-_The_Girl_With_The_Pearl_Earring_(1665).jpg [output]",
+        true,
+        "refresh",
+        "image"
+      ],
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 42,
+      "type": "FluxKontextImageScale",
+      "pos": [
+        -145.3395233154297,
+        491.6781921386719
+      ],
+      "size": [
+        187.71665954589844,
+        33.35621643066406
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 309
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            222,
+            289
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "FluxKontextImageScale"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 196,
+      "type": "PreviewAny",
+      "pos": [
+        844.9977416992188,
+        166.62808227539062
+      ],
+      "size": [
+        347.3836669921875,
+        252.7612762451172
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 314
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.43",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 189,
+      "type": "EndlessReplicateLatents",
+      "pos": [
+        845.8294677734375,
+        52.543521881103516
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 325
+        },
+        {
+          "name": "count",
+          "type": "INT",
+          "widget": {
+            "name": "count"
+          },
+          "link": 322
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            306
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EndlessReplicateLatents"
+      },
+      "widgets_values": [
+        1
+      ]
+    },
+    {
+      "id": 39,
+      "type": "VAELoader",
+      "pos": [
+        -487.8869934082031,
+        322.44085693359375
+      ],
+      "size": [
+        337.76861572265625,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            223,
+            327
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "ae.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Lumina_Image_2.0_Repackaged/resolve/main/split_files/vae/ae.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "ae.safetensors"
+      ],
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 38,
+      "type": "DualCLIPLoader",
+      "pos": [
+        -488.6225280761719,
+        126.9427490234375
+      ],
+      "size": [
+        337.76861572265625,
+        130
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            318
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "DualCLIPLoader",
+        "models": [
+          {
+            "name": "clip_l.safetensors",
+            "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/clip_l.safetensors",
+            "directory": "text_encoders"
+          },
+          {
+            "name": "t5xxl_fp8_e4m3fn_scaled.safetensors",
+            "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn_scaled.safetensors",
+            "directory": "text_encoders"
+          }
+        ]
+      },
+      "widgets_values": [
+        "clip_l.safetensors",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors",
+        "flux",
+        "default"
+      ],
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 37,
+      "type": "UNETLoader",
+      "pos": [
+        -490.9262390136719,
+        -11.827646255493164
+      ],
+      "size": [
+        337.76861572265625,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            319
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "flux1-dev-kontext_fp8_scaled.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/flux1-kontext-dev_ComfyUI/resolve/main/split_files/diffusion_models/flux1-dev-kontext_fp8_scaled.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "flux1-dev-kontext_fp8_scaled.safetensors",
+        "default"
+      ],
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 173,
+      "type": "PreviewImage",
+      "pos": [
+        96.81117248535156,
+        491.4635925292969
+      ],
+      "size": [
+        404.89703369140625,
+        372.09002685546875
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 289
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 135,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        558.8958129882812,
+        -24.83323860168457
+      ],
+      "size": [
+        240,
+        26
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 299
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            326
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "ConditioningZeroOut"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 177,
+      "type": "ReferenceLatent",
+      "pos": [
+        558.8096313476562,
+        -141.2848358154297
+      ],
+      "size": [
+        197.712890625,
+        46
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 296
+        },
+        {
+          "name": "latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 293
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            308
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.41",
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 124,
+      "type": "VAEEncode",
+      "pos": [
+        91.94683837890625,
+        -25.904176712036133
+      ],
+      "size": [
+        240,
+        50
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 222
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 223
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            293,
+            325
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1602.777099609375,
+        -65.97893524169922
+      ],
+      "size": [
+        190,
+        46
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 52
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 327
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            315,
+            316
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 199,
+      "type": "PreviewImage",
+      "pos": [
+        1968.77392578125,
+        -401.9773254394531
+      ],
+      "size": [
+        758.97802734375,
+        731.2053833007812
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 315
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 197,
+      "type": "PromptCounter",
+      "pos": [
+        572.9763793945312,
+        146.658935546875
+      ],
+      "size": [
+        210,
+        78
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompts",
+          "type": "STRING",
+          "link": 313
+        }
+      ],
+      "outputs": [
+        {
+          "name": "count",
+          "type": "INT",
+          "links": [
+            322
+          ]
+        },
+        {
+          "name": "preview",
+          "type": "STRING",
+          "links": [
+            314
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PromptCounter"
+      },
+      "widgets_values": [
+        false
+      ]
+    },
+    {
+      "id": 31,
+      "type": "KSampler",
+      "pos": [
+        1212.6544189453125,
+        -66.05636596679688
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 319
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 308
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 326
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 306
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            52
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        123454678910,
+        "randomize",
+        20,
+        1,
+        "euler",
+        "beta",
+        1
+      ]
+    },
+    {
+      "id": 198,
+      "type": "Image_saver",
+      "pos": [
+        1968.8272705078125,
+        450.73095703125
+      ],
+      "size": [
+        762.1901245117188,
+        438
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 316
+        },
+        {
+          "name": "prompt_list",
+          "type": "STRING",
+          "link": 320
+        }
+      ],
+      "outputs": [
+        {
+          "name": "saved_paths",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Image_saver"
+      },
+      "widgets_values": [
+        true,
+        "%Y-%m-%d_%H-%M-%S",
+        "PNG",
+        95,
+        "_",
+        8,
+        true,
+        true,
+        true,
+        2,
+        false,
+        true,
+        "",
+        "Kontext",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 190,
+      "type": "FluxKontextBatchPrompts",
+      "pos": [
+        91.05509948730469,
+        126.88367462158203
+      ],
+      "size": [
+        394.2222900390625,
+        256.80902099609375
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 318
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            296,
+            299
+          ]
+        },
+        {
+          "name": "PROMPT_LIST",
+          "type": "STRING",
+          "links": [
+            313,
+            320
+          ]
+        },
+        {
+          "name": "PROMPT_COUNT",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FluxKontextBatchPrompts"
+      },
+      "widgets_values": [
+        "take the image and change it so the woman is holding a sign that says \"Kontext\" and the image is chnaged to 1960s pop art in the style of Andy Warhol\ntake the image and change it so the woman is holding a sign that says \"Kontext\" and the image is changed to a coloured pencil sketch with detailed cross hatching and shading",
+        2.5,
+        true,
+        0
+      ]
+    }
+  ],
+  "links": [
+    [
+      52,
+      31,
+      0,
+      8,
+      0,
+      "LATENT"
+    ],
+    [
+      222,
+      42,
+      0,
+      124,
+      0,
+      "IMAGE"
+    ],
+    [
+      223,
+      39,
+      0,
+      124,
+      1,
+      "VAE"
+    ],
+    [
+      289,
+      42,
+      0,
+      173,
+      0,
+      "IMAGE"
+    ],
+    [
+      293,
+      124,
+      0,
+      177,
+      1,
+      "LATENT"
+    ],
+    [
+      296,
+      190,
+      0,
+      177,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      299,
+      190,
+      0,
+      135,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      306,
+      189,
+      0,
+      31,
+      3,
+      "LATENT"
+    ],
+    [
+      308,
+      177,
+      0,
+      31,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      309,
+      142,
+      0,
+      42,
+      0,
+      "IMAGE"
+    ],
+    [
+      313,
+      190,
+      1,
+      197,
+      0,
+      "STRING"
+    ],
+    [
+      314,
+      197,
+      1,
+      196,
+      0,
+      "*"
+    ],
+    [
+      315,
+      8,
+      0,
+      199,
+      0,
+      "IMAGE"
+    ],
+    [
+      316,
+      8,
+      0,
+      198,
+      0,
+      "IMAGE"
+    ],
+    [
+      318,
+      38,
+      0,
+      190,
+      0,
+      "CLIP"
+    ],
+    [
+      319,
+      37,
+      0,
+      31,
+      0,
+      "MODEL"
+    ],
+    [
+      320,
+      190,
+      1,
+      198,
+      1,
+      "STRING"
+    ],
+    [
+      322,
+      197,
+      0,
+      189,
+      1,
+      "INT"
+    ],
+    [
+      325,
+      124,
+      0,
+      189,
+      0,
+      "LATENT"
+    ],
+    [
+      326,
+      135,
+      0,
+      31,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      327,
+      39,
+      0,
+      8,
+      1,
+      "VAE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8728137150720292,
+      "offset": [
+        1044.4410552978516,
+        888.7000393948313
+      ]
+    },
+    "frontendVersion": "1.23.4",
+    "reroutes": [
+      {
+        "id": 1,
+        "pos": [
+          -57.19364547729492,
+          141.10812377929688
+        ],
+        "linkIds": [
+          318
+        ]
+      },
+      {
+        "id": 2,
+        "pos": [
+          -13.858236312866211,
+          -184.93614196777344
+        ],
+        "linkIds": [
+          319
+        ]
+      },
+      {
+        "id": 3,
+        "parentId": 2,
+        "pos": [
+          937.293701171875,
+          -184.69000244140625
+        ],
+        "linkIds": [
+          319
+        ]
+      },
+      {
+        "id": 5,
+        "pos": [
+          585.5619506835938,
+          484.87799072265625
+        ],
+        "linkIds": [
+          320
+        ]
+      },
+      {
+        "id": 7,
+        "pos": [
+          1024.8916015625,
+          -11.335799217224121
+        ],
+        "linkIds": [
+          326
+        ]
+      },
+      {
+        "id": 8,
+        "pos": [
+          559.64111328125,
+          66.1928482055664
+        ],
+        "linkIds": [
+          325
+        ]
+      },
+      {
+        "id": 9,
+        "pos": [
+          92.53398895263672,
+          433.5308532714844
+        ],
+        "linkIds": [
+          327
+        ]
+      },
+      {
+        "id": 10,
+        "parentId": 9,
+        "pos": [
+          1514.0599365234375,
+          433.5308532714844
+        ],
+        "linkIds": [
+          327
+        ]
+      }
+    ],
+    "groupNodes": {},
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "linkExtensions": [
+      {
+        "id": 318,
+        "parentId": 1
+      },
+      {
+        "id": 319,
+        "parentId": 3
+      },
+      {
+        "id": 320,
+        "parentId": 5
+      },
+      {
+        "id": 325,
+        "parentId": 8
+      },
+      {
+        "id": 326,
+        "parentId": 7
+      },
+      {
+        "id": 327,
+        "parentId": 10
+      }
+    ],
+    "prompt": "take the image and change it so the woman is holding a sign that says \"Kontext\" and the image is changed to a coloured pencil sketch with detailed cross hatching and shading",
+    "negative_prompt": "",
+    "batch_index": 2,
+    "creation_time": "2025-07-07T13:30:52.938019",
+    "source": "FluxSaver"
+  },
+  "version": 0.4,
+  "widget_idx_map": {
+    "31": {
+      "seed": 0,
+      "sampler_name": 4,
+      "scheduler": 5
+    }
+  },
+  "state": {
+    "idCounter": 200
+  }
+}
