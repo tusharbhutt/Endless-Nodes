@@ -9,6 +9,8 @@ from .endless_batchers import (
     EndlessNode_SDXLBatchPrompts,
     EndlessNode_BatchNegativePrompts,
     EndlessNode_PromptCounter,
+    EndlessNode_FluxKontextBatchPrompts,
+    EndlessNode_ReplicateLatents,
 # IGNORE ME, I AM NOT READY!!
 # from .endless_fluxlatent import (
     # EndlessNode_FluxLatentReplicator,
@@ -22,6 +24,8 @@ NODE_CLASS_MAPPINGS = {
     "SDXLBatchPrompts": EndlessNode_SDXLBatchPrompts,
     "BatchNegativePrompts": EndlessNode_BatchNegativePrompts,
     "PromptCounter": EndlessNode_PromptCounter,
+    "FluxKontextBatchPrompts": EndlessNode_FluxKontextBatchPrompts,
+    "EndlessReplicateLatents": EndlessNode_ReplicateLatents,
 # IGNORE ME, I AM NOT READY!!
     # "LatentReplicator": EndlessNode_FluxLatentReplicator,
     # "LatentReplicatorPrompts": EndlessNode_FluxLatentReplicatorFromPrompts,
@@ -34,7 +38,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SDXLBatchPrompts": "SDXL Batch Prompts", 
     "BatchNegativePrompts": "Batch Negative Prompts",
     "PromptCounter": "Prompt Counter",
-# IGNORE ME, I AM NOT READY!!
+    "FluxKontextBatchPrompts": "FLUX Kontext Batch Prompts",
+    "EndlessReplicateLatents": "Replicate Latents",
+    # IGNORE ME, I AM NOT READY!!
     # "LatentReplicator": "Latent Replicator",
     # "LatentReplicatorPrompts": "Latent Replicator from Prompts",
 }

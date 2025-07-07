@@ -108,7 +108,8 @@ class EndlessNode_SimpleBatchPrompts:
 class EndlessNode_FluxBatchPrompts:
     """
     Specialized batch prompt encoder for FLUX models
-    Handles FLUX-specific conditioning requirements including guidance and T5 text encoding
+    Handles FLUX-specific conditioning requirements with proper dual encoder support
+    Maintains true batch processing for both unified and separate encoder setups
     """
     @classmethod
     def INPUT_TYPES(s):
@@ -150,7 +151,36 @@ class EndlessNode_FluxBatchPrompts:
             for i, prompt in enumerate(prompt_lines):
                 print(f"  {i+1}: {prompt}")
         
-        # Encode each prompt with FLUX-specific conditioning
+        # Try true batch encoding first (works with unified CLIP)
+        try:
+            # Create a single multi-line prompt for batch tokenization
+            batch_prompt = "\n".join(prompt_lines)
+            
+            # Try to tokenize the entire batch at once
+            tokens = clip.tokenize(batch_prompt)
+            cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
+            
+            # Check if we got proper batch dimensions
+            expected_batch_size = len(prompt_lines)
+            if cond.shape[0] == expected_batch_size:
+                # Success! We have proper batched encoding
+                conditioning = [[cond, {
+                    "pooled_output": pooled,
+                    "guidance": guidance,
+                    "guidance_scale": guidance
+                }]]
+                
+                if print_output:
+                    print(f"✓ True batch encoding successful: {cond.shape}, pooled: {pooled.shape}")
+                
+                prompt_list_str = "|".join(prompt_lines)
+                return (conditioning, prompt_list_str, prompt_count)
+                
+        except Exception as e:
+            if print_output:
+                print(f"Batch encoding failed, trying individual encoding: {e}")
+        
+        # Fallback to individual encoding (for dual encoders or other issues)
         cond_tensors = []
         pooled_tensors = []
         
@@ -160,9 +190,13 @@ class EndlessNode_FluxBatchPrompts:
                 cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
                 cond_tensors.append(cond)
                 pooled_tensors.append(pooled)
+                
+                if print_output and i == 0:
+                    print(f"Individual encoding shapes - cond: {cond.shape}, pooled: {pooled.shape}")
+                    
             except Exception as e:
                 print(f"Error encoding FLUX prompt {i+1} '{prompt}': {e}")
-                # Use a fallback empty prompt
+                # Use fallback empty prompt
                 try:
                     tokens = clip.tokenize("")
                     cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
@@ -172,35 +206,57 @@ class EndlessNode_FluxBatchPrompts:
                 except Exception as fallback_error:
                     raise ValueError(f"Failed to encode FLUX prompt {i+1} and fallback failed: {fallback_error}")
         
-        # Batch the conditioning tensors properly for FLUX
+        # Now try to batch the individual encodings
         try:
-            # Stack the conditioning tensors along batch dimension
-            batched_cond = torch.cat(cond_tensors, dim=0)
-            batched_pooled = torch.cat(pooled_tensors, dim=0)
+            # Check tensor shapes for compatibility
+            first_cond_shape = cond_tensors[0].shape[1:]  # Skip batch dimension
+            first_pooled_shape = pooled_tensors[0].shape[1:]  # Skip batch dimension
             
-            if print_output:
-                print(f"Created FLUX batched conditioning: {batched_cond.shape}")
-                print(f"Created FLUX batched pooled: {batched_pooled.shape}")
+            shapes_compatible = all(
+                tensor.shape[1:] == first_cond_shape for tensor in cond_tensors
+            ) and all(
+                tensor.shape[1:] == first_pooled_shape for tensor in pooled_tensors
+            )
             
-            # FLUX-specific conditioning with guidance
-            conditioning = [[batched_cond, {
-                "pooled_output": batched_pooled,
-                "guidance": guidance,
-                "guidance_scale": guidance  # Some FLUX implementations use this key
-            }]]
-            
+            if shapes_compatible:
+                # Concatenate along batch dimension
+                batched_cond = torch.cat(cond_tensors, dim=0)
+                batched_pooled = torch.cat(pooled_tensors, dim=0)
+                
+                conditioning = [[batched_cond, {
+                    "pooled_output": batched_pooled,
+                    "guidance": guidance,
+                    "guidance_scale": guidance
+                }]]
+                
+                if print_output:
+                    print(f"✓ Individual->Batch concatenation successful: {batched_cond.shape}")
+                    
+            else:
+                # Shapes incompatible - use list format but still maintain batch structure
+                conditioning = []
+                for i in range(len(cond_tensors)):
+                    conditioning.append([cond_tensors[i], {
+                        "pooled_output": pooled_tensors[i],
+                        "guidance": guidance,
+                        "guidance_scale": guidance
+                    }])
+                
+                if print_output:
+                    print(f"⚠ Using list format due to incompatible shapes (dual encoder setup)")
+                    print(f"  Cond shapes: {[t.shape for t in cond_tensors[:3]]}")  # Show first 3
+                    print(f"  Pooled shapes: {[t.shape for t in pooled_tensors[:3]]}")
+                    
         except Exception as e:
-            print(f"Error creating FLUX batched conditioning: {e}")
-            print("Falling back to list format...")
-            # Fallback to list format if batching fails
+            print(f"Error during tensor batching: {e}")
+            # Final fallback to individual list
             conditioning = []
             for i in range(len(cond_tensors)):
-                flux_conditioning = [cond_tensors[i], {
+                conditioning.append([cond_tensors[i], {
                     "pooled_output": pooled_tensors[i],
                     "guidance": guidance,
                     "guidance_scale": guidance
-                }]
-                conditioning.append(flux_conditioning)
+                }])
         
         prompt_list_str = "|".join(prompt_lines)
         return (conditioning, prompt_list_str, prompt_count)
@@ -208,8 +264,8 @@ class EndlessNode_FluxBatchPrompts:
 
 class EndlessNode_SDXLBatchPrompts:
     """
-    Specialized batch prompt encoder for SDXL models
-    Handles dual text encoders and SDXL-specific conditioning requirements
+    Specialized batch prompt encoder for SDXL models  
+    Handles dual text encoders with proper batch processing
     """
     @classmethod
     def INPUT_TYPES(s):
@@ -250,7 +306,27 @@ class EndlessNode_SDXLBatchPrompts:
             for i, prompt in enumerate(prompt_lines):
                 print(f"  {i+1}: {prompt}")
         
-        # Encode each prompt with SDXL-specific conditioning
+        # Try true batch encoding first
+        try:
+            batch_prompt = "\n".join(prompt_lines)
+            tokens = clip.tokenize(batch_prompt)
+            cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
+            
+            expected_batch_size = len(prompt_lines)
+            if cond.shape[0] == expected_batch_size:
+                conditioning = [[cond, {"pooled_output": pooled}]]
+                
+                if print_output:
+                    print(f"✓ SDXL batch encoding successful: {cond.shape}")
+                
+                prompt_list_str = "|".join(prompt_lines)
+                return (conditioning, prompt_list_str, prompt_count)
+                
+        except Exception as e:
+            if print_output:
+                print(f"SDXL batch encoding failed, trying individual: {e}")
+        
+        # Individual encoding fallback
         cond_tensors = []
         pooled_tensors = []
         
@@ -262,7 +338,6 @@ class EndlessNode_SDXLBatchPrompts:
                 pooled_tensors.append(pooled)
             except Exception as e:
                 print(f"Error encoding SDXL prompt {i+1} '{prompt}': {e}")
-                # Use a fallback empty prompt
                 try:
                     tokens = clip.tokenize("")
                     cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
@@ -272,27 +347,37 @@ class EndlessNode_SDXLBatchPrompts:
                 except Exception as fallback_error:
                     raise ValueError(f"Failed to encode SDXL prompt {i+1} and fallback failed: {fallback_error}")
         
-        # Batch the conditioning tensors properly for SDXL
+        # Try to batch the results
         try:
-            # Stack the conditioning tensors along batch dimension
-            batched_cond = torch.cat(cond_tensors, dim=0)
-            batched_pooled = torch.cat(pooled_tensors, dim=0)
+            first_cond_shape = cond_tensors[0].shape[1:]
+            first_pooled_shape = pooled_tensors[0].shape[1:]
             
-            if print_output:
-                print(f"Created SDXL batched conditioning: {batched_cond.shape}")
-                print(f"Created SDXL batched pooled: {batched_pooled.shape}")
+            shapes_compatible = all(
+                tensor.shape[1:] == first_cond_shape for tensor in cond_tensors
+            ) and all(
+                tensor.shape[1:] == first_pooled_shape for tensor in pooled_tensors
+            )
             
-            # SDXL-specific conditioning - simplified without size parameters
-            conditioning = [[batched_cond, {"pooled_output": batched_pooled}]]
-            
+            if shapes_compatible:
+                batched_cond = torch.cat(cond_tensors, dim=0)
+                batched_pooled = torch.cat(pooled_tensors, dim=0)
+                conditioning = [[batched_cond, {"pooled_output": batched_pooled}]]
+                
+                if print_output:
+                    print(f"✓ SDXL individual->batch successful: {batched_cond.shape}")
+            else:
+                conditioning = []
+                for i in range(len(cond_tensors)):
+                    conditioning.append([cond_tensors[i], {"pooled_output": pooled_tensors[i]}])
+                
+                if print_output:
+                    print(f"⚠ SDXL using list format due to incompatible shapes")
+                    
         except Exception as e:
-            print(f"Error creating SDXL batched conditioning: {e}")
-            print("Falling back to list format...")
-            # Fallback to list format if batching fails
+            print(f"SDXL batching error: {e}")
             conditioning = []
             for i in range(len(cond_tensors)):
-                sdxl_conditioning = [cond_tensors[i], {"pooled_output": pooled_tensors[i]}]
-                conditioning.append(sdxl_conditioning)
+                conditioning.append([cond_tensors[i], {"pooled_output": pooled_tensors[i]}])
         
         prompt_list_str = "|".join(prompt_lines)
         return (conditioning, prompt_list_str, prompt_count)
@@ -394,7 +479,6 @@ class EndlessNode_PromptCounter:
     Utility node to count prompts from input text and display a preview.
     The preview will be shown in the console output and returned as a string output.
     """
-
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -403,41 +487,129 @@ class EndlessNode_PromptCounter:
                 "print_to_console": ("BOOLEAN", {"default": True}),
             }
         }
-
     RETURN_TYPES = ("INT", "STRING")
     RETURN_NAMES = ("count", "preview")
     FUNCTION = "count_prompts"
     CATEGORY = "Endless 🌊✨/BatchProcessing"
-
+    
     def count_prompts(self, prompts, print_to_console):
-        prompt_lines = [line.strip() for line in prompts.split('\n') if line.strip()]
+        # Handle both pipe-separated (from batch nodes) and newline-separated formats
+        if '|' in prompts and '\n' not in prompts.strip():
+            # Pipe-separated format from batch node
+            prompt_lines = [line.strip() for line in prompts.split('|') if line.strip()]
+        else:
+            # Newline-separated format from text input
+            prompt_lines = [line.strip() for line in prompts.split('\n') if line.strip()]
+        
         count = len(prompt_lines)
-
         preview = f"Found {count} prompt{'s' if count != 1 else ''}:\n"
         for i, prompt in enumerate(prompt_lines[:5]):
             preview += f"{i+1}. {prompt}\n"
         if count > 5:
             preview += f"... and {count - 5} more"
-
         if print_to_console:
             print(f"\n=== Prompt Counter ===")
             print(preview)
             print("======================\n")
-
         return (count, preview)
 
-NODE_CLASS_MAPPINGS = {
-    "EndlessNode_SimpleBatchPrompts": EndlessNode_SimpleBatchPrompts,
-    "EndlessNode_FluxBatchPrompts": EndlessNode_FluxBatchPrompts,
-    "EndlessNode_SDXLBatchPrompts": EndlessNode_SDXLBatchPrompts,
-    "EndlessNode_BatchNegativePrompts": EndlessNode_BatchNegativePrompts,
-    "EndlessNode_PromptCounter": EndlessNode_PromptCounter,
-}
 
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "EndlessNode_SimpleBatchPrompts": "Simple Batch Prompts",
-    "EndlessNode_FluxBatchPrompts": "Flux Batch Prompts",
-    "EndlessNode_SDXLBatchPrompts": "SDXL Batch Prompts",
-    "EndlessNode_BatchNegativePrompts": "Batch Negative Prompts",
-    "EndlessNode_PromptCounter": "Prompt Counter",
-}
+class EndlessNode_ReplicateLatents:
+    """
+    Replicates latents to match prompt batch size (for use with Kontext-style workflows)
+    """
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "latent": ("LATENT",),
+                "count": ("INT", {"default": 1, "min": 1, "max": 64}),
+            }
+        }
+
+    RETURN_TYPES = ("LATENT",)
+    FUNCTION = "replicate_latent"
+    CATEGORY = "Endless 🌊✨/BatchProcessing"
+
+    def replicate_latent(self, latent, count):
+        if not isinstance(latent, dict) or "samples" not in latent:
+            raise ValueError("Expected latent input to be a dict with 'samples' key")
+        samples = latent["samples"]
+        if not hasattr(samples, "unsqueeze"):
+            raise ValueError("Latent 'samples' tensor invalid")
+
+        replicated = samples.repeat(count, 1, 1, 1)
+        return ({"samples": replicated},)
+
+
+
+class EndlessNode_FluxKontextBatchPrompts:
+    """
+    Specialized batch prompt encoder for FLUX Kontext editing.
+    Handles simultaneous edit prompts and outputs batched conditioning for each.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "prompts": ("STRING", {"multiline": True, "default": "change sky to sunset\nadd rainbow\nmake it night"}),
+                "clip": ("CLIP", ),
+                "guidance": ("FLOAT", {"default": 3.5, "min": 0.0, "max": 100.0, "step": 0.1}),
+                "print_output": ("BOOLEAN", {"default": True}),
+                "max_batch_size": ("INT", {"default": 0, "min": 0, "max": 64}),
+            }
+        }
+
+    RETURN_TYPES = ("CONDITIONING", "STRING", "INT")
+    RETURN_NAMES = ("CONDITIONING", "PROMPT_LIST", "PROMPT_COUNT")
+    FUNCTION = "batch_encode"
+    CATEGORY = "Endless 🌊✨/BatchProcessing"
+
+    def batch_encode(self, prompts, clip, guidance, print_output, max_batch_size=0):
+        prompt_lines = [line.strip() for line in prompts.split('\n') if line.strip()]
+        prompt_count = len(prompt_lines)
+        if not prompt_lines:
+            raise ValueError("No valid prompts found.")
+
+        if max_batch_size > 0:
+            if max_batch_size < prompt_count:
+                prompt_lines = prompt_lines[:max_batch_size]
+            elif max_batch_size > prompt_count:
+                original = list(prompt_lines)
+                while len(prompt_lines) < max_batch_size:
+                    prompt_lines.extend(original[:max_batch_size - len(prompt_lines)])
+
+        cond_tensors = []
+        pooled_tensors = []
+        for i, prompt in enumerate(prompt_lines):
+            try:
+                tokens = clip.tokenize(prompt)
+                cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
+                cond_tensors.append(cond)
+                pooled_tensors.append(pooled)
+            except Exception as e:
+                tokens = clip.tokenize("")
+                cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
+                cond_tensors.append(cond)
+                pooled_tensors.append(pooled)
+
+        try:
+            batched_cond = torch.cat(cond_tensors, dim=0)
+            batched_pooled = torch.cat(pooled_tensors, dim=0)
+            conditioning = [[batched_cond, {
+                "pooled_output": batched_pooled,
+                "guidance": guidance,
+                "guidance_scale": guidance
+            }]]
+        except:
+            conditioning = []
+            for c, p in zip(cond_tensors, pooled_tensors):
+                conditioning.append([c, {
+                    "pooled_output": p,
+                    "guidance": guidance,
+                    "guidance_scale": guidance
+                }])
+
+        prompt_list_str = "|".join(prompt_lines)
+        return (conditioning, prompt_list_str, len(prompt_lines))
