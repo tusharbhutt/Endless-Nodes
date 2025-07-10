@@ -1,3 +1,7 @@
+# =============================
+# 🤓 Module-Level Code
+# =============================
+
 import os
 import json
 import re
@@ -11,19 +15,23 @@ import folder_paths
 from PIL.PngImagePlugin import PngInfo
 import platform
 
+# =============================
+# 🛠️ Workflow helper
+# =============================
+
 def get_workflow(prompt=None, extra_pnginfo=None):
     from server import PromptServer
 
-    # ✅ First: try directly from prompt
+    # First: try directly from prompt
     if isinstance(prompt, dict) and "workflow" in prompt:
         return prompt["workflow"]
 
-    # ✅ Second: try from extra_pnginfo
+    # Second: try from extra_pnginfo
     if isinstance(extra_pnginfo, dict) and "workflow" in extra_pnginfo:
         print("[INFO] Workflow recovered from extra_pnginfo.")
         return extra_pnginfo["workflow"]
 
-    # ✅ Third: fallback from PromptServer
+    # Third: fallback from PromptServer
     last = getattr(PromptServer.instance, "last_prompt", {})
     workflow = last.get("workflow")
     if workflow:
@@ -31,6 +39,16 @@ def get_workflow(prompt=None, extra_pnginfo=None):
         return workflow
 
     raise ValueError("🚫 No workflow found in prompt, extra_pnginfo, or PromptServer context.")
+
+# =============================
+# 🚧 Node Construction
+# =============================
+
+CATEGORY = "Endless 🌊✨/IO"
+
+# =============================
+# 💾 Image Saver
+# =============================
 
         
 class EndlessNode_Imagesaver:
@@ -57,14 +75,10 @@ class EndlessNode_Imagesaver:
         else:
             return 200  # Conservative fallback
 
-
-
-
     @classmethod
     def INPUT_TYPES(s):
         return {"required": 
                     {"images": ("IMAGE", ),
-                     "prompt_list": ("STRING", {"forceInput": True}),
                      "include_timestamp": ("BOOLEAN", {"default": True}),
                      "timestamp_format": ("STRING", {"default": "%Y-%m-%d_%H-%M-%S", "description": "Use Python strftime format.\nExample: %Y-%m-%d %H-%M-%S\nSee: strftime.org for full options."}),
                      "image_format": (["PNG", "JPEG", "WEBP"], {"default": "PNG"}),
@@ -83,6 +97,7 @@ class EndlessNode_Imagesaver:
                      },
                 "optional":
                     {"output_path": ("STRING", {"default": ""}),
+                     "prompt_list": ("STRING", {"forceInput": True, "default": ""}),
                      "filename_prefix": ("STRING", {"default": "Batch"}),
                      "negative_prompt_list": ("STRING", {"default": ""}),
                      "json_folder": ("STRING", {"default": ""}),
@@ -97,7 +112,7 @@ class EndlessNode_Imagesaver:
     RETURN_NAMES = ("saved_paths",)
     FUNCTION = "save_batch_images"
     OUTPUT_NODE = True
-    CATEGORY = "Endless 🌊✨/IO"
+    CATEGORY = CATEGORY
 
     def encode_emoji(self, obj):
         """Properly encode emojis and special characters"""
@@ -236,7 +251,7 @@ class EndlessNode_Imagesaver:
         try:
             workflow = get_workflow(prompt)
 
-            # ✅ Ensure core fields
+            # Ensure core fields
             workflow.setdefault("version", 1)
             workflow.setdefault("nodes", [])
             workflow.setdefault("links", [])
@@ -244,10 +259,10 @@ class EndlessNode_Imagesaver:
                 max_id = max((n.get("id", 0) for n in workflow["nodes"]), default=0)
                 workflow["state"] = {"idCounter": max_id + 1}
 
-            # ✅ Remove sidecar metadata if present
+            # Remove sidecar metadata if present
             workflow.pop("extra_pnginfo", None)
 
-            # ✅ Embed custom metadata
+            # Embed custom metadata
             workflow["extra"] = workflow.get("extra", {})
             workflow["extra"].update({
                 "prompt": prompt_text,
@@ -304,7 +319,7 @@ class EndlessNode_Imagesaver:
         
         return filename
 
-    def save_batch_images(self, images, prompt_list, include_timestamp=True, 
+    def save_batch_images(self, images, prompt_list="", include_timestamp=True, 
                           timestamp_format="%Y-%m-%d_%H-%M-%S", image_format="PNG", 
                           jpeg_quality=95, delimiter="_", 
                           prompt_words_limit=8, embed_workflow=True, save_json_metadata=False,
@@ -317,7 +332,7 @@ class EndlessNode_Imagesaver:
         print(f"DEBUG: Images tensor shape: {images.shape}")
         print(f"DEBUG: Images tensor type: {type(images)}")
 
-        # ✅ Fallback: repair prompt if missing or partial
+        # Fallback: repair prompt if missing or partial
         if prompt is None or not isinstance(prompt, dict) or "workflow" not in prompt:
             if extra_pnginfo and "workflow" in extra_pnginfo:
                 print("[INFO] Workflow recovered from extra_pnginfo.")
