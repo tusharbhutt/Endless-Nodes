@@ -1,4 +1,8 @@
-July 7/25, V 1.2.4: You can now use the batch prompt node with Flux Kontext Dev.  The process works the same way as the other nodes, except here the prompts are used to make changes to the image(s).  You cannot iterate within the prompt set (e.g, set up a list of prompts for a sequence of changes), it is designed to allow you to process multiple scenarios at once.
+July 19/26, V1.3: INtroducing the  Endless Fontifier, a javascript file that adds allows the user to change font sizes and fonts for various text elements on the ComfyUI interface.
+
+July 8/25, V1.2.5: Fixed bug in Image Saver that forced a connection for prompts.  That is now optional
+
+July 7/25, V1.2.4: You can now use the batch prompt node with Flux Kontext Dev.  The process works the same way as the other nodes, except here the prompts are used to make changes to the image(s).  You cannot iterate within the prompt set (e.g, set up a list of prompts for a sequence of changes), it is designed to allow you to process multiple scenarios at once.
 
 July 6/25, V1.2.3: Corrected the JSON files that were being exported.  They will now load the workflow when dragged back to the UI.  As a bonus, if the PNGINfo is also selected, the JSON will remove that, lowering the size of the file.
 
