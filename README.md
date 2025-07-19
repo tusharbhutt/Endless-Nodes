@@ -96,7 +96,7 @@ Once you make your changes, you can preview them and then choose to apply or can
 ![fontifiernode](./img/fontifiernode.png)
 
 
-**NOTE: There is a few bugs still where the changes don't respect the preview or reset buttons, instead they are applied immediately.  I'll fix these issues soon.
+**NOTE: There is a few bugs still where the changes don't respect the preview or reset buttons, instead they are applied immediately.  I'll fix these issues soon.**
 
 ## Node List
 
