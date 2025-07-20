@@ -1,5 +1,14 @@
 # nodes/__init__.py
 
+
+# nodes/__init__.py
+
+# =========================
+# 💉 Set JavaScript
+# =========================
+
+WEB_DIRECTORY = "./web/"
+
 # Import NODE_CLASS_MAPPINGS and NODE_DISPLAY_NAME_MAPPINGS from each submodule if present
 try:
     from .batchers import NODE_CLASS_MAPPINGS as BATCH_PROCESSOR_CLASSES, NODE_DISPLAY_NAME_MAPPINGS as BATCH_PROCESSOR_NAMES
