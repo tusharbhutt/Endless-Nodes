@@ -1,4 +1,6 @@
-July 19/26, V1.3: INtroducing the  Endless Fontifier, a javascript file that adds allows the user to change font sizes and fonts for various text elements on the ComfyUI interface.
+July 25/25, V1.5: Adds the Node Spawner to create multiple nodes at once,and a node minimap
+
+July 19/25, V1.3: Introducing the  Endless Fontifier, a javascript file that adds allows the user to change font sizes and fonts for various text elements on the ComfyUI interface.
 
 July 8/25, V1.2.5: Fixed bug in Image Saver that forced a connection for prompts.  That is now optional
 
