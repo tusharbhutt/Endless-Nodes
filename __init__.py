@@ -94,7 +94,7 @@ NODE_DISPLAY_NAME_MAPPINGS.update(TEXT_SWITCH_NAMES)
 NODE_DISPLAY_NAME_MAPPINGS.update(TYPE_CONVERTER_NAMES)
 
 # Version info
-__version__ = "1.2.2"
+__version__ = "1.5.0"
 
 print(f"Endless Sea of Stars Custom Nodes v{__version__} loaded successfully!")
 print("Nodes available under 'Endless 🌊✨' menu")
